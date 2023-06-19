@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
 // material
 import { IconButton } from '@mui/material';

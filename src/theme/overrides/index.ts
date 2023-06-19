@@ -92,7 +92,7 @@ export default function ComponentsOverrides(theme:any) {
     Pagination(theme),
     ButtonGroup(theme),
     Breadcrumbs(theme),
-    Autocomplete(theme),
+    Autocomplete(),
     ControlLabel(theme),
     ToggleButton(theme),
     LoadingButton()

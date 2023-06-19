@@ -1,15 +1,15 @@
 // material
-import { useTheme } from '@mui/material/styles';
+// import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
 export default function SeoIllustration({ ...other }) {
-  const theme = useTheme();
-  const PRIMARY_LIGHTER = theme.palette.primary.light;
-  const PRIMARY_MAIN = theme.palette.primary.main;
-  const PRIMARY_DARK = theme.palette.primary.dark;
-  const PRIMARY_DARKER = theme.palette.primary.dark;
+  // const theme = useTheme();
+  // const PRIMARY_LIGHTER = theme.palette.primary.light;
+  // const PRIMARY_MAIN = theme.palette.primary.main;
+  // const PRIMARY_DARK = theme.palette.primary.dark;
+  // const PRIMARY_DARKER = theme.palette.primary.dark;
 
   return (
     <Box {...other}>

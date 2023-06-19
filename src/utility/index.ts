@@ -19,11 +19,9 @@ export const formatDate2 = (d: string | number | Date) => {
             "November",
             "December",
         ];
-        var day = date.getDay();
         const date_ = date.getDate();
         const year = date.getFullYear();
         const month = monthNames[date.getMonth()];
-        var hours = date.getHours();
         return `${month} ${date_}, ${year}`;
     } catch (e) {
         return "";

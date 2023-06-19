@@ -34,10 +34,8 @@ const AuthUserProvider = ({ children }: Props) => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const user = tokenService.getUser();
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   useEffect(() => {
-    if (user) {
-    }
     dispatch({
       type: userActions.SET_USER_PROFILE,
       payload: user,

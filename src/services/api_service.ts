@@ -23,12 +23,12 @@ axiosInstance.interceptors.request.use((config) => {
 });
 axiosInstance.interceptors.response.use(
     (response) =>
-        new Promise((resolve, reject) => {
+        new Promise((resolve, _reject) => {
             resolve(response);
         }),
     (error) => {
         if (!error.response) {
-            return new Promise((resolve, reject) => {
+            return new Promise((_resolve, reject) => {
                 reject(error);
             });
         }
@@ -38,7 +38,7 @@ axiosInstance.interceptors.response.use(
             // @ts-ignore
             window.location = "/auth/login";
         } else {
-            return new Promise((resolve, reject) => {
+            return new Promise((_resolve, reject) => {
                 reject(error);
             });
         }

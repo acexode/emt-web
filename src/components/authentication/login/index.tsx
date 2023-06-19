@@ -1,16 +1,14 @@
-import React,{FC,useState} from 'react'
+import {FC,useState} from 'react'
  import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAuthUserContext } from "../../../context/authUser.context";
-import { useSnackbar } from 'notistack';
  import { Link as RouterLink } from 'react-router-dom';
-import { styled } from '@mui/material/styles';
 
 import { Icon } from '@iconify/react';
 import eyeFill from '@iconify/icons-eva/eye-fill';
  import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
-import { Alert, TextField, InputAdornment, IconButton,Link} from '@mui/material';
+import {  TextField, InputAdornment, IconButton,Link} from '@mui/material';
 import { Stack } from '@mui/system';
   import { PATH_AUTH } from '../../../routes/paths';
 import LoadingButton from '@mui/lab/LoadingButton';

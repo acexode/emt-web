@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react";
 import { useSnackbar } from "notistack";
-import { useRef, useState, FC } from "react";
+import { useRef, useState } from "react";
 import homeFill from "@iconify/icons-eva/home-fill";
 
 import { Link as RouterLink } from "react-router-dom";

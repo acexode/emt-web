@@ -1,8 +1,7 @@
 import PropTypes from "prop-types";
-import { Link as RouterLink } from "react-router-dom";
 // material
 import { styled } from "@mui/material/styles";
-import { Typography, Button, Card, CardContent } from "@mui/material";
+import { Typography, Card, CardContent } from "@mui/material";
 import SeoIllustration from "../../../assets/SeoIllustration";
 
 // ----------------------------------------------------------------------

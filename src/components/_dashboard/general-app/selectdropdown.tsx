@@ -1,7 +1,6 @@
-import { Box, Card, Grid, Stack, TextField, Autocomplete } from "@mui/material";
+import {  Card, Grid, Stack, TextField, Autocomplete } from "@mui/material";
 import { FC } from "react";
 
-const q = [1, 2, 3];
 const states = [
   "Abia",
   "Adamawa",
@@ -42,7 +41,7 @@ const states = [
   "Zamfara",
 ];
 const year = new Date().getFullYear();
-const years = Array.from(new Array(10), (val, index) => index + year);
+const years = Array.from(new Array(10), (_val, index) => index + year);
 const SelectDropDownCard: FC = () => {
   return (
     <Grid item xs={12} md={12}>

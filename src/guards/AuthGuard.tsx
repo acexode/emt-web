@@ -12,7 +12,7 @@ AuthGuard.propTypes = {
 
 // @ts-ignore
 export default function AuthGuard({ children }) {
-    const [isAuthenticated, setisAuthenticated] = useState(
+    const [isAuthenticated] = useState(
         tokenService.getToken()
     );
      const { pathname } = useLocation();

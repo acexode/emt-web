@@ -5,53 +5,53 @@ import alertCircleFill from '@iconify/icons-eva/alert-circle-fill';
 import alertTriangleFill from '@iconify/icons-eva/alert-triangle-fill';
 import checkmarkCircle2Fill from '@iconify/icons-eva/checkmark-circle-2-fill';
 // material
-import { makeStyles, createStyles } from '@mui/styles';
+// import { makeStyles, createStyles } from '@mui/styles';
 import { alpha } from "@mui/material/styles";
 import { Box } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
-const useStyles = makeStyles((theme:any) => {
-  const isLight = theme.palette.mode === 'light';
-   const createStyle = {
-    color: `${theme.palette.text.primary} !important`,
-   };
+// const useStyles = makeStyles((theme:any) => {
+//   const isLight = theme.palette.mode === 'light';
+//    const createStyle = {
+//     color: `${theme.palette.text.primary} !important`,
+//    };
 
-  return createStyles({
-    containerRoot: {
-      pointerEvents: 'unset',
-      '& .MuiCollapse-wrapperInner': {
-        width: '100%'
-      }
-    },
-    contentRoot: {
-      width: '100%',
-      padding: theme.spacing(1.5),
-      margin: theme.spacing(0.25, 0),
-      boxShadow: theme.customShadows.z8,
-      borderRadius: theme.shape.borderRadius,
-      color: theme.palette.grey[isLight ? 0 : 800],
-      backgroundColor: theme.palette.grey[isLight ? 900 : 0]
-    },
-    message: {
-      padding: 0,
-      fontWeight: theme.typography.fontWeightMedium
-    },
-    action: {
-      marginRight: -4,
-      '& svg': {
-        width: 20,
-        height: 20,
-        opacity: 0.48,
-        '&:hover': { opacity: 1 }
-      }
-    },
-    info: { ...createStyle },
-    success: { ...createStyle },
-    warning: { ...createStyle },
-    error: { ...createStyle }
-  });
-});
+//   return createStyles({
+//     containerRoot: {
+//       pointerEvents: 'unset',
+//       '& .MuiCollapse-wrapperInner': {
+//         width: '100%'
+//       }
+//     },
+//     contentRoot: {
+//       width: '100%',
+//       padding: theme.spacing(1.5),
+//       margin: theme.spacing(0.25, 0),
+//       boxShadow: theme.customShadows.z8,
+//       borderRadius: theme.shape.borderRadius,
+//       color: theme.palette.grey[isLight ? 0 : 800],
+//       backgroundColor: theme.palette.grey[isLight ? 900 : 0]
+//     },
+//     message: {
+//       padding: 0,
+//       fontWeight: theme.typography.fontWeightMedium
+//     },
+//     action: {
+//       marginRight: -4,
+//       '& svg': {
+//         width: 20,
+//         height: 20,
+//         opacity: 0.48,
+//         '&:hover': { opacity: 1 }
+//       }
+//     },
+//     info: { ...createStyle },
+//     success: { ...createStyle },
+//     warning: { ...createStyle },
+//     error: { ...createStyle }
+//   });
+// });
 
 // ----------------------------------------------------------------------
 
@@ -79,7 +79,6 @@ function SnackbarIcon({ icon, color }:any) {
  
 
 export default function NotistackProvider({ children }:any) {
-  const classes = useStyles();
 
   return (
     <SnackbarProvider

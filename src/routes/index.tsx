@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from "react";
+import { Suspense, lazy } from "react";
 import { Navigate, useLocation, useRoutes } from "react-router-dom";
 // import AuthGuard from "../guards/AuthGuard";
 import LoadingScreen from "../components/LoadingScreen";

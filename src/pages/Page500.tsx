@@ -8,7 +8,7 @@ import SeverErrorIllustration from "../assets/illustration_500";
 
 // ----------------------------------------------------------------------
 
-const RootStyle = styled(Page)(({ theme }) => ({
+const RootStyle = styled(Page)(({ }) => ({
   display: "flex",
   minHeight: "100%",
   alignItems: "center",
