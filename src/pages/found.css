@@ -1,0 +1,33 @@
+.title{
+
+    font-family: 'Lato', serif;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 2.5rem;
+    line-height: 48px;
+    /* identical to box height */
+
+
+    color: #FF5959;
+
+}
+.subtext{
+
+    font-family: 'Lato', serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 19px;
+
+    color: #423C3C;
+}
+
+.notfound_content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.sub_title{
+    color: rgba(66, 107, 255, 1);
+    cursor: pointer;
+}
