@@ -54,7 +54,7 @@ const ListItemStyle = styled((props) => (
     position: "absolute",
     borderTopLeftRadius: 4,
     borderBottomLeftRadius: 4,
-    backgroundColor: "hsl(150, 100%, 34%)",
+    backgroundColor: "#fff",
   },
 }));
 
@@ -79,14 +79,14 @@ function NavItem({ item, active, isShow }: any) {
   };
   //
   const activeRootStyle = {
-    color: "hsl(150, 100%, 34%)",
+    color: "#fff",
     fontWeight: "fontWeightMedium",
     bgcolor: alpha("hsl(148, 37%, 59%)", theme.palette.action.selectedOpacity),
     "&:before": { display: "block" },
   };
 
   const activeSubStyle = {
-    color: "hsl(150, 100%, 34%)",
+    color: "#fff",
     fontWeight: "fontWeightMedium",
   };
 

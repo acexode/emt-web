@@ -6,13 +6,13 @@ export default function Autocomplete() {
       styleOverrides: {
         root: {
           "&.Mui-focused .MuiOutlinedInput-notchedOutline  ": {
-             borderColor: "hsl(150, 100%, 34%)",
+             borderColor: "hsl(0, 100%, 27%)",
            
 
              
           },
           "&.MuiAutocomplete-inputFocused":{
-            color: "hsl(150, 100%, 34%)",
+            color: "hsl(0, 100%, 27%)",
           }
         },
          

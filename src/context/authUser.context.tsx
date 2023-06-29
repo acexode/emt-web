@@ -61,14 +61,14 @@ const AuthUserProvider = ({ children }: Props) => {
 
   const handleSignInUser = async (data: any) => {
     try {
-      const res = await axios.post(`${BASE_URL}/auth/login`, data);
+      // const res = await axios.post(`${BASE_URL}/auth/login`, data);
 
-      tokenService.setToken(res.data?.token);
-      tokenService.setUser(JSON.stringify(res.data?.user));
-      dispatch({
-        type: userActions.SIGN_IN,
-        payload: res?.data,
-      });
+      // tokenService.setToken(res.data?.token);
+      // tokenService.setUser(JSON.stringify(res.data?.user));
+      // dispatch({
+      //   type: userActions.SIGN_IN,
+      //   payload: res?.data,
+      // });
       enqueueSnackbar("Login success", {
         variant: "success",
         action: (key) => (

@@ -9,7 +9,7 @@ export default function Link() {
 
       styleOverrides: {
         root: {
-          color:'hsl(150,55%,47%)'
+          color:'hsl(0, 100%, 27%)'
         }
       }
     }

@@ -1,11 +1,10 @@
 import { Suspense, lazy } from "react";
 import { Navigate, useLocation, useRoutes } from "react-router-dom";
-// import AuthGuard from "../guards/AuthGuard";
 import LoadingScreen from "../components/LoadingScreen";
+// import AuthGuard from "../guards/AuthGuard";
 import GuestGuard from "../guards/GuestGuard";
+import DashboardLayout from "../layouts/dashboard";
 import LogoOnlyLayout from "../layouts/LogoOnlyLayout";
-// import DashboardLayout from "../layouts/dashboard";
-// import NotFound from "../pages/not_found";
 
 const Loadable = (Component: any) => (props: JSX.IntrinsicAttributes) => {
   const { pathname } = useLocation();
@@ -52,43 +51,33 @@ export default function Router() {
         { path: "login-unprotected", element: <Login /> },
       ],
     },
-    // {
-    //   path: "dashboard",
-    //   element: (
-    //     <AuthGuard>
-    //       <DashboardLayout />
-    //     </AuthGuard>
-    //   ),
-    //   children: [
-    //     { path: "", element: <Navigate to="/dashboard/app" replace /> },
-    //     { path: "app", element: <GeneralApp /> },
-    //     {
-    //       path: "m-and-e",
+    {
+      path: "dashboard",
+      element: (
+          <DashboardLayout />
+        // <AuthGuard>
+        // </AuthGuard>
+      ),
+      children: [
+        { path: "", element: <Navigate to="/dashboard/app" replace /> },
+        { path: "app", element: <GeneralApp /> },
+        {
+          path: "incidents",
 
-    //       children: [
-    //         // { path: '/', element: <Navigate to="/m-and-e/state" replace /> },
-    //         { path: "state", element: <StatePage /> },
-    //         { path: "lga", element: <LGAPage /> },
-    //         { path: "hf", element: <HFPage /> },
-    //         { path: "view-assessment", element: <ViewQuarter /> },
-    //         { path: "view-state-assessment", element: <ViewQuarterState /> },
-    //         { path: "view-hf-assessment", element: <ViewHFQuarter /> },
-    //         { path: "new-assessment", element: <NewAssessmentForm /> },
-    //         { path: "new-assessment-lga", element: <NewAssessmentFormLGA /> },
-    //         { path: "new-assessment-hf", element: <NewAssessmentFormHF /> },
-    //       ],
-    //     },
-    //     {
-    //       path: "settings",
-    //       children: [
-    //         { path: "user", element: <UserManagement /> },
-    //         { path: "facility", element: <FacilityManagement /> },
-    //         { path: "questions", element: <QuestionsSettings /> },
+          children: [
+            // { path: '/', element: <Navigate to="/m-and-e/state" replace /> },
            
-    //       ],
-    //     },
-    //   ],
-    // },
+          ],
+        },
+        {
+          path: "settings",
+          children: [
+          
+           
+          ],
+        },
+      ],
+    },
     {
       path: "*",
       element: <LogoOnlyLayout />,
@@ -105,9 +94,9 @@ export default function Router() {
 }
 
 const Login = Loadable(lazy(() => import("../pages/authentication/login")));
-// const GeneralApp = Loadable(
-//   lazy(() => import("../pages/dashboard/general_app"))
-// );
+const GeneralApp = Loadable(
+  lazy(() => import("../pages/dashboard/general_app"))
+);
 
 
 const Page500 = Loadable(lazy(() => import("../pages/Page500")));
