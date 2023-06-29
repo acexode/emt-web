@@ -1,13 +1,13 @@
 .MuiLoadingButton-root {
-  background: hsl(150, 100%, 34%);
+  background: hsl(0, 100%, 27%);
 }
 
 .MuiLoadingButton-root:hover {
-  background: hsl(148, 37%, 59%);
+  background: hsl(3, 34%, 61%);
 }
 
 .css-1uamm5k-MuiFormLabel-root-MuiInputLabel-root.Mui-focused {
-  color: hsl(148, 37%, 59%);
+  color: hsl(3, 34%, 61%);
 }
 
 .helperTextColor {

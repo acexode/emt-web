@@ -1,5 +1,5 @@
 // routes
-import { PATH_DASHBOARD } from "../../routes/paths";
+import { PATH_DASHBOARD, PATH_AUTH } from "../../routes/paths";
 // components
 import SvgIconStyle from "../../components/SvgIconStyle";
 
@@ -35,29 +35,36 @@ const sidebarConfig = [
         icon: ICONS.dashboard,
       },
 
-  
+      {
+        title: "Incidents",
+        path: PATH_DASHBOARD.incidents.root,
+        icon: ICONS.reports,
+      },
+      {
+        title: "Claims",
+        path: PATH_DASHBOARD.claims.root,
+        icon: ICONS.reports,
+      },
     ],
   },
 
   // Misc
   // ----------------------------------------------------------------------
-  // {
-  //   subheader: "Misc",
-  //   items: [
-  //     {
-  //       title: "Settings",
+  {
+    subheader: "Misc",
+    items: [
+      {
+        title: "Settings",
 
-  //       path: PATH_DASHBOARD.settings.root,
-  //       icon: ICONS.settings,
-  //       children: [
-  //         { title: "User Management", path: PATH_DASHBOARD.settings.userManagement },
-  //         { title: "Facility Management", path: PATH_DASHBOARD.settings.facilityManagement },
-  //         { title: "Questions", path: PATH_DASHBOARD.settings.questionsManagement },
-  //       ],
-  //     },
-  //     { title: "Log Out", path: PATH_AUTH.login, icon: ICONS.exit },
-  //   ],
-  // },
+        path: PATH_DASHBOARD.settings.root,
+        icon: ICONS.settings,
+        children: [
+          { title: "", path: ''},
+        ],
+      },
+      { title: "Log Out", path: PATH_AUTH.login, icon: ICONS.exit },
+    ],
+  },
 ];
 
 export default sidebarConfig;

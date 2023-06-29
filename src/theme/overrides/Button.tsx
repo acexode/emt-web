@@ -5,11 +5,11 @@ export default function Button(theme: { palette: { grey: any[]; action: { hover:
     MuiButton: {
       styleOverrides: {
         root: {
-          background: "hsl(150, 100%, 34%)",
+          background: "hsl(0, 100%, 27%)",
           color:"#fff",
           '&:hover': {
             boxShadow: 'none',
-            backgroundColor: "hsl(148, 37%, 59%)",
+            backgroundColor: "hsl(3,34%,61%)",
             
           }
         },
@@ -21,7 +21,7 @@ export default function Button(theme: { palette: { grey: any[]; action: { hover:
           color: theme.palette.grey[800],
           boxShadow: theme.customShadows.z8,
           '&:hover': {
-            backgroundColor: "hsl(148, 37%, 59%)"
+            backgroundColor: "hsl(3,34%,61%)"
           }
         },
         containedPrimary: {
@@ -46,7 +46,7 @@ export default function Button(theme: { palette: { grey: any[]; action: { hover:
         outlinedInherit: {
           border: `1px solid ${theme.palette.grey[500_32]}`,
           '&:hover': {
-            backgroundColor: "hsl(148, 37%, 59%)"
+            backgroundColor: "hsl(3,34%,61%)"
           }
         },
         textInherit: {

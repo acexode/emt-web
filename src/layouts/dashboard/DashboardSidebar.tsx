@@ -53,7 +53,7 @@ const AccountStyle = styled("div")(({ theme }) => ({
 
 function IconCollapse({ onToggleCollapse, collapseClick }: any) {
   return (
-    <Tooltip title="BHCPF Menu">
+    <Tooltip title="EMT Menu">
       <CardActionArea
         onClick={onToggleCollapse}
         sx={{
@@ -98,6 +98,7 @@ export default function DashboardSidebar({
   const {
     userState: { userProfile },
   } = useAuthUserContext();
+  console.log({userProfile});
 
   useEffect(() => {
     setsidebar(sidebarConfig);
@@ -157,11 +158,11 @@ export default function DashboardSidebar({
               variant="h6"
               sx={{
                 fontSize: "0.6rem",
-                ml: 2,
+                // ml: 2,
                 color: "#fff",
               }}
             >
-              NPHCDA BHCPF Platform
+             EMT Platform
             </Typography>
           </Box>
 
@@ -187,10 +188,12 @@ export default function DashboardSidebar({
               <MyAvatar />
               <Box sx={{ ml: 2 }}>
                 <Typography variant="subtitle2" sx={{ color: "#fff" }}>
-                  {userProfile?.name}
+                  {/* {userProfile?.name} */}
+                  John Doe
                 </Typography>
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  {userProfile?.access}
+                  {/* {userProfile?.access} */}
+                  Manager
                 </Typography>
               </Box>
             </AccountStyle>

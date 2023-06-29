@@ -35,8 +35,8 @@ const PRIMARY = {
   dark: "#152763",
   darker: "#0b1638",
   contrastText: "#fff",
-  mainGreen:"hsl(150, 100%, 34%)",
-  lightGreen:"hsl(148, 37%, 59%)"
+  mainGreen:"hsl(0, 100%, 27%)",
+  lightGreen:"hsl(3,34%,61%)"
 };
 const SECONDARY = {
   lighter: "#D6E4FF",

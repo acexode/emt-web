@@ -23,24 +23,18 @@ function path(root: string, sublink: string) {
       app: path(ROOTS_DASHBOARD, '/app'),
       
     },
-    // m_and_e: {
-    //   root: path(ROOTS_DASHBOARD, '/m-and-e'),
-    //   state: path(ROOTS_DASHBOARD, '/m-and-e/state'),
-    //   lga: path(ROOTS_DASHBOARD, '/m-and-e/lga'),
-    //   hf: path(ROOTS_DASHBOARD, '/m-and-e/hf'),
-    //   newAssessment: path(ROOTS_DASHBOARD, '/m-and-e/new-assessment'),
-    //   newAssessmentLga: path(ROOTS_DASHBOARD, '/m-and-e/new-assessment-lga'),
-    //   newAssessmentHF: path(ROOTS_DASHBOARD, '/m-and-e/new-assessment-hf'),
-    //   viewAssessment: path(ROOTS_DASHBOARD, '/m-and-e/view-assessment'),
-    //   viewStateAssessment: path(ROOTS_DASHBOARD, '/m-and-e/view-state-assessment'),
-    //   viewHFAssessment: path(ROOTS_DASHBOARD, '/m-and-e/view-hf-assessment'),
-    // },
-    // settings: {
-    //   root: path(ROOTS_DASHBOARD, '/settings'),
-    //   userManagement: path(ROOTS_DASHBOARD, '/settings/user'),
-    //   facilityManagement: path(ROOTS_DASHBOARD, '/settings/facility'),
-    //   questionsManagement: path(ROOTS_DASHBOARD, '/settings/questions'),
-    // },
+    incidents: {
+      root: path(ROOTS_DASHBOARD, '/incidents'),
+
+    },
+    claims: {
+      root: path(ROOTS_DASHBOARD, '/claims'),
+
+    },
+    settings: {
+      root: path(ROOTS_DASHBOARD, '/settings'),
+     
+    },
    
   };
 

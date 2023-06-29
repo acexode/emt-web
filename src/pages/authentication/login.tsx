@@ -1,7 +1,7 @@
 import { Link as RouterLink } from "react-router-dom";
 // material
 import { styled } from "@mui/material/styles";
-import { Box, Card, Stack, Link, Container, Typography } from "@mui/material";
+import { Box, Stack, Link, Container, Typography } from "@mui/material";
 // routes
 import { PATH_AUTH } from "../../routes/paths";
 
@@ -10,7 +10,6 @@ import { PATH_AUTH } from "../../routes/paths";
 import Page from "../../components/Page";
 import { MHidden } from "../../components/@material-extend";
 import LoginForm from "../../components/authentication/login";
-import logiIcon from "../../assets/loginSvg.svg";
 import { app_title } from "../../constants";
 import Logo from "../../components/Logo";
 
@@ -23,14 +22,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
   },
 }));
 
-const SectionStyle = styled(Card)(({ theme }) => ({
-  width: "100%",
-  maxWidth: 464,
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  margin: theme.spacing(2, 0, 2, 2),
-}));
+
 
 const ContentStyle = styled("div")(({ theme }) => ({
   maxWidth: 480,
@@ -47,15 +39,6 @@ const ContentStyle = styled("div")(({ theme }) => ({
 export default function Login() {
   return (
     <RootStyle title={`Login | ${app_title}`}>
-      <MHidden width="mdDown">
-        <SectionStyle>
-          <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-            Hi, Welcome Back
-          </Typography>
-          <img src={logiIcon} alt="login" width={320} height={250} />
-        </SectionStyle>
-      </MHidden>
-
       <Container maxWidth="sm">
         <ContentStyle>
           <Stack
