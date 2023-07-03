@@ -4,30 +4,30 @@ import { IGovernaceStructure, IServiceCard ,IGovernaceStructure2, IBHCPFSystem} 
 export const cardData:IServiceCard[] =[
     {
       color: "#26b76e",
-      title:"Feedback Date",
-      value:"17 Feb 2023",
+      title:"Incidents",
+      value:"8",
 	  show:false
   
     },
     {
       color: "#536cbe",
-      title:"No Of LGAs",
+      title:"Dispatches",
       value:"16",
 	  show:false
   
     },
     {
       color: "#4ca8ff",
-      title:"No Of Wards",
+      title:"Ambulance",
       value:"33",
 	  show:false
   
     },
     {
       color: "#ff825c",
-      title:"PHCs Authorised",
+      title:"Service Providers",
       value:"369",
-	  show:true
+	  show:false
   
     },
   

@@ -1,6 +1,6 @@
 // material
 import { Box } from "@mui/material";
-// import logo from "../assets/logo-only.png";
+import logo from "../assets/emt.jpg";
 import { useLocation } from "react-router-dom";
 // ----------------------------------------------------------------------
 
@@ -9,7 +9,7 @@ export default function Logo({ sx }: any) {
   const itsAuth = pathname === "/auth/login";
   return (
     <Box sx={{ width: itsAuth ? 90 : 60, height: 40, ...sx }}>
-      {/* <img alt="screen" src={logo} /> */}
+      <img alt="screen" src={logo} width="40" />
     </Box>
   );
 }

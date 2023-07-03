@@ -35,14 +35,14 @@ const AuthUserProvider = ({ children }: Props) => {
 
   const user = tokenService.getUser();
   const navigate = useNavigate();
-  useEffect(() => {
-    dispatch({
-      type: userActions.SET_USER_PROFILE,
-      payload: user,
-    });
-  }, []);
+  // useEffect(() => {
+  //   dispatch({
+  //     type: userActions.SET_USER_PROFILE,
+  //     payload: user,
+  //   });
+  // }, []);
   const handleSignOut = () => {
-    tokenService.clearStorage();
+    // tokenService.clearStorage();
     dispatch({
       type: userActions.SIGN_OUT,
       payload: false,
