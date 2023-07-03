@@ -70,6 +70,14 @@ export default function Router() {
           ],
         },
         {
+          path: "claims",
+
+          children: [
+            // { path: '/', element: <Navigate to="/m-and-e/state" replace /> },
+           
+          ],
+        },
+        {
           path: "settings",
           children: [
           
