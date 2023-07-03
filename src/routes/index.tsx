@@ -62,20 +62,10 @@ export default function Router() {
         { path: "", element: <Navigate to="/dashboard/app" replace /> },
         { path: "app", element: <GeneralApp /> },
         {
-          path: "incidents",
-
-          children: [
-            // { path: '/', element: <Navigate to="/m-and-e/state" replace /> },
-           
-          ],
+          path: "incidents", element: <Incidents />
         },
         {
-          path: "claims",
-
-          children: [
-            // { path: '/', element: <Navigate to="/m-and-e/state" replace /> },
-           
-          ],
+          path: "claims",element: <Claims />
         },
         {
           path: "settings",
@@ -104,6 +94,12 @@ export default function Router() {
 const Login = Loadable(lazy(() => import("../pages/authentication/login")));
 const GeneralApp = Loadable(
   lazy(() => import("../pages/dashboard/general_app"))
+);
+const Incidents = Loadable(
+  lazy(() => import("../pages/dashboard/incidents"))
+);
+const Claims = Loadable(
+  lazy(() => import("../pages/dashboard/claims"))
 );
 
 
