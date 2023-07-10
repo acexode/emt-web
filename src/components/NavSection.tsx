@@ -65,6 +65,7 @@ const ListItemIconStyle = styled(ListItemIcon)({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  
 });
 
 // ----------------------------------------------------------------------

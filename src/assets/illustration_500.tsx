@@ -22,8 +22,8 @@ export default function SeverErrorIllustration({ ...other }) {
       >
         <defs>
           <linearGradient id="BG" x1="19.496%" x2="77.479%" y1="71.822%" y2="16.69%">
-            <stop offset="0%" stopColor="#00ab55" />
-            <stop offset="100%" stopColor="#00ab55" stopOpacity="0" />
+            <stop offset="0%" stopColor="hsl(3, 34%, 61%)" />
+            <stop offset="100%" stopColor="hsl(3, 34%, 61%)" stopOpacity="0" />
           </linearGradient>
         </defs>
         <g fill="none" fillRule="evenodd" stroke="none" strokeWidth="1">
@@ -35,17 +35,17 @@ export default function SeverErrorIllustration({ ...other }) {
               opacity="0.2"
             />
             <path
-              fill="#00ab55"
+              fill="hsl(0, 100%, 27%)"
               fillRule="nonzero"
               d="M272.423 266.439L265.112 266.439 265.112 265.804 271.778 265.804 271.778 206.162 246.073 206.162 246.073 117.996 222.475 117.996 222.475 117.361 246.708 117.361 246.708 205.526 272.423 205.526z"
             />
             <path
-              fill="#00ab55"
+              fill="hsl(0, 100%, 27%)"
               fillRule="nonzero"
               d="M126.041 164.5L125.397 164.5 125.397 143.416 141.85 143.416 141.85 124.385 142.485 124.385 142.485 144.061 126.041 144.061z"
             />
             <path
-              fill="#00ab55"
+              fill="hsl(0, 100%, 27%)"
               fillRule="nonzero"
               d="M222.456 112.315a12.072 12.072 0 01-12.079 12.07h-82.752a12.078 12.078 0 110-24.149h2.762A23.799 23.799 0 01153.303 70h7.043a23.763 23.763 0 0121.121 12.835 14.196 14.196 0 016.5-1.566h1.842a14.316 14.316 0 0114.316 14.317v.709a14.277 14.277 0 01-.552 3.941h6.85c6.651.03 12.028 5.428 12.033 12.079z"
               opacity="0.12"
@@ -88,13 +88,13 @@ export default function SeverErrorIllustration({ ...other }) {
               fillRule="nonzero"
               d="M244.424 267.737c.503-1.769-.846-3.727-1.168-5.539a3.038 3.038 0 115.987-.025c-.307 1.813-1.628 3.808-1.075 5.562l.399 1.269a2.361 2.361 0 11-4.522.064l.379-1.331z"
             />
-            <rect width="38" height="38.752" x="228" y="145" fill="#00ab55" fillRule="nonzero" rx="8" />
+            <rect width="38" height="38.752" x="228" y="145" fill="hsl(0, 100%, 27%)" fillRule="nonzero" rx="8" />
             <rect
               width="28.413"
               height="38.752"
               x="80.568"
               y="129.67"
-              fill="#00ab55"
+              fill="hsl(0, 100%, 27%)"
               fillRule="nonzero"
               opacity="0.18"
               rx="3"
@@ -105,7 +105,7 @@ export default function SeverErrorIllustration({ ...other }) {
               height="38.752"
               x="73.645"
               y="135.949"
-              fill="#00ab55"
+              fill="hsl(0, 100%, 27%)"
               fillRule="nonzero"
               opacity="0.48"
               rx="3"
@@ -116,12 +116,12 @@ export default function SeverErrorIllustration({ ...other }) {
               d="M60 243.462c.21 1.976.895 3.872 1.998 5.525 4.42 7.807 9.373 15.495 16.213 21.286 10.064 8.507 23.229 12.181 35.953 15.652-1.132-.553-2.504-6.445-3.01-7.706-.985-2.523-1.906-5.073-2.845-7.615-1.501-4.005-4.604-7.227-7.697-10.182a60.761 60.761 0 00-24.546-14.437A57.813 57.813 0 0060 243.462z"
             />
             <path
-              fill="#00ab55"
+              fill="hsl(0, 100%, 27%)"
               fillRule="nonzero"
               d="M109.782 247.836c-1.041-7.265-2.109-14.621-5.027-21.351-2.919-6.73-7.983-12.89-14.86-15.403-.203 10.397-.402 20.792-.599 31.184-.12 6.002-.22 12.125 1.501 17.879 3.03 10.128 13.516 21.922 23.616 25.255 1.501-4.843-1.013-12.181-1.731-17.217l-2.9-20.347z"
             />
             <rect width="114" height="36" x="111.587" y="164" fill={PRIMARY_DARK} fillRule="nonzero" rx="8.428" />
-            <rect width="108" height="36" x="117.587" y="164" fill="#00ab55" fillRule="nonzero" rx="8.428" />
+            <rect width="108" height="36" x="117.587" y="164" fill="hsl(0, 100%, 27%)" fillRule="nonzero" rx="8.428" />
             <path
               fill={PRIMARY_LIGHTER}
               fillRule="nonzero"
@@ -129,7 +129,7 @@ export default function SeverErrorIllustration({ ...other }) {
             />
             <rect width="114" height="36" x="111.587" y="208" fill={PRIMARY_DARK} fillRule="nonzero" rx="8.428" />
             <path
-              fill="#00ab55"
+              fill="hsl(0, 100%, 27%)"
               fillRule="nonzero"
               d="M226 217.583v16.815c.008 2.549-1.045 4.995-2.923 6.798-1.879 1.802-4.43 2.811-7.087 2.804h-87.999c-2.653 0-5.197-1.012-7.072-2.813-1.874-1.802-2.924-4.244-2.919-6.789v-16.815c0-5.292 4.473-9.583 9.991-9.583h87.999c2.653-.005 5.199 1.003 7.077 2.8 1.878 1.798 2.933 4.239 2.933 6.783z"
             />
@@ -140,7 +140,7 @@ export default function SeverErrorIllustration({ ...other }) {
             />
             <rect width="32" height="4" x="183" y="224" fill={PRIMARY_LIGHTER} fillRule="nonzero" rx="1" />
             <rect width="114" height="36" x="111.587" y="252.209" fill={PRIMARY_DARK} fillRule="nonzero" rx="8.428" />
-            <rect width="108" height="36" x="118" y="252" fill="#00ab55" fillRule="nonzero" rx="8.428" />
+            <rect width="108" height="36" x="118" y="252" fill="hsl(0, 100%, 27%)" fillRule="nonzero" rx="8.428" />
             <path
               fill={PRIMARY_LIGHTER}
               fillRule="nonzero"

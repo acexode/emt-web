@@ -12,7 +12,7 @@ const RootStyle = styled(Page)(({ }) => ({
   display: "flex",
   minHeight: "100%",
   alignItems: "center",
-  // paddingTop: theme.spacing(2),
+  paddingTop:45,
   // paddingBottom: theme.spacing(3)
 }));
 

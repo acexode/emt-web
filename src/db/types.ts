@@ -4,6 +4,11 @@ export interface IServiceCard{
     color:string ,
     show?:boolean
   }
+export interface IClaims{
+    value: string,
+    title: string,
+    color:string ,
+  }
 
   export interface IGovernaceStructure {
     structure: string,

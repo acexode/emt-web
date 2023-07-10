@@ -43,7 +43,7 @@ const sidebarConfig = [
       {
         title: "Claims",
         path: PATH_DASHBOARD.claims.root,
-        icon: ICONS.reports,
+        icon: ICONS.booking,
       },
     ],
   },
