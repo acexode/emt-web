@@ -69,7 +69,7 @@ function applySortFilter(
   if (query) {
     return filter(
       array,
-      (_user) => _user?.firstName?.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      (_user) => _user?.category?.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
   return stabilizedThis.map((el: any[]) => el[0]);
@@ -264,11 +264,11 @@ const CustomClaimTable: FC<ITable> = ({ dataList, page_title, table_Head,loading
                             aria-checked={isItemSelected}
                           >
                           
-                            <TableCell
+                          <TableCell
                               align="left"
                              
                             >
-                              { row?.firstName 
+                              { index +1
                               }
                            
                             </TableCell>
@@ -276,36 +276,34 @@ const CustomClaimTable: FC<ITable> = ({ dataList, page_title, table_Head,loading
                               align="left"
                              
                             >
-                               {row?.lastName
+                              { row?.category 
+                              }
+                           
+                            </TableCell>
+                            <TableCell
+                              align="left"
+                             
+                            >
+                               {row?.location
                               }
                             </TableCell>
                             <TableCell
                               align="left"
                               
                             >
-                               {row?.email
+                               {row?.ambulance_type
                               }
                             </TableCell>
                             <TableCell
                               align="left"
                               
                             >
-                               {row?.role || "Nil"
+                               {row?.date || "Nil"
                               }
                             </TableCell>
                             <TableCell align="left">
                           
-                              { row?.access || "Nil"}
-                             
-                              </TableCell>
-                            <TableCell align="left">
-                          
-                              { row?.level || "Nil"}
-                             
-                              </TableCell>
-                            <TableCell align="left">
-                          
-                              { row?.location?.name || "Nil"}
+                              { row?.status || "Nil"}
                              
                               </TableCell>
 

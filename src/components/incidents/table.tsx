@@ -69,7 +69,7 @@ function applySortFilter(
   if (query) {
     return filter(
       array,
-      (_user) => _user?.firstName?.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      (_user) => _user?.category?.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
   return stabilizedThis.map((el: any[]) => el[0]);
@@ -264,6 +264,14 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                             aria-checked={isItemSelected}
                           >
                           
+                            <TableCell
+                              align="left"
+                             
+                            >
+                              { index +1
+                              }
+                           
+                            </TableCell>
                             <TableCell
                               align="left"
                              

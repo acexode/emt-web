@@ -1,4 +1,5 @@
 import { FC, useEffect, useState,lazy } from "react";
+import { incidentsData } from "../../db";
 import axiosInstance from "../../services/api_service";
 
 const CustomTable = lazy(() => import("../../components/incidents/table"))
@@ -16,8 +17,8 @@ const TABLE_HEAD = [
 
  
 const Incidents: FC = () => {
-  const [incidents, setIncidents] = useState([]);
-  const [loading,setLoading] = useState(true)
+  const [incidents, setIncidents] = useState(incidentsData);
+  const [loading,setLoading] = useState(false)
 
   const fetchIncidents = () =>{
     setLoading(true)
@@ -33,7 +34,7 @@ const Incidents: FC = () => {
       })
   }
   useEffect(() => {
-    fetchIncidents()
+    // fetchIncidents()
   }, []);
   return (
     <><CustomTable page_title='Incidents' loading={loading} table_Head={TABLE_HEAD} dataList={incidents} fetchAllData={fetchIncidents} /></>
