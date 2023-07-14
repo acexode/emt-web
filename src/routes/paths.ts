@@ -25,6 +25,7 @@ function path(root: string, sublink: string) {
     },
     incidents: {
       root: path(ROOTS_DASHBOARD, '/incidents'),
+      newIncidents: path(ROOTS_DASHBOARD,'/new-incidents')
 
     },
     claims: {
