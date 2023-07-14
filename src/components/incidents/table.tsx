@@ -2,6 +2,8 @@ import { filter } from "lodash";
 import { Icon } from "@iconify/react";
 import { useState, SetStateAction, FC } from "react";
 import plusFill from "@iconify/icons-eva/plus-fill";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+
 // material
 import {
   Card,
@@ -164,7 +166,10 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
             action={
               <Button
                 variant="contained"
-                onClick={toggle}
+                to={
+                  PATH_DASHBOARD.incidents.newIncidents
+                }
+                component={RouterLink}
                 startIcon={<Icon icon={plusFill} />}
               >
                 New Incident

@@ -65,6 +65,9 @@ export default function Router() {
           path: "incidents", element: <Incidents />
         },
         {
+          path: "new-incidents", element: <NewIncidentForm />
+        },
+        {
           path: "claims",element: <Claims />
         },
         {
@@ -100,6 +103,9 @@ const Incidents = Loadable(
 );
 const Claims = Loadable(
   lazy(() => import("../pages/dashboard/claims"))
+);
+const NewIncidentForm = Loadable(
+  lazy(() => import("../pages/dashboard/components/new_incident"))
 );
 
 
