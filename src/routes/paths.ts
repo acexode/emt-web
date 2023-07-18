@@ -28,12 +28,21 @@ function path(root: string, sublink: string) {
       newIncidents: path(ROOTS_DASHBOARD,'/new-incidents')
 
     },
+    patients: {
+      root: path(ROOTS_DASHBOARD, '/patients'),
+    },
     claims: {
       root: path(ROOTS_DASHBOARD, '/claims'),
-
+      viewEtc: path(ROOTS_DASHBOARD, '/claims/view-etc-claim'),
+      viewAmbulance: path(ROOTS_DASHBOARD, '/claims/view-ambulance-claim'),
+    },
+    ambulance_run_sheets: {
+      root: path(ROOTS_DASHBOARD, '/ambulance_run_sheets'),
     },
     settings: {
       root: path(ROOTS_DASHBOARD, '/settings'),
+      userManagement: path(ROOTS_DASHBOARD,'/settings/users'),
+      serviceProviders: path(ROOTS_DASHBOARD,'/settings/service-providers')
      
     },
    

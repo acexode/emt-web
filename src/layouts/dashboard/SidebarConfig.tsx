@@ -59,7 +59,57 @@ const sidebarConfig = [
         path: PATH_DASHBOARD.settings.root,
         icon: ICONS.settings,
         children: [
-          { title: "", path: ''},
+          { title: "Users", path: PATH_DASHBOARD.settings.userManagement},
+          { title: "Service Providers", path: PATH_DASHBOARD.settings.serviceProviders},
+        ],
+      },
+      { title: "Log Out", path: PATH_AUTH.login, icon: ICONS.exit },
+    ],
+  },
+];
+
+export const sidebarETCConfig = [
+  // GENERAL
+  // ----------------------------------------------------------------------
+  {
+    subheader: "general",
+    items: [
+      {
+        title: "Dashboard",
+
+        path: PATH_DASHBOARD.general.app,
+        icon: ICONS.dashboard,
+      },
+      {
+        title: "Patient Records",
+        path: PATH_DASHBOARD.patients.root,
+        icon: ICONS.user,
+      },
+      {
+        title: "Claims",
+        path: PATH_DASHBOARD.claims.root,
+        icon: ICONS.booking,
+      },
+      {
+        title: "Ambulance Run Sheets",
+        path: PATH_DASHBOARD.ambulance_run_sheets.root,
+        icon: ICONS.reports,
+      },
+    ],
+  },
+
+  // Misc
+  // ----------------------------------------------------------------------
+  {
+    subheader: "Misc",
+    items: [
+      {
+        title: "Settings",
+
+        path: PATH_DASHBOARD.settings.root,
+        icon: ICONS.settings,
+        children: [
+          { title: "Users", path: PATH_DASHBOARD.settings.userManagement},
         ],
       },
       { title: "Log Out", path: PATH_AUTH.login, icon: ICONS.exit },

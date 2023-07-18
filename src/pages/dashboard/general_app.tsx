@@ -6,9 +6,6 @@ import { cardData, cardData2, claimsData } from "../../db";
 import { ServicesCard } from "../../components/_dashboard/general-app";
 import ClaimsCard from "../../components/_dashboard/general-app/ClaimsCard";
 
-
-
-
 const GeneralApp: FC = () => {
   const { themeStretch } = useSettings();
 //   const {
