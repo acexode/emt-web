@@ -68,13 +68,26 @@ export default function Router() {
           path: "new-incidents", element: <NewIncidentForm />
         },
         {
+          path: "patients", element: <Patients />
+        },
+        {
+          path: "ambulance_run_sheets", element: <RunSheets />
+        },
+        {
           path: "claims",element: <Claims />
+        },
+        {
+          path: "claims/view-etc-claim",element: <ViewETC />
+        },
+        {
+          path: "claims/view-ambulance-claim",element: <ViewAmbulance />
         },
         {
           path: "settings",
           children: [
+            { path: "users", element: <UserManagement /> },
+            { path: "service-providers", element: <ServiceProvidersManagement /> },
           
-           
           ],
         },
       ],
@@ -104,8 +117,26 @@ const Incidents = Loadable(
 const Claims = Loadable(
   lazy(() => import("../pages/dashboard/claims"))
 );
+const Patients = Loadable(
+  lazy(() => import("../pages/dashboard/patients"))
+);
+const RunSheets = Loadable(
+  lazy(() => import("../pages/dashboard/run_sheets"))
+);
+const ViewAmbulance = Loadable(
+  lazy(() => import("../pages/dashboard/viewAmbulance"))
+);
+const ViewETC = Loadable(
+  lazy(() => import("../pages/dashboard/viewEtc"))
+);
 const NewIncidentForm = Loadable(
   lazy(() => import("../pages/dashboard/components/new_incident"))
+);
+const ServiceProvidersManagement = Loadable(
+  lazy(() => import("../pages/settings/ServiceProviders"))
+);
+const UserManagement = Loadable(
+  lazy(() => import("../pages/settings/User"))
 );
 
 

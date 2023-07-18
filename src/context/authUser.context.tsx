@@ -61,10 +61,15 @@ const AuthUserProvider = ({ children }: Props) => {
 
   const handleSignInUser = async (data: any) => {
     try {
+      let userType = data?.email === "etc@test.com" ? "etc" : "ambulance"
       // const res = await axios.post(`${BASE_URL}/auth/login`, data);
+      let user ={
+        ...data,
+        type:userType
+      }
 
       // tokenService.setToken(res.data?.token);
-      // tokenService.setUser(JSON.stringify(res.data?.user));
+      tokenService.setUser(JSON.stringify(user));
       // dispatch({
       //   type: userActions.SIGN_IN,
       //   payload: res?.data,

@@ -5,12 +5,8 @@ import {
     Grid,
     TextField,
     MenuItem,
-    FormControl,
     FormLabel,
-    FormControlLabel,
-    Checkbox
   } from "@mui/material";
-  import React, { useEffect, useState } from "react";
   import HeaderBreadcrumbs from "../../../components/HeaderBreadcrumbs";
   import Page from "../../../components/Page";
   import { PATH_DASHBOARD } from "../../../routes/paths";
@@ -18,20 +14,20 @@ import {
   import * as yup from "yup"; 
   import { yupResolver } from "@hookform/resolvers/yup";
 
-   import { useSnackbar } from "notistack";
-  import { useNavigate } from "react-router-dom";
+//    import { useSnackbar } from "notistack";
+//   import { useNavigate } from "react-router-dom";
   
   import useSettings from "../../../hooks/useSettings";
-  import axiosInstance from "../../../services/api_service";
-  import { useAuthUserContext } from "../../../context/authUser.context";
-  import { MIconButton } from "../../../components/@material-extend";
-  import closeFill from "@iconify/icons-eva/close-fill";
-  import { Icon } from "@mui/material";
+//   import axiosInstance from "../../../services/api_service";
+//   import { useAuthUserContext } from "../../../context/authUser.context";
+//   import { MIconButton } from "../../../components/@material-extend";
+//   import closeFill from "@iconify/icons-eva/close-fill";
+//   import { Icon } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 // import AlertDialog from "./confirmDialog";
-  interface BodyType {
-    [key: string]: string;
-  }
+//   interface BodyType {
+//     [key: string]: string;
+//   }
 
   const schema = yup.object().shape({
     incidentDate: yup.string().required("*Incident Date is required"),
@@ -63,7 +59,7 @@ import { LoadingButton } from "@mui/lab";
     const ambulance_type =["BLS","ALS","ICU","Mobile Clinic","Boat Ambulance","KEKE (Rural Ambulance)","MotorBike Ambulance"]
   const NewIncidentForm = () => {
     const { themeStretch } = useSettings();
-    const [open, setOpen] = useState(false);
+    // const [open, setOpen] = useState(false);
     const {
         register,
         handleSubmit,
@@ -77,20 +73,20 @@ import { LoadingButton } from "@mui/lab";
         delayError: undefined,
         resolver: yupResolver(schema),
       });
-    const [confirmationPayload, setConfirmationPayload] = useState(null);
+    // const [confirmationPayload, setConfirmationPayload] = useState(null);
 
 
    
     // const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-    let navigate = useNavigate();
-    const handleClickOpen = () => {
-      setOpen(true);
-    };
+    // let navigate = useNavigate();
+    // const handleClickOpen = () => {
+    //   setOpen(true);
+    // };
   
-    const handleClose = () => {
-      setOpen(false);
-    };
+    // const handleClose = () => {
+    //   setOpen(false);
+    // };
   
   
    
@@ -108,7 +104,7 @@ import { LoadingButton } from "@mui/lab";
         //   userId: userProfile?.id,
         // };
         // questions can be sent to API to persist assessment
-        handleClickOpen();
+        // handleClickOpen();
     // setConfirmationPayload(payload);
       
   };

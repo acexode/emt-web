@@ -179,3 +179,46 @@ export const incidentsData = [
 		status: "No Dispatch Needed"
 	}
 ]
+export const claimsData2 = [
+	{
+		service_provider: "Paediatric",
+		incident_code:"IN123123",
+		patient_name:"Jane Doe",
+		date: "4-05-2021",
+		status: "Dispatched"
+	},
+	{
+		service_provider: "Paediatric",
+		incident_code:"IN432564",
+		patient_name:"John Doe",
+		date: "4-05-2021",
+		status: "Resolved"
+	},
+	{
+		service_provider: "Paediatric",
+		incident_code:"IN875345",
+		patient_name:"Janet Doe",
+		date: "4-05-2021",
+		status: "No Dispatch Needed"
+	}
+]
+
+export const ambulance_run_sheets =[
+  {
+    incident_no: "002",
+    ambulance_service_provider:"R & R Ambulance Service"
+  },
+  {
+    incident_no: "003",
+    ambulance_service_provider:"Hibalance Ambulance Service"
+  },
+  {
+    incident_no: "004",
+    ambulance_service_provider:"PneumaRS Ambulance Service"
+  },
+  {
+    incident_no: "005",
+    ambulance_service_provider:"R & R Ambulance Service"
+  },
+
+]

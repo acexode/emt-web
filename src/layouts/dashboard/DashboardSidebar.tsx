@@ -24,8 +24,10 @@ import Scrollbar from "../../components/Scrollbar";
 import NavSection from "../../components/NavSection";
 import { MHidden } from "../../components/@material-extend";
 //
-import sidebarConfig from "./SidebarConfig";
+import sidebarConfig, { sidebarETCConfig } from "./SidebarConfig";
 import { useAuthUserContext } from "../../context/authUser.context";
+import tokenService from "../../services/tokenService";
+import { userType } from "../../constants";
 
 // ----------------------------------------------------------------------
 
@@ -98,11 +100,15 @@ export default function DashboardSidebar({
   const {
     userState: { userProfile },
   } = useAuthUserContext();
-  console.log({userProfile});
-
+  const user = tokenService.getUser();
   useEffect(() => {
-    setsidebar(sidebarConfig);
-  }, []);
+    if(user?.type === userType.etc_user){
+      setsidebar(sidebarETCConfig);
+    }
+    else{
+      setsidebar(sidebarConfig);
+    }
+  }, [user]);
 
   const {
     isCollapse,

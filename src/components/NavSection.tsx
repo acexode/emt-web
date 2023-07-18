@@ -146,7 +146,6 @@ function NavItem({ item, active, isShow }: any) {
                             theme.transitions.create("transform"),
                           ...(isActiveSub && {
                             transform: "scale(2)",
-                            bgcolor: "hsl(150, 100%, 34%)",
                           }),
                         }}
                       />

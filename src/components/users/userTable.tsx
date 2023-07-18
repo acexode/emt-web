@@ -1,12 +1,13 @@
 import { filter } from "lodash";
-// import { Icon } from "@iconify/react";
+import { Icon } from "@iconify/react";
 import { useState, SetStateAction, FC } from "react";
-// import plusFill from "@iconify/icons-eva/plus-fill";
+import plusFill from "@iconify/icons-eva/plus-fill";
 // material
 import {
   Card,
   Table,
   Stack,
+  Button,
   TableRow,
   TableBody,
   TableCell,
@@ -28,7 +29,8 @@ import HeaderBreadcrumbs from "../../components/HeaderBreadcrumbs";
 import TableListHead from "../table/tableListHead";
 import ListToolbar from "../table/tableListToolbar";
 import MoreMenu from "../table/TableMoreMenu";
-import { AddEditClaims } from "./add-edit-claim";
+import { AddEditUser } from "./components/add-edit-user";
+// import axiosInstance from "../../services/api_service";
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
@@ -59,7 +61,7 @@ function applySortFilter(
   query: string
 ) {
 
-  const stabilizedThis = array.map((el: any, index: any) => [el, index]);
+  const stabilizedThis = array?.map((el: any, index: any) => [el, index]);
   stabilizedThis.sort((a: number[], b: number[]) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
@@ -68,7 +70,11 @@ function applySortFilter(
   if (query) {
     return filter(
       array,
-      (_user) => _user?.category?.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      (_user) => _user?.firstName?.toLowerCase().includes(query.toLowerCase())  ||
+      _user?.lastName?.toLowerCase().includes(query.toLowerCase()) ||
+      _user?.role?.toLowerCase().includes(query.toLowerCase()) ||
+      _user?.type?.toLowerCase().includes(query.toLowerCase()) ||
+      _user?.state?.toLowerCase().includes(query.toLowerCase()) 
     );
   }
   return stabilizedThis.map((el: any[]) => el[0]);
@@ -78,19 +84,19 @@ interface ITable {
   table_Head: any;
   dataList: any;
   page_title: string;
-  loading?:boolean;
-  fetchAllData:any;
+  loading?:boolean,
+  fetchAllUsers:any;
   type?:string
 }
 
-const CustomClaimTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetchAllData,type }) => {
+const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetchAllUsers,type }) => {
   const { themeStretch } = useSettings();
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
   const [selected, setSelected] = useState<any>([]);
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(25);
   const [modal, setModal] = useState(false);
   const [edit, setEdit] = useState(false);
   const [formData, setFormData] = useState(null);
@@ -104,7 +110,7 @@ const CustomClaimTable: FC<ITable> = ({ dataList, page_title, table_Head,loading
     setModal(!modal);
     setFormData(row);
     setEdit(true);
-  }; 
+  };
 
   const handleRequestSort = (_event: any, property: SetStateAction<string>) => {
     const isAsc = orderBy === property && order === "asc";
@@ -148,7 +154,7 @@ const CustomClaimTable: FC<ITable> = ({ dataList, page_title, table_Head,loading
   );
 
   const isUserNotFound = filteredUsers.length === 0 && !loading;
-  let dummyData = [...Array(5)]
+  let dummyData = [...Array(10)]
 
   return (
     <>
@@ -158,18 +164,18 @@ const CustomClaimTable: FC<ITable> = ({ dataList, page_title, table_Head,loading
             heading={`${page_title}`}
             links={[
               { name: "Dashboard", href: PATH_DASHBOARD.root },
-              { name: `${page_title}`, href:PATH_DASHBOARD.claims.root },
+              { name: `${page_title}`, href:PATH_DASHBOARD.settings.userManagement },
               { name: "List" },
             ]}
-            // action={
-            //   <Button
-            //     variant="contained"
-            //     onClick={toggle}
-            //     startIcon={<Icon icon={plusFill} />}
-            //   >
-            //     New Claim
-            //   </Button>
-            // }
+            action={
+              <Button
+                variant="contained"
+                onClick={toggle}
+                startIcon={<Icon icon={plusFill} />}
+              >
+               { type === "patient" ? "New Record" : "New User" } 
+              </Button>
+            }
           />
 
           <Card>
@@ -264,11 +270,11 @@ const CustomClaimTable: FC<ITable> = ({ dataList, page_title, table_Head,loading
                             aria-checked={isItemSelected}
                           >
                           
-                          <TableCell
+                            <TableCell
                               align="left"
                              
                             >
-                              { index +1
+                              { index + 1
                               }
                            
                             </TableCell>
@@ -276,7 +282,7 @@ const CustomClaimTable: FC<ITable> = ({ dataList, page_title, table_Head,loading
                               align="left"
                              
                             >
-                              { row?.service_provider || "NIL" 
+                              { row?.firstName || "Nil"
                               }
                            
                             </TableCell>
@@ -284,31 +290,37 @@ const CustomClaimTable: FC<ITable> = ({ dataList, page_title, table_Head,loading
                               align="left"
                              
                             >
-                               {row?.incident_code || "Nil"
+                               {row?.lastName || "Nil"
                               }
                             </TableCell>
                             <TableCell
                               align="left"
                               
                             >
-                               {row?.patient_name || "Nil"
+                               {row?.email || "Nil"
                               }
                             </TableCell>
                             <TableCell
                               align="left"
                               
                             >
-                               {row?.date || "Nil"
+                               {row?.role || "Nil"
                               }
                             </TableCell>
+                           
                             <TableCell align="left">
                           
-                              { row?.status || "Nil"}
+                              { row?.type || "Nil"}
+                             
+                              </TableCell>
+                            <TableCell align="left">
+                          
+                           {row?.state || "Nil"}
                              
                               </TableCell>
 
                             <TableCell align="right">
-                                <MoreMenu handleUpdate={handleUpdate} row={row} fetchAllData={fetchAllData} type={type} />
+                                <MoreMenu handleUpdate={handleUpdate} row={row} fetchAllData={fetchAllUsers} type="User" />
                             </TableCell>
                           </TableRow>
                         );
@@ -345,9 +357,9 @@ const CustomClaimTable: FC<ITable> = ({ dataList, page_title, table_Head,loading
           </Card>
         </Container>
       </Page>
-      <AddEditClaims toggle={toggle} modal={modal} formData={formData} edit={edit} fetchAllData={fetchAllData}  />
+      <AddEditUser toggle={toggle}  modal={modal} formData={formData} edit={edit} fetchAllUsers={fetchAllUsers}  />
     </>
   );
 };
 
-export default CustomClaimTable;
+export default CustomTable;
