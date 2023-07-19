@@ -9,7 +9,7 @@ import SeoIllustration from "../../../assets/SeoIllustration";
 const RootStyle = styled(Card)(({ theme }) => ({
   boxShadow: "none",
   textAlign: "center",
-  backgroundColor: "hsl(142,63%,91%)",
+  backgroundColor: "hsl(7,100%,95%)",
   [theme.breakpoints.up("md")]: {
     height: "100%",
     display: "flex",
@@ -32,28 +32,22 @@ export default function AppWelcome({ displayName }: any) {
         sx={{
           p: { md: 0 },
           pl: { md: 5 },
-          color: "grey.800",
         }}
       >
-        <Typography gutterBottom variant="h4">
-          Welcome back,
+        <Typography gutterBottom variant="h4" sx={{color:"#7b0a31"}}>
+          Welcome back 👋
           <br /> {!displayName ? "..." : displayName}!
         </Typography>
 
         <Typography
           variant="body2"
-          sx={{ pb: { xs: 3, xl: 5 }, maxWidth: 480, mx: "auto" }}
+          sx={{ pb: { xs: 3, xl: 5 }, maxWidth: 480, mx: "auto" ,color:"#ad6174"}}
         >
           This Platform will enable you have real time access to vital
-          information on NPHCDA Gateway M&E Activities of the BHCPF Program in
-          Nigeria. You can track the utilisation of funds for the provision of
+          information on EMT. You can track the utilisation of funds for the provision of
           basic healthcare services and generate reports to share with
           stakeholders.
         </Typography>
-
-        {/* <Button variant="contained" to="/" component={RouterLink}>
-          Go Now
-        </Button> */}
       </CardContent>
 
       <SeoIllustration

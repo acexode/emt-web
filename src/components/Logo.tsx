@@ -1,6 +1,6 @@
 // material
 import { Box } from "@mui/material";
-import logo from "../assets/emt.jpg";
+import logo from "../assets/emtLogo.svg";
 import { useLocation } from "react-router-dom";
 // ----------------------------------------------------------------------
 

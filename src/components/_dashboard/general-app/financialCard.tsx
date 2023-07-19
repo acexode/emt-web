@@ -9,17 +9,19 @@ import { BaseOptionChart } from "../../charts";
 
 // ----------------------------------------------------------------------
 
-const CHART_DATA = [{ data: [30, 90, 60, 50] }];
+const CHART_DATA = [{ data: [30, 90, 60, 50,40,20] }];
 
 export default function FinancialCard() {
   const chartOptions = merge(BaseOptionChart(), {
-    colors: "#26b76e",
+    colors: ["#26b76e","#013767","#b76e00","#045e49","#00b8d9","#ff3030"],
     xaxis: {
       categories: [
-        "Received DFF on time",
-        "Received capitation",
-        "With >1 account no",
-        "Submitted BP",
+        "Service Providers with minimum infrastructure and equipment requirements",
+        "States to have adopted and deployed the NIEMS software",
+        "States with established EMS control centres",
+        "States with a minimum staffing requirements",
+        "States with developed DispatchProt...",
+        "States with installed and fun...",
       ],
     },
     plotOptions: {
@@ -28,11 +30,19 @@ export default function FinancialCard() {
         barHeight: 15,
       },
     },
+    dataLabels: {
+      enabled: true,
+      offsetX: -6,
+      style: {
+        fontSize: '12px',
+        colors: ['#fff']
+      }
+    },
   });
 
   return (
     <Card>
-      <CardHeader title="FINANCING AND FINANCIAL MANAGEMENT" />
+      <CardHeader title="INFRASTRUCTURE & EQUIPMENT" />
 
       <Box sx={{ mt: 3, mx: 3 }} dir="ltr">
         <ReactApexChart
