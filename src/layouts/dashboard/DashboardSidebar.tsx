@@ -156,7 +156,7 @@ export default function DashboardSidebar({
           <Box
             component={RouterLink}
             to="/dashboard/app"
-            sx={{ display: "inline-flex", textDecoration: "none" }}
+            sx={{ display: "inline-flex",alignItems:"center", textDecoration: "none" }}
           >
             <Logo />
             <Typography
@@ -165,7 +165,8 @@ export default function DashboardSidebar({
               sx={{
                 fontSize: "0.6rem",
                 // ml: 2,
-                color: "#fff",
+                color: "#000",
+                mb:0
               }}
             >
              NEMSAS
@@ -193,7 +194,7 @@ export default function DashboardSidebar({
             <AccountStyle>
               <MyAvatar />
               <Box sx={{ ml: 2 }}>
-                <Typography variant="subtitle2" sx={{ color: "#fff" }}>
+                <Typography variant="subtitle2" sx={{ color: "#000" }}>
                   {/* {userProfile?.name} */}
                   John Doe
                 </Typography>

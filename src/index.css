@@ -18,8 +18,8 @@
   background-color: transparent !important;
 } */
 .apexcharts-toolbar {
-  top: 3px !important;
-  right: -21px !important;
+  top: 0px !important;
+  right: 0px !important;
 }
 .apexcharts-zoomin-icon,
 .apexcharts-zoomout-icon,
@@ -30,5 +30,7 @@
 }
 .css-bmprcn-MuiPaper-root-MuiDrawer-paper,
 .css-7lh4qq-MuiPaper-root-MuiDrawer-paper {
-  background: hsl(211, 24%, 17%);
+  /* background: hsl(220, 47%, 96%); */
+  /* background: hsl(211, 24%, 17%); */
+  /* background: #f0f0f0; */
 }

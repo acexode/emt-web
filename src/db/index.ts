@@ -35,24 +35,31 @@ export const cardData:IServiceCard[] =[
 export const cardData2:IServiceCard[] =[
     {
       color: "#26b76e",
-      title:"States with NEMSAS established",
-      value:"56%",
-	  show:false
+      title:"States with functional and accredited Ambulance Service providers",
+      value:"12",
+	  show:true
   
     },
     {
       color: "#536cbe",
-      title:"States with a minimum staffing requirements",
-      value:"71%",
-	  show:false
+      title:"LGAs with functional and accredited Ambulance Service providers",
+      value:"9,623",
+	  show:true
   
     },
     {
       color: "#4ca8ff",
-      title:"States with Dispatch Protocols at EMS",
-      value:"49%",
-	  show:false
-  
+      title:"States with functional and accredited Emergency Treatment Centres",
+      value:"18",
+	  show:true
+
+    },
+    {
+      color: "#4ca8ff",
+      title:"LGAs with functional and accredited Emergency Treatment Centres",
+      value:"20",
+	  show:true
+
     },
   
   ]
@@ -77,7 +84,18 @@ export const claimsData:IClaims[] =[
       title:"Pending Review",
       value:"10",
     },
-  
+  ]
+export const ambData:IClaims[] =[
+    {
+      color: "#90EE90",
+      title:"Incidents",
+      value:"101",  
+    },
+    {
+      color: "#D3D3D3",
+      title:"Referrals",
+      value:"10",
+    },
   ]
 
   export const governanceStructure:IGovernaceStructure[] = [
@@ -222,3 +240,26 @@ export const ambulance_run_sheets =[
   },
 
 ]
+
+
+// {
+//   color: "#26b76e",
+//   title:"States with NEMSAS established",
+//   value:"56%",
+// show:false
+
+// },
+// {
+//   color: "#536cbe",
+//   title:"States with a minimum staffing requirements",
+//   value:"71%",
+// show:false
+
+// },
+// {
+//   color: "#4ca8ff",
+//   title:"States with Dispatch Protocols at EMS",
+//   value:"49%",
+// show:false
+
+// },

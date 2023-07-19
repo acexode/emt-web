@@ -15,13 +15,19 @@ import {
     TextField,
   } from "@mui/material";
 import { ambulance_run_sheets } from "../../db";
+import { useNavigate } from "react-router-dom";
  
 const RunSheets: FC = () => {
     const { themeStretch } = useSettings();
 
   const [ambulanceRunSheets, _setAmbulanceRunSheets] = useState(ambulance_run_sheets);
   // const [loading,setLoading] = useState(false)
-
+  let navigate = useNavigate()
+  const handleClick = (data:any) =>{
+    navigate(PATH_DASHBOARD.ambulance_run_sheets.viewRunSheet,{
+      state: {data}
+    })
+  }
   // const fetchAllAmbulanceRunSheets = () =>{
   //   setLoading(true)
   //   axiosInstance
@@ -63,7 +69,7 @@ const RunSheets: FC = () => {
             </Grid>
             </Grid>
             {ambulanceRunSheets?.map((runSheets, index) =>(
-                <Card sx={{ p: 3, mb: 2 }} key={index}>
+                <Card sx={{ p: 3, mb: 2 ,cursor:"pointer"}} key={index} onClick={() => handleClick(runSheets)}>
                     <ListItem secondaryAction={  <Typography sx={{color:"blue", cursor:"pointer"}} >{   runSheets?.ambulance_service_provider || "Not Available"}</Typography>}>
                   <ListItemText primary={`Incident No: ${runSheets?.incident_no}`} />
                 </ListItem>

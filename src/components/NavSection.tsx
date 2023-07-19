@@ -48,14 +48,14 @@ const ListItemStyle = styled((props) => (
   "&:before": {
     top: 0,
     right: 0,
-    width: 3,
+    width: 4,
     bottom: 0,
     content: "''",
     display: "none",
     position: "absolute",
     borderTopLeftRadius: 4,
     borderBottomLeftRadius: 4,
-    backgroundColor: "#fff",
+    backgroundColor: "hsl(0, 100%, 27%)",
   },
 }));
 
@@ -81,14 +81,14 @@ function NavItem({ item, active, isShow }: any) {
   };
   //
   const activeRootStyle = {
-    color: "#fff",
+    color: "hsl(0, 100%, 27%)",
     fontWeight: "fontWeightMedium",
-    bgcolor: alpha("hsl(148, 37%, 59%)", theme.palette.action.selectedOpacity),
+    bgcolor: alpha("hsl(3, 34%, 61%)", theme.palette.action.selectedOpacity),
     "&:before": { display: "block" },
   };
 
   const activeSubStyle = {
-    color: "#fff",
+    color: "hsl(0, 100%, 27%)",
     fontWeight: "fontWeightMedium",
   };
 
@@ -146,6 +146,8 @@ function NavItem({ item, active, isShow }: any) {
                             theme.transitions.create("transform"),
                           ...(isActiveSub && {
                             transform: "scale(2)",
+                            bgcolor: "hsl(0, 100%, 27%)",
+
                           }),
                         }}
                       />
@@ -191,7 +193,7 @@ export default function NavSection({ navConfig, isShow = true, ...other }) {
         return (
           <List key={subheader} disablePadding>
             {isShow && (
-              <ListSubheaderStyle sx={{ color: "#fff" }}>
+              <ListSubheaderStyle sx={{ color: "#000" }}>
                 {subheader}
               </ListSubheaderStyle>
             )}
