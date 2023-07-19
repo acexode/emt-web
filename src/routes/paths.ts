@@ -38,6 +38,7 @@ function path(root: string, sublink: string) {
     },
     ambulance_run_sheets: {
       root: path(ROOTS_DASHBOARD, '/ambulance_run_sheets'),
+      viewRunSheet: path(ROOTS_DASHBOARD, '/view_runsheet'),
     },
     settings: {
       root: path(ROOTS_DASHBOARD, '/settings'),
