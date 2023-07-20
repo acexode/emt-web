@@ -11,7 +11,7 @@ import 'swiper/css/scrollbar';
 import { Card } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import "./swiper.css";
-import img from "../../../assets/logo-only.png";
+import img from "../../../assets/emtLogo.svg";
 
 // SwiperCore.use([Navigation, Pagination, Autoplay]);
 
@@ -37,8 +37,8 @@ const SwiperCard = () => {
         spaceBetween={30}
         slidesPerView={1}
         autoplay={{ delay: 5000 }}
-        pagination={{ clickable: true }}
-        navigation={true}
+        // pagination={{ clickable: true }}
+        navigation={false}
       >
         <SwiperSlide className="slideMainBg">
           <div className="slide slideContent">

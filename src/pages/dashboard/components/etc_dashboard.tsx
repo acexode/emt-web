@@ -5,7 +5,7 @@ import {  FinancialCard, HumanResourcesCard, ServicesCard, UserWelcome } from ".
 import ClaimsCard from "../../../components/_dashboard/general-app/ClaimsCard";
 import ServicesCardTwo from "../../../components/_dashboard/general-app/ServiceCardTwo";
 import { useAuthUserContext } from "../../../context/authUser.context";
-// import SwiperCard from "../../components/_dashboard/general-app/swiperCard";
+import SwiperCard from "../../../components/_dashboard/general-app/swiperCard";
 
 const ETCDashboard: FC = () => {
    const {
@@ -18,7 +18,7 @@ const ETCDashboard: FC = () => {
           <UserWelcome displayName={userProfile?.name ?? "John Doe"} />
         </Grid>
         <Grid item xs={12} md={4}>
-          {/* <SwiperCard /> */}
+          <SwiperCard />
         </Grid>
     <Grid item xs={12} md={12} sx={{mb:-2, mt:4}}>
         <Typography variant="subtitle1">Accreditions <Typography variant="caption">(As of Today)</Typography> </Typography>

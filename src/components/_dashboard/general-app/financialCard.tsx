@@ -13,7 +13,6 @@ const CHART_DATA = [{ data: [30, 90, 60, 50,40,20] }];
 
 export default function FinancialCard() {
   const chartOptions = merge(BaseOptionChart(), {
-    colors: ["#26b76e","#013767","#b76e00","#045e49","#00b8d9","#ff3030"],
     xaxis: {
       categories: [
         "Service Providers with minimum infrastructure and equipment requirements",
@@ -30,6 +29,8 @@ export default function FinancialCard() {
         barHeight: 15,
       },
     },
+    colors: ["#26b76e","#013767","#b76e00","#045e49","#00b8d9","#ff3030"],
+
     dataLabels: {
       enabled: true,
       offsetX: -6,
