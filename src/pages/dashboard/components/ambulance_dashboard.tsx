@@ -4,7 +4,7 @@ import {  Grid ,Typography} from "@mui/material";
 import {  UserWelcome } from "../../../components/_dashboard/general-app";
 import ClaimsCard from "../../../components/_dashboard/general-app/ClaimsCard";
 import { useAuthUserContext } from "../../../context/authUser.context";
-// import SwiperCard from "../../components/_dashboard/general-app/swiperCard";
+import SwiperCard from "../../../components/_dashboard/general-app/swiperCard";
 
 const AmbulanceDashboard: FC = () => {
    const {
@@ -17,7 +17,7 @@ const AmbulanceDashboard: FC = () => {
           <UserWelcome displayName={userProfile?.name ?? "John Doe"} />
         </Grid>
         <Grid item xs={12} md={4}>
-          {/* <SwiperCard /> */}
+          <SwiperCard />
         </Grid>
         <Grid item xs={12} md={12} sx={{mb:-2, mt:4}}>
         <Typography variant="h4">ETC - Gwarinpa General Hospital Dashboard</Typography>
