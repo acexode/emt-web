@@ -41,7 +41,7 @@ export default function AppWelcome({ displayName }: any) {
 
         <Typography
           variant="body2"
-          sx={{ pb: { xs: 3, xl: 5 }, maxWidth: 480, mx: "auto" ,color:"#ad6174"}}
+          sx={{ pb: { xs: 3, xl: 5 }, maxWidth: 680, mx: "auto" ,color:"#ad6174"}}
         >
           This Platform will enable you have real time access to vital
           information on EMT. You can track the utilisation of funds for the provision of

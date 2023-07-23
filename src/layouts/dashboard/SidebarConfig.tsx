@@ -45,6 +45,11 @@ const sidebarConfig = [
         path: PATH_DASHBOARD.claims.root,
         icon: ICONS.booking,
       },
+      {
+        title: "Ambulance Run Sheets",
+        path: PATH_DASHBOARD.nemsas_run_sheets.root,
+        icon: ICONS.reports,
+      },
     ],
   },
 

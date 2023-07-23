@@ -15,7 +15,15 @@ const CHART_DATA = [
 
 export default function HumanResourcesCard() {
   const chartOptions = merge(BaseOptionChart(), {
-    colors: ["#26b76e"],
+    colors: ["#EACE09"],
+    dataLabels: {
+      enabled: true,
+      offsetX: -3,
+      style: {
+        fontSize: '12px',
+        colors: ['#000']
+      }
+    },
     // xaxis: {
     //   categories: [
     //     "Midwives Engaged",

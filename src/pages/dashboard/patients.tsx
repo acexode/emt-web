@@ -1,55 +1,22 @@
 import { useEffect, useState ,lazy} from 'react'
 // import axiosInstance from '../../services/api_service';
 
-const CustomTable = lazy(() => import("../../components/users/userTable"))
-const states = [
-    "Abia",
-    "Adamawa",
-    "Akwa Ibom",
-    "Anambra",
-    "Bauchi",
-    "Bayelsa",
-    "Benue",
-    "Borno",
-    "Cross River",
-    "Delta",
-    "Ebonyi",
-    "Edo",
-    "Ekiti",
-    "Enugu",
-    "Federal Capital Territory",
-    "Gombe",
-    "Imo",
-    "Jigawa",
-    "Kaduna",
-    "Kano",
-    "Katsina",
-    "Kebbi",
-    "Kogi",
-    "Kwara",
-    "Lagos",
-    "Nasarawa",
-    "Niger",
-    "Ogun",
-    "Ondo",
-    "Osun",
-    "Oyo",
-    "Plateau",
-    "Rivers",
-    "Sokoto",
-    "Taraba",
-    "Yobe",
-    "Zamfara"
-  ];
+const CustomTable = lazy(() => import("../../components/patients/patientTable"))
+const status = [
+    "Discharged",
+    "Awaiting Discharge",
+    "Treatment In Progress"
+  ]
+
+  const incidentTypes = ["Domestic Accidents","Fire Accidents"]
 
 const TABLE_HEAD = [
   { id: "sn", label: "S/N", alignRight: false },
   { id: "firstName", label: "First Name", alignRight: false },
   { id: "lastName", label: "Last Name", alignRight: false },
-  { id: "email", label: "Email", alignRight: false },
-  { id: "role", label: "Role", alignRight: false },
-  { id: "type", label: "Type", alignRight: false },
-  { id: "state", label: "State", alignRight: false },
+  { id: "age", label: "Age", alignRight: false },
+  { id: "incidentType", label: "Incident Type", alignRight: false },
+  { id: "status", label: "Status", alignRight: false },
   { id: "" },
 ];
 
@@ -70,10 +37,9 @@ const Patients = () => {
         sn: i,
         firstName: getRandomValue(["John", "Jane", "Mike", "Sarah"]),
         lastName: getRandomValue(["Doe", "Smith", "Johnson", "Brown"]),
-        email: getRandomValue(["example1@example.com", "example2@example.com", "example3@example.com"]),
-        role: getRandomValue(["Admin", "User", "Manager"]),
-        type: getRandomValue(["Type1", "Type2", "Type3"]),
-        state: getRandomValue(states)
+        age: getRandomValue(["20 years", "30 years", "45 years"]),
+        type: getRandomValue(incidentTypes),
+        status: getRandomValue(status)
       };
       data.push(obj);
     }

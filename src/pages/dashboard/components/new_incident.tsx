@@ -29,6 +29,31 @@ import { LoadingButton } from "@mui/lab";
 //     [key: string]: string;
 //   }
 
+const treatmentTypes =[
+    "Federal Medical Centre, Abuja",
+    "Gwarimpa General Hospital, Abuja",
+    "Garki General Hospital, Abuja"
+]
+const ambulance =[
+    {
+      ambulance_code: "002",
+      ambulance_service_provider:"R & R Ambulance Service"
+    },
+    {
+      ambulance_code: "003",
+      ambulance_service_provider:"Hibalance Ambulance Service"
+    },
+    {
+      ambulance_code: "004",
+      ambulance_service_provider:"PneumaRS Ambulance Service"
+    },
+    {
+      ambulance_code: "005",
+      ambulance_service_provider:"R & R Ambulance Service"
+    },
+  
+  ]
+
   const schema = yup.object().shape({
     incidentDate: yup.string().required("*Incident Date is required"),
     incidentTime: yup.string().required("*Incident Time is required"),
@@ -184,22 +209,7 @@ import { LoadingButton } from "@mui/lab";
                         >
                         </TextField>
                     </Grid>
-                    <Grid item sm={4}>
-                        <FormLabel >
-                        Incident Code
-                        </FormLabel>
-                        <TextField
-                            variant="outlined"
-                            fullWidth                      
-                            type="text"
-                            {...register('incidentCode')}
-                            helperText={errors?.incidentCode?.message?.toString()}
-                            FormHelperTextProps={{
-                            className:"helperTextColor"
-                        }}
-                        >
-                        </TextField>
-                    </Grid>
+                   
                     <Grid item sm={4}>
                         <FormLabel >
                         Caller ID (Phone Number)
@@ -346,7 +356,7 @@ import { LoadingButton } from "@mui/lab";
                     </Grid>
                     <Grid item sm={6}>
                         <FormLabel >
-                        Case resolved without an ambulance dispatch checkbox
+                        Was the case resolved without Ambulance dispatch?
                         </FormLabel>
                         <TextField
                             variant="outlined"
@@ -373,21 +383,29 @@ import { LoadingButton } from "@mui/lab";
               <Card sx={{ p: 3, pb: 10, mb: 5 }}>
                 <Box sx={{mb:2}}>Ambulance Dispatch Information</Box>
                     <Grid container spacing={2}>
-                
                     <Grid item sm={6}>
                         <FormLabel >
-                        Ambulance Code
+                        Ambulance
                         </FormLabel>
                         <TextField
                             variant="outlined"
-                            fullWidth                      
+                            fullWidth
+                            select
                             type="text"
                             {...register('ambulanceCode')}
                             helperText={errors?.ambulanceCode?.message?.toString()}
                             FormHelperTextProps={{
                             className:"helperTextColor"
-                        }}
+                            }}
                         >
+                            <MenuItem value={""}>
+                                None
+                            </MenuItem>
+                           {ambulance.map((amb, index) =>(
+                            <MenuItem value={amb.ambulance_code} key={index}>
+                                {amb.ambulance_service_provider}
+                            </MenuItem>
+                           ))}                 
                         </TextField>
                     </Grid>
                     <Grid item sm={6}>
@@ -418,24 +436,31 @@ import { LoadingButton } from "@mui/lab";
               <Card sx={{ p: 3, pb: 10, mb: 5 }}>
                 <Box sx={{mb:2}}>Treatment Center Information</Box>
                     <Grid container spacing={2}>
-                
-                    <Grid item sm={12}>
+                    <Grid item sm={6}>
                         <FormLabel >
                         Treatment Center Code
                         </FormLabel>
                         <TextField
                             variant="outlined"
-                            fullWidth                      
+                            fullWidth
+                            select
                             type="text"
                             {...register('treatmentCode')}
                             helperText={errors?.treatmentCode?.message?.toString()}
                             FormHelperTextProps={{
                             className:"helperTextColor"
-                        }}
+                            }}
                         >
+                            <MenuItem value={""}>
+                                None
+                            </MenuItem>
+                           {treatmentTypes.map((treatment, index) =>(
+                            <MenuItem value={treatment} key={index}>
+                                {treatment}
+                            </MenuItem>
+                           ))} 
                         </TextField>
-                    </Grid>
-                     
+                   </Grid>
                     </Grid>
               </Card>
               <Card sx={{ p: 3, pb: 10, mb: 5 }}>
@@ -564,28 +589,7 @@ import { LoadingButton } from "@mui/lab";
                      
                     </Grid>
               </Card>
-              <Card sx={{ p: 3, pb: 10, mb: 5 }}>
-                    <Grid container spacing={2}>
-                
-                    <Grid item sm={12}>
-                        <FormLabel >
-                       Serial No
-                        </FormLabel>
-                        <TextField
-                            variant="outlined"
-                            fullWidth                      
-                            type="text"
-                            {...register('serialNo')}
-                            helperText={errors?.serialNo?.message?.toString()}
-                            FormHelperTextProps={{
-                            className:"helperTextColor"
-                        }}
-                        >
-                        </TextField>
-                    </Grid>
-          
-                    </Grid>
-              </Card>
+              
               <LoadingButton
                 size="large"
                 type="submit"

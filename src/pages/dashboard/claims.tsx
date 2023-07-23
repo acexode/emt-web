@@ -5,6 +5,8 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import tokenService from "../../services/tokenService";
+import { userType } from "../../constants";
 const CustomTable = lazy(() => import("../../components/claims/table"))
 
 
@@ -54,6 +56,7 @@ const Claims: FC = () => {
   const [claims, setClaims] = useState(claimsData2);
   const [loading,setLoading] = useState(false)
   const [value, setValue] = useState(0);
+  const user = tokenService.getUser();
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -78,27 +81,31 @@ const Claims: FC = () => {
   }, []);
   return (
     <>
-     <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' ,mx:6}}>
-        <Tabs value={value} onChange={handleChange}  TabIndicatorProps={{
-        style: {
-          backgroundColor: 'hsl(0, 100%, 27%)', // Change this to the desired color
-        },
-      }}
-          aria-label="basic tabs example">
-          <Tab label="Ambulance Claims" {...a11yProps(0)} />
-          <Tab label="ETC Claims" {...a11yProps(1)} />
-      
-        </Tabs>
-      </Box>
-      <TabPanel value={value} index={0}>
-      <CustomTable page_title='Ambulance' loading={loading} table_Head={TABLE_HEAD} dataList={claims} fetchAllData={fetchAllData} type="ambulance" />
-
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-      <CustomTable page_title='Emergency Treatment Centre' loading={loading} table_Head={TABLE_HEAD} dataList={claims} fetchAllData={fetchAllData} type="etc" />
-      </TabPanel>
+    {userType.etc_user === user?.type ?      <CustomTable page_title='Emergency Treatment Centre' loading={loading} table_Head={TABLE_HEAD} dataList={claims} fetchAllData={fetchAllData} type="etc" />
+ : 
+    <Box sx={{ width: '100%' }}>
+    <Box sx={{ borderBottom: 1, borderColor: 'divider' ,mx:6}}>
+      <Tabs value={value} onChange={handleChange}  TabIndicatorProps={{
+      style: {
+        backgroundColor: 'hsl(0, 100%, 27%)', // Change this to the desired color
+      },
+    }}
+        aria-label="basic tabs example">
+        <Tab label="Ambulance Claims" {...a11yProps(0)} />
+        <Tab label="ETC Claims" {...a11yProps(1)} />
+    
+      </Tabs>
     </Box>
+    <TabPanel value={value} index={0}>
+    <CustomTable page_title='Ambulance' loading={loading} table_Head={TABLE_HEAD} dataList={claims} fetchAllData={fetchAllData} type="ambulance" />
+
+    </TabPanel>
+    <TabPanel value={value} index={1}>
+    <CustomTable page_title='Emergency Treatment Centre' loading={loading} table_Head={TABLE_HEAD} dataList={claims} fetchAllData={fetchAllData} type="etc" />
+    </TabPanel>
+    </Box>
+      }
+    
     </>
 
   );

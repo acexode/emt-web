@@ -45,8 +45,8 @@ const states = [
 
 const TABLE_HEAD = [
   { id: "sn", label: "S/N", alignRight: false },
-  { id: "state", label: "State", alignRight: false },
   { id: "type", label: "Type", alignRight: false },
+  { id: "state", label: "State", alignRight: false },
   { id: "" },
 ];
 
