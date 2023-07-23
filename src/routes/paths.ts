@@ -40,6 +40,9 @@ function path(root: string, sublink: string) {
       root: path(ROOTS_DASHBOARD, '/ambulance_run_sheets'),
       viewRunSheet: path(ROOTS_DASHBOARD, '/view_runsheet'),
     },
+    nemsas_run_sheets: {
+      root: path(ROOTS_DASHBOARD, '/nemsas_run_sheets'),
+    },
     settings: {
       root: path(ROOTS_DASHBOARD, '/settings'),
       userManagement: path(ROOTS_DASHBOARD,'/settings/users'),

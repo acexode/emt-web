@@ -38,7 +38,7 @@ function CircularProgressWithLabel(
 ) {
   return (
     <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-      <CircularProgress variant="determinate" sx={{color:"green"}} size={60} {...props} />
+      <CircularProgress variant="determinate" sx={{color:props.value === 80 ? "red" :"green"}} size={60} {...props} />
       <Box
         sx={{
           top: 0,
@@ -61,8 +61,8 @@ function CircularProgressWithLabel(
   );
 }
 
-const ServicesCardTwo: FC<IServiceCard> = ({ title, color, value, show }) => {
-  const [progress, setProgress] = useState(70);
+const ServicesCardTwo: FC<IServiceCard> = ({ title, color, value, show,percentage }) => {
+  const [progress, setProgress] = useState(percentage);
   const theme = useTheme();
 
   return (
@@ -100,7 +100,7 @@ const ServicesCardTwo: FC<IServiceCard> = ({ title, color, value, show }) => {
           )}
         </Stack>
       </Box>
-      <CircularProgressWithLabel value={progress} />
+      <CircularProgressWithLabel value={progress}  />
     
     </Card>
   );

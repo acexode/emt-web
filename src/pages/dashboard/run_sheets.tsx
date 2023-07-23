@@ -70,7 +70,7 @@ const RunSheets: FC = () => {
             </Grid>
             {ambulanceRunSheets?.map((runSheets, index) =>(
                 <Card sx={{ p: 3, mb: 2 ,cursor:"pointer"}} key={index} onClick={() => handleClick(runSheets)}>
-                    <ListItem secondaryAction={  <Typography sx={{color:"blue", cursor:"pointer"}} >{   runSheets?.ambulance_service_provider || "Not Available"}</Typography>}>
+                    <ListItem secondaryAction={  <Typography sx={{color:"hsl(0, 100%, 27%)", cursor:"pointer"}} >{   runSheets?.ambulance_service_provider || "Not Available"}</Typography>}>
                   <ListItemText primary={`Incident No: ${runSheets?.incident_no}`} />
                 </ListItem>
 

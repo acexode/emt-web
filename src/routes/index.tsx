@@ -74,6 +74,9 @@ export default function Router() {
           path: "ambulance_run_sheets", element: <RunSheets />
         },
         {
+          path: "nemsas_run_sheets", element: <NemsasRunSheets />
+        },
+        {
           path: "view_runsheet", element: <ViewRunSheet />
         },
         {
@@ -128,6 +131,9 @@ const RunSheets = Loadable(
 );
 const ViewAmbulance = Loadable(
   lazy(() => import("../pages/dashboard/viewAmbulance"))
+);
+const NemsasRunSheets = Loadable(
+  lazy(() => import("../pages/dashboard/nemsa_runsheets"))
 );
 const ViewETC = Loadable(
   lazy(() => import("../pages/dashboard/viewEtc"))

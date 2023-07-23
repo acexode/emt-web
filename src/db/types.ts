@@ -2,7 +2,8 @@ export interface IServiceCard{
     value: string,
     title: string,
     color:string ,
-    show?:boolean
+    show?:boolean,
+    percentage?:number
   }
 export interface IClaims{
     value: string,

@@ -29,14 +29,14 @@ export default function FinancialCard() {
         barHeight: 15,
       },
     },
-    colors: ["#26b76e","#013767","#b76e00","#045e49","#00b8d9","#ff3030"],
+    colors: ["#EACE09"],
 
     dataLabels: {
       enabled: true,
       offsetX: -6,
       style: {
         fontSize: '12px',
-        colors: ['#fff']
+        colors: ['#000']
       }
     },
   });

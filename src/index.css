@@ -34,3 +34,10 @@
   /* background: hsl(211, 24%, 17%); */
   background: #f0f0f0;
 }
+
+.btnCustom {
+  background: green;
+}
+.btnCustom:hover {
+  background: green;
+}

@@ -51,8 +51,8 @@ export default function Login() {
           >
             <Logo />
           </Stack>
-          <Stack direction="row" alignItems="center" sx={{ mb: 5,mt:5 }}>
-            <Box sx={{ flexGrow: 1 }}>
+          <Stack direction="row" alignItems="center"  sx={{ mb: 5,mt:5 }}>
+            <Box sx={{ flexGrow: 1, display:"flex", flexDirection:"column", alignItems:"center" }}>
               <Typography variant="h4" gutterBottom>
                 Sign in to the {app_title} Portal
               </Typography>

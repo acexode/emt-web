@@ -37,28 +37,32 @@ export const cardData2:IServiceCard[] =[
       color: "#26b76e",
       title:"States with functional and accredited Ambulance Service providers",
       value:"12",
-	  show:true
+	  show:true,
+    percentage:70
   
     },
     {
       color: "#536cbe",
       title:"LGAs with functional and accredited Ambulance Service providers",
-      value:"9,623",
-	  show:true
+      value:"80",
+	    show:true,
+      percentage:80
   
     },
     {
       color: "#4ca8ff",
       title:"States with functional and accredited Emergency Treatment Centres",
       value:"18",
-	  show:true
+	  show:true,
+    percentage:70
 
     },
     {
       color: "#4ca8ff",
       title:"LGAs with functional and accredited Emergency Treatment Centres",
       value:"20",
-	  show:true
+	  show:true,
+    percentage:70
 
     },
   
@@ -203,21 +207,21 @@ export const claimsData2 = [
 		incident_code:"IN123123",
 		patient_name:"Jane Doe",
 		date: "4-05-2021",
-		status: "Dispatched"
+		status: "Rejected"
 	},
 	{
 		service_provider: "Paediatric",
 		incident_code:"IN432564",
 		patient_name:"John Doe",
 		date: "4-05-2021",
-		status: "Resolved"
+		status: "Accepted"
 	},
 	{
 		service_provider: "Paediatric",
 		incident_code:"IN875345",
 		patient_name:"Janet Doe",
 		date: "4-05-2021",
-		status: "No Dispatch Needed"
+		status: "Accepted"
 	}
 ]
 
