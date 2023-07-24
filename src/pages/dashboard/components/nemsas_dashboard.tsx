@@ -5,6 +5,7 @@ import {  FinancialCard, HumanResourcesCard, ServicesCard, UserWelcome } from ".
 import ClaimsCard from "../../../components/_dashboard/general-app/ClaimsCard";
 import ServicesCardTwo from "../../../components/_dashboard/general-app/ServiceCardTwo";
 import { useAuthUserContext } from "../../../context/authUser.context";
+// import AmbulanceMap from "../../../components/_dashboard/general-app/map";
 
 const NEMSASDashboard: FC = () => {
    const {
@@ -59,6 +60,9 @@ const NEMSASDashboard: FC = () => {
         <Grid item xs={12} md={6} lg={6}>
           <HumanResourcesCard />
         </Grid>
+        {/* <Grid item xs={12} md={12} lg={12}>
+          <AmbulanceMap />
+        </Grid> */}
         </Grid>
   );
 };
