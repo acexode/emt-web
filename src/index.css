@@ -41,3 +41,23 @@
 .btnCustom:hover {
   background: green;
 }
+
+.showVerificationCards {
+  display: none;
+}
+
+@media print {
+  .css-bmprcn-MuiPaper-root-MuiDrawer-paper,
+  .css-7lh4qq-MuiPaper-root-MuiDrawer-paper,
+  .hidebtn,
+  .css-lbq405-MuiPaper-root-MuiAppBar-root {
+    display: none;
+  }
+  .showVerificationCards {
+    display: flex;
+  }
+}
+
+.map-container {
+  height: 400px;
+}

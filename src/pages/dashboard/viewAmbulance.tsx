@@ -53,6 +53,9 @@ import { formatter } from "../../utility";
             SetContent(objectData)
         },[row])
   
+        const handlePrint = () => {
+          window.print();
+        }
     return (
       <Page title={`View Ambulance Claim | EMT`}>
         <Container maxWidth={themeStretch ? false : "lg"}>
@@ -64,9 +67,24 @@ import { formatter } from "../../utility";
               { name: "List" },
             ]}
           />
-           <Typography variant="h6" component="div">
+         
+          <Grid container spacing={1} mb={2} justifyContent="space-between">
+              <Grid item sm={8}>
+              <Typography variant="h6" component="div">
          NATIONAL EMERGENCY MEDICAL SERVICE AND AMBULANCE SYSTEM (NEMSAS)
           </Typography>
+              </Grid>
+              <Grid item sm={4} display="flex" justifyContent="end">
+              <Button
+                size="medium"
+                variant="contained"
+                onClick={handlePrint}
+                className="hidebtn"
+            >
+                Print
+            </Button>
+              </Grid>
+         </Grid>
           <Card sx={{ p: 3, pb: 10, mb: 2 }}>
                 <Box sx={{mb:2}}>Provider Details</Box>
                     <Grid container spacing={2}>
@@ -180,7 +198,7 @@ import { formatter } from "../../utility";
             </Card>
 
 
-          {/* <Card sx={{ p: 3, pb: 10, mb: 2 }}>
+          <Card className="showVerificationCards" sx={{ p: 3, pb: 10, mb: 2 }}>
                 <Box sx={{mb:2}}>EASP Verification</Box>
                     <Grid container spacing={2}>
                     <Grid item sm={6}>
@@ -244,8 +262,8 @@ import { formatter } from "../../utility";
                     </ListItem>
                     </Grid> 
                     </Grid>
-            </Card> */}
-          {/* <Card sx={{ p: 3, pb: 10, mb: 2 }}>
+            </Card>
+          <Card className="showVerificationCards" sx={{ p: 3, pb: 10, mb: 2 }}>
                 <Box sx={{mb:2}}>EMSASA Verification</Box>
                     <Grid container spacing={2}>
                     <Grid item sm={4}>
@@ -290,7 +308,7 @@ import { formatter } from "../../utility";
                     </Grid>
                 
                     </Grid>
-            </Card> */}
+            </Card>
           <Card sx={{ p: 3, pb: 4, mb: 2 }}>
                 <Grid container spacing={2}>
                 <Grid item sm={12}>
@@ -310,7 +328,7 @@ import { formatter } from "../../utility";
                 size="medium"
                 type="submit"
                 variant="contained"
-                className="btnCustom"
+                className="btnCustom hidebtn"
                 sx={{mr:2}}
           
             >
@@ -320,7 +338,7 @@ import { formatter } from "../../utility";
                 size="medium"
                 type="submit"
                 variant="contained"
-          
+                className="hidebtn"
             >
                 Reject
             </Button>
