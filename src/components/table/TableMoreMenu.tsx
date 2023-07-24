@@ -27,11 +27,14 @@ interface IMoreMenu {
   const [isOpen, setIsOpen] = useState(false);
   // const [modal, setModal] = useState(false);
   let navigate = useNavigate();
-
+console.log({type});
   const handleView = () =>{
     if(type === userType.ambulance_user){
       navigate(PATH_DASHBOARD.claims.viewAmbulance,{state:{row}})
-    }else{
+    }else if(type === "patient"){
+      navigate(PATH_DASHBOARD.patients.viewPatient)
+    }
+    else{
       navigate(PATH_DASHBOARD.claims.viewEtc,{state:{row}})
     }
   }
@@ -52,7 +55,7 @@ interface IMoreMenu {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-     {(type === userType.ambulance_user || type === userType.etc_user  ) &&   <MenuItem
+     {(type === userType.ambulance_user || type === userType.etc_user || type === "patient" ) &&   <MenuItem
 
            sx={{ color: 'text.secondary' }}
            onClick={()=>handleView()}

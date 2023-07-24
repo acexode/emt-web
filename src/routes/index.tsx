@@ -71,6 +71,9 @@ export default function Router() {
           path: "patients", element: <Patients />
         },
         {
+          path: "view_patient", element: <ViewPatient />
+        },
+        {
           path: "ambulance_run_sheets", element: <RunSheets />
         },
         {
@@ -125,6 +128,9 @@ const Claims = Loadable(
 );
 const Patients = Loadable(
   lazy(() => import("../pages/dashboard/patients"))
+);
+const ViewPatient = Loadable(
+  lazy(() => import("../pages/dashboard/viewPatient"))
 );
 const RunSheets = Loadable(
   lazy(() => import("../pages/dashboard/run_sheets"))

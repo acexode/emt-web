@@ -9,12 +9,14 @@ import {
     Grid,
     MenuItem,
     TextField,
-    Autocomplete
+    Autocomplete,
+    Box,
+    
   } from "@mui/material";
   import React, { FC, useEffect, useState } from "react";
-  import {useForm} from "react-hook-form"
+  import {useForm, useFieldArray, Controller} from "react-hook-form"
   import { useSnackbar } from "notistack";
-
+import {RemoveCircleOutline} from "@mui/icons-material"
   import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { MIconButton } from "../../@material-extend";
@@ -33,6 +35,7 @@ import axiosInstance from "../../services/api_service";
   }
 
   const schema = yup.object().shape({
+    patientName: yup.string().required("*Patient Name is required"),
     category: yup.string().required("*Category is required"),
     location: yup.string().required("*Location is required"),
     ambulance_type: yup.string().required("*Ambulance Type is required"),
@@ -88,7 +91,9 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
         handleSubmit,
         reset,
         formState: { errors },
-        setValue
+        setValue,
+        control,
+        watch
       } = useForm({
         mode: "onTouched",
         criteriaMode: "firstError",
@@ -97,25 +102,32 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
         shouldUseNativeValidation: false,
         delayError: undefined,
         resolver: yupResolver(schema),
+        defaultValues: {
+          items: [{ medicalIntervention: '', serviceCode: '', unitCost: '', quantity: '' }],
+        },
       });
       const [loading,setLoading] = useState(false)
       const { enqueueSnackbar, closeSnackbar } = useSnackbar();
       const [locations,setLocations] = useState([])
    
-
-    //   useEffect(()=>{
-    //       axiosInstance.get('locations').then(res =>{
-    //         const options = res?.data?.map((dt) =>{
-    //           return {
-    //             label: dt?.name,
-    //             id: dt?.id
-    //           }
-    //         })
-    //         setLocations(options)
-    //       }).catch(error =>{
-    //         console.log(error)
-    //       })
-    //   },[])
+      const { fields, append, remove } = useFieldArray({
+        control,
+        name: 'items',
+      });
+      const calculateAmount = (unitCost, quantity) => {
+        if (unitCost && quantity) {
+          return (unitCost * quantity).toFixed(2);
+        }
+        return '';
+      };
+      useEffect(() => {
+        const updateTotalAmount = () => {
+          let totalAmount = fields?.reduce((sum, field) => sum + calculateAmount(field.unitCost, field.quantity), 0);
+          setValue('totalAmount', parseFloat(totalAmount)?.toFixed(2));
+        };
+        updateTotalAmount();
+      }, [fields, setValue]);
+   
 
       useEffect(()=>{
           if(edit){
@@ -184,97 +196,92 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
         <DialogTitle id="alert-dialog-title">{edit ? "Edit Claim": "Add Claim"}</DialogTitle>
            <form onSubmit={handleSubmit(onSubmit)}>
         <DialogContent>
-          <Grid container spacing={2}>
-            
-          <Grid item xs={12} sm={6} lg={6}>
-            <label>Select Category</label>
+        <Grid item xs={12} sm={6} lg={6}>
+            <label>Incident Code</label>
               <TextField
                  variant="outlined"
                 fullWidth
                  required
-                select
                  type="text"
-                {...register("category")}
+                {...register("incidentCode")}
                
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                {category?.map((role) => (
-                  <MenuItem value={role.id}>{role?.name}</MenuItem>
-                ))}
-              </TextField>
+              />
+                
+              
                 <p style={{ color: "red", fontSize: 12 }}>
-                  {errors?.category?.message?.toString()}
+                  {errors?.incidentCode?.message?.toString()}
                 </p>
             </Grid>
-            <Grid item xs={12} sm={6} lg={6}>
-            <label>Select Location</label>
-            <Autocomplete
-              options={locations}
-              getOptionLabel={(option) => option.label}
-              onChange={handleAutocompleteChange}
-              renderInput={(params) => <TextField {...params}  label="Select an option" />}
+          {fields.map((field, index) => (
+            <Grid key={field.id} mb={2} container spacing={2}>
+           <Grid item sm={12}>
+           <Box>{index+1}).</Box>
+           </Grid>
+           <Grid item xs={6} sm={3} lg={3}>
+           <label>Medical Intervention</label>
+            <TextField
+              {...register(`items[${index}].medicalIntervention`, { required: 'Medical Intervention is required' })}
+              error={!!errors.items?.[index]?.medicalIntervention}
+              helperText={errors.items?.[index]?.medicalIntervention?.message}
             />
-            
-            </Grid>
-            <Grid item xs={12} sm={6} lg={6}>
-            <label>Select Ambulance Type</label>
-              <TextField
-                 variant="outlined"
-                fullWidth
-                select
-                 type="text"
-                {...register("ambulance_type")}
-               
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                {ambulanceTypes?.map((type) => (
-                  <MenuItem value={type?.id}>{type?.type}</MenuItem>
-                ))}
-              </TextField>
-                <p style={{ color: "red", fontSize: 12 }}>
-                  {errors?.ambulance_type?.message?.toString()}
-                </p>
-            </Grid>
-            <Grid item xs={12} sm={6} lg={6}>
-                <label>Date</label>
-                <TextField
-                    defaultValue={formData?.date}
-                    variant="outlined"
-                    fullWidth
-                    {...register('date')}
-                    type="date"
-                />
-                <p style={{ color: "red", fontSize: 12 }}>
-                  {errors?.date?.message?.toString()}
-                </p>
-            </Grid>
-            <Grid item xs={12} sm={6} lg={6}>
-            <label>Select Status</label>
-              <TextField
-                 variant="outlined"
-                fullWidth
-                select
-                 type="text"
-                {...register("status")}
-               
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                {status?.map((stat) => (
-                  <MenuItem value={stat.id}>{stat.name}</MenuItem>
-                ))}
-              </TextField>
-                <p style={{ color: "red", fontSize: 12 }}>
-                  {errors?.status?.message?.toString()}
-                </p>
-            </Grid>
-           
           </Grid>
+          <Grid item xs={6} sm={3} lg={3}>
+          <label>Service Code</label>
+          <TextField
+            {...register(`items[${index}].serviceCode`, { required: 'Service Code is required' })}
+            error={!!errors.items?.[index]?.serviceCode}
+            helperText={errors.items?.[index]?.serviceCode?.message}
+          />
+          </Grid>
+          <Grid item xs={6} sm={3} lg={3}>
+          <label>Unit Cost</label>
+          <TextField
+            type="number"
+            inputProps={{ step: '0.01' }}
+            {...register(`items[${index}].unitCost`, { required: 'Unit Cost is required', pattern: /^\d+(\.\d{1,2})?$/ })}
+            error={!!errors.items?.[index]?.unitCost}
+            helperText={errors.items?.[index]?.unitCost?.message}
+          />
+          </Grid>
+          <Grid item xs={6} sm={3} lg={3}>
+          <label>Quantity</label>
+          <TextField
+            type="number"
+            {...register(`items[${index}].quantity`, { required: 'Quantity is required', pattern: /^\d+$/ })}
+            error={!!errors.items?.[index]?.quantity}
+            helperText={errors.items?.[index]?.quantity?.message}
+          />
+          </Grid>
+          <Grid item xs={6} sm={3} lg={3}>
+          <label>Amount</label>
+          <TextField
+            value={calculateAmount(field.unitCost, field.quantity)}
+            disabled
+          />
+          </Grid>
+          <Button size="small" sx={{background:"grey", height:"40px", mt:6,ml:2, '&:hover': {
+          // Define the hover styles here
+          backgroundColor: 'lightgray',
+        
+        },}} type="button" onClick={() => remove(index)}>
+            <RemoveCircleOutline />
+          </Button>
+          </Grid>
+      ))}
+
+      <Button type="button" onClick={() => append({ medicalIntervention: '', serviceCode: '', unitCost: '', quantity: '' })}>
+        Add Item
+      </Button>
+      <Grid item xs={12} sm={12} mt={4} lg={12}>
+        <TextField
+          value={parseFloat(watch('totalAmount', 0)).toFixed(2)}
+          disabled
+          label="Total Amount"
+        />
+
+      </Grid>
+ 
+           
         </DialogContent>
         <DialogActions>
           <Button onClick={handleToggle} sx={{background:"grey",  '&:hover': {

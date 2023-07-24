@@ -438,7 +438,7 @@ const ambulance =[
                     <Grid container spacing={2}>
                     <Grid item sm={6}>
                         <FormLabel >
-                        Treatment Center Code
+                        Treatment Center
                         </FormLabel>
                         <TextField
                             variant="outlined"

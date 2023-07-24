@@ -17,7 +17,7 @@ const GeneralApp: FC = () => {
 
 
   return (
-    <Page title="General: App | EMT">
+    <Page title="General: App | NEMSAS">
       <Container maxWidth={themeStretch ? false : "xl"}>
         {user?.type === userType.etc_user ? <ETCDashboard />  :   <NamsasDashboard /> }
   

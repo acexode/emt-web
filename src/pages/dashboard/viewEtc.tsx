@@ -295,6 +295,7 @@ import { formatter } from "../../utility";
 
           <Card className="showVerificationCards" sx={{ p: 3, pb: 10, mb: 2 }}>
                 <Box sx={{mb:2}}>ETC Verification</Box>
+            
                     <Grid container spacing={2}>
                     <Grid item sm={6}>
                     <ListItem>

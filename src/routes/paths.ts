@@ -30,6 +30,7 @@ function path(root: string, sublink: string) {
     },
     patients: {
       root: path(ROOTS_DASHBOARD, '/patients'),
+      viewPatient: path(ROOTS_DASHBOARD, '/view_patient'),
     },
     claims: {
       root: path(ROOTS_DASHBOARD, '/claims'),

@@ -159,7 +159,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
 
   return (
     <>
-      <Page title={`${page_title}: List | EMT`}>
+      <Page title={`${page_title}: List | NEMSAS`}>
         <Container maxWidth={themeStretch ? false : "lg"}>
           <HeaderBreadcrumbs
             heading={`${page_title}`}
@@ -315,7 +315,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                               </TableCell>
 
                             <TableCell align="right">
-                                <MoreMenu handleUpdate={handleUpdate} row={row} fetchAllData={fetchAllUsers} type="User" />
+                                <MoreMenu handleUpdate={handleUpdate} row={row} fetchAllData={fetchAllUsers} type="patient" />
                             </TableCell>
                           </TableRow>
                         );
