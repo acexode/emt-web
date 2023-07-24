@@ -47,6 +47,9 @@
 }
 
 @media print {
+  body {
+    width: 1000px;
+  }
   .css-bmprcn-MuiPaper-root-MuiDrawer-paper,
   .css-7lh4qq-MuiPaper-root-MuiDrawer-paper,
   .hidebtn,
@@ -55,6 +58,7 @@
   }
   .showVerificationCards {
     display: flex;
+    flex-direction: column;
   }
 }
 

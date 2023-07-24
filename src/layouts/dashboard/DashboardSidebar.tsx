@@ -55,7 +55,7 @@ const AccountStyle = styled("div")(({ theme }) => ({
 
 function IconCollapse({ onToggleCollapse, collapseClick }: any) {
   return (
-    <Tooltip title="EMT Menu">
+    <Tooltip title="NEMSAS Menu">
       <CardActionArea
         onClick={onToggleCollapse}
         sx={{
@@ -196,7 +196,7 @@ export default function DashboardSidebar({
               <Box sx={{ ml: 2 }}>
                 <Typography variant="subtitle2" sx={{ color: "#000" }}>
                   {/* {userProfile?.name} */}
-                  John Doe
+                 {userType.etc_user === user.type ?  "John Doe" :"Dr Doubra"}
                 </Typography>
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
                   {/* {userProfile?.access} */}

@@ -66,16 +66,9 @@ export default function LoadingScreen({ ...other }) {
       <ProgressBar />
 
       <motion.div
-        initial={{ rotateY: 0 }}
-        animate={{ rotateY: 360 }}
-        transition={{
-          duration: 2,
-          ease: 'easeInOut',
-          repeatDelay: 1,
-          repeat: Infinity
-        }}
+     
       >
-        <Logo sx={{ width: 80, height: 80 }} />
+        <Logo sx={{ width: 80, height: 80, display:"flex", justifyContent:"center"}} />
       </motion.div>
 
       <Box

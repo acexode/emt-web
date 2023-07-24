@@ -57,7 +57,7 @@ import { formatter } from "../../utility";
           window.print();
         }
     return (
-      <Page title={`View Ambulance Claim | EMT`}>
+      <Page title={`View Ambulance Claim | NEMSAS`}>
         <Container maxWidth={themeStretch ? false : "lg"}>
           <HeaderBreadcrumbs
             heading={`Ambulance Claims`}
