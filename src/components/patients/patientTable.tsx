@@ -168,15 +168,15 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
               { name: `${page_title}`, href:PATH_DASHBOARD.settings.userManagement },
               { name: "List" },
             ]}
-            action={
-              <Button
-                variant="contained"
-                onClick={toggle}
-                startIcon={<Icon icon={plusFill} />}
-              >
-               { type === "patient" ? "New Record" : "New User" } 
-              </Button>
-            }
+            // action={
+            //   <Button
+            //     variant="contained"
+            //     onClick={toggle}
+            //     startIcon={<Icon icon={plusFill} />}
+            //   >
+            //    { type === "patient" ? "New Record" : "New User" } 
+            //   </Button>
+            // }
           />
 
           <Card>

@@ -166,15 +166,15 @@ const CustomClaimTable: FC<ITable> = ({ dataList, page_title, table_Head,loading
               { name: `${page_title}`, href:PATH_DASHBOARD.claims.root },
               { name: "List" },
             ]}
-            action={ userType.etc_user === user?.type ?
-              <Button
-                variant="contained"
-                onClick={toggle}
-                startIcon={<Icon icon={plusFill} />}
-              >
-                New Claim
-              </Button> : null
-            }
+            // action={ userType.etc_user === user?.type ?
+            //   <Button
+            //     variant="contained"
+            //     onClick={toggle}
+            //     startIcon={<Icon icon={plusFill} />}
+            //   >
+            //     New Claim
+            //   </Button> : null
+            // }
           />
 
           <Card>
