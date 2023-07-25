@@ -46,7 +46,7 @@ export const cardData2:IServiceCard[] =[
       title:"LGAs with functional and accredited Ambulance Service providers",
       value:"80",
 	    show:true,
-      percentage:80
+      percentage:20
   
     },
     {
