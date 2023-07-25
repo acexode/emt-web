@@ -13,14 +13,13 @@ import {
   import { useForm } from "react-hook-form";
   import * as yup from "yup"; 
   import { yupResolver } from "@hookform/resolvers/yup";
-
-//    import { useSnackbar } from "notistack";
-//   import { useNavigate } from "react-router-dom";
+   import { useSnackbar } from "notistack";
+  import { useNavigate } from "react-router-dom";
   
   import useSettings from "../../../hooks/useSettings";
 //   import axiosInstance from "../../../services/api_service";
 //   import { useAuthUserContext } from "../../../context/authUser.context";
-//   import { MIconButton } from "../../../components/@material-extend";
+  import { MIconButton } from "../../../components/@material-extend";
 //   import closeFill from "@iconify/icons-eva/close-fill";
 //   import { Icon } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
@@ -57,7 +56,6 @@ const ambulance =[
   const schema = yup.object().shape({
     incidentDate: yup.string().required("*Incident Date is required"),
     incidentTime: yup.string().required("*Incident Time is required"),
-    incidentCode: yup.string().required("*Incident Code is required"),
     callerId: yup.string().required("*Caller ID is required"),
     sex: yup.string().required("*Sex is required"),
     incidentLocation: yup.string().required("*Incident Location is required"),
@@ -66,18 +64,18 @@ const ambulance =[
     areaCouncil: yup.string().required("*Area Council is required"),
     zipCode: yup.string().required("*Zip Code is required"),
     incidentCategory: yup.string(),
-    caseResolvedWithoutAmbulance: yup.boolean(),
-    ambulanceCode: yup.string().required("*Ambulance Code is required"),
-    ambulanceType: yup.string().required("*Ambulance Type is required"),
-    treatmentCode: yup.string().required("*Treatment Code is required"),
-    dispatcherFullname: yup.string().required("*Dispatcher full name Code is required"),
-    dispatcherID: yup.string().required("*Dispatcher ID Code is required"),
-    dispatcherDate: yup.string().required("*Date is required"),
-    supervisorFirstName: yup.string().required("*Supervisor first name is required"),
-    supervisorLastName: yup.string().required("*Supervisor last name is required"),
-    supervisorMiddleInitial: yup.string().required("*Supervisor middle initial is required"),
-    supervisorDate: yup.string().required("*Date is required"),
-    serialNo: yup.string().required("*Serial No is required"),
+    caseResolvedWithoutAmbulance: yup.string(),
+    ambulanceCode: yup.string(),
+    ambulanceType: yup.string(),
+    treatmentCode: yup.string(),
+    dispatcherFullname: yup.string(),
+    dispatcherID: yup.string(),
+    dispatcherDate: yup.string(),
+    supervisorFirstName: yup.string(),
+    supervisorLastName: yup.string(),
+    supervisorMiddleInitial: yup.string(),
+    supervisorDate: yup.string(),
+    serialNo: yup.string(),
 });
 
   const category = ["RTA","Domestic Accident", "Chemical Accident","Industrial Accident", "Obstetric Emergency"," Neonatal (<5yrs)","Paediatric (<5yrs)","Banditry/Terrorism","Bomblast","Fire Accident","Geriatric Emergency","Others"]
@@ -89,6 +87,7 @@ const ambulance =[
         register,
         handleSubmit,
         formState: { errors },
+        watch
       } = useForm({
         mode: "onTouched",
         criteriaMode: "firstError",
@@ -98,13 +97,10 @@ const ambulance =[
         delayError: undefined,
         resolver: yupResolver(schema),
       });
+      const watchIsCaseSolvedWithAmbulance = watch("caseResolvedWithoutAmbulance") === "Yes"
     // const [confirmationPayload, setConfirmationPayload] = useState(null);
-
-
-   
-    // const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-
-    // let navigate = useNavigate();
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+    let navigate = useNavigate();
     // const handleClickOpen = () => {
     //   setOpen(true);
     // };
@@ -113,14 +109,20 @@ const ambulance =[
     //   setOpen(false);
     // };
   
-  
    
    //TODO make sure to append FCT360/ to serial no
   
    const onHandleSubmit = async (data:any) => {
-  
-        console.log({data})
-    
+    console.log({data});
+          navigate(PATH_DASHBOARD.incidents.root);
+        enqueueSnackbar("Incident added!", {
+          variant: "success",
+          action: (key) => (
+            <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+              {/* <Icon icon={closeFill} /> */}
+            </MIconButton>
+          ),
+        });
         // const payload = {
         //   quarter: quarter,
         //   year: selectedYear,
@@ -139,15 +141,15 @@ const ambulance =[
     //   try {
     //     const res = await axiosInstance.post("/assessments/m-and-e", confirmationPayload);
     //     console.log(res);
-    //     navigate(PATH_DASHBOARD.m_and_e.hf);
-    //     enqueueSnackbar("Assessment added!", {
-    //       variant: "success",
-    //       action: (key) => (
-    //         <MIconButton size="small" onClick={() => closeSnackbar(key)}>
-    //           <Icon icon={closeFill} />
-    //         </MIconButton>
-    //       ),
-    //     });
+        // navigate(PATH_DASHBOARD.m_and_e.hf);
+        // enqueueSnackbar("Assessment added!", {
+        //   variant: "success",
+        //   action: (key) => (
+        //     <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+        //       <Icon icon={closeFill} />
+        //     </MIconButton>
+        //   ),
+        // });
     //   } catch (error) {
     //     enqueueSnackbar("Error adding Assessment!", {
     //         variant: "error",
@@ -228,7 +230,7 @@ const ambulance =[
                     </Grid>
                     <Grid item sm={4}>
                         <FormLabel >
-                        Sex
+                        Gender
                         </FormLabel>
                         <TextField
                             variant="outlined"
@@ -380,7 +382,7 @@ const ambulance =[
                     
                     </Grid>
               </Card>
-              <Card sx={{ p: 3, pb: 10, mb: 5 }}>
+             {!watchIsCaseSolvedWithAmbulance && <> <Card sx={{ p: 3, pb: 10, mb: 5 }}>
                 <Box sx={{mb:2}}>Ambulance Dispatch Information</Box>
                     <Grid container spacing={2}>
                     <Grid item sm={6}>
@@ -589,6 +591,8 @@ const ambulance =[
                      
                     </Grid>
               </Card>
+              </>
+              }
               
               <LoadingButton
                 size="large"

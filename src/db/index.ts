@@ -97,7 +97,7 @@ export const ambData:IClaims[] =[
     },
     {
       color: "#D3D3D3",
-      title:"Referrals",
+      title:"Patient Records",
       value:"10",
     },
   ]
@@ -267,3 +267,87 @@ export const ambulance_run_sheets =[
 // show:false
 
 // },
+
+export const medicalInterventions =[
+  {
+    code :"NHIS-010-001",
+    intervention:"Specialist Initial Consultation",
+    price: 2000
+  },
+  {
+    code :"NHIS-010-002",
+    intervention:"Specialist Review (Per visit)",
+    price: 1200
+  },
+  {
+    code :"NHIS-010-003",
+    intervention:"Nursing Care (per day)",
+    price: 1000
+  },
+  {
+    code :"NHIS-010-004",
+    intervention:"Special Nursing Care (e.g., Intensive care, SCBU, Paediatric Emergency etc)",
+    price: 1200
+  },
+  {
+    code :"NHIS-010-005",
+    intervention:"Hospital Bed Occupancy",
+    price: 1000
+  },
+  {
+    code :"NHIS-010-006",
+    intervention:"ICU Nursing Care/ Day",
+    price: 2000
+  },
+  {
+    code :"NHIS-020-000",
+    intervention:"E.N.T/Maxillofacial Surgery",
+    price: 2000
+  },
+  {
+    code :"NHIS-021-000",
+    intervention:"Minor Procedures/Surgeries",
+    price: 2000
+  },
+  {
+    code :"NHIS-021-001",
+    intervention:"Antral Washout",
+    price: 20000
+  },
+  {
+    code :"NHIS-021-002",
+    intervention:"Aseptic Destruction of Labyrinth for Meniere's Disease",
+    price: 24000
+  },
+  {
+    code :"NHIS-021-003",
+    intervention:"Audiometry",
+    price: 10000
+  },
+  {
+    code :"NHIS-021-004",
+    intervention:"Electrocautery of Nose",
+    price: 20000
+  },
+  {
+    code :"NHIS-021-005",
+    intervention:"Foreign Body Removal from Ear",
+    price: 5000
+  },
+  {
+    code :"NHIS-021-006",
+    intervention:"Ingestion Airway",
+    price: 15000
+  },
+  {
+    code :"NHIS-021-007",
+    intervention:"Oesophagus",
+    price: 15000
+  },
+  {
+    code :"NHIS-021-008",
+    intervention:"Ordinary",
+    price: 5000
+  },
+
+]

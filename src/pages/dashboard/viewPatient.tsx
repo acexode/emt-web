@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import {
     Container,
     Grid,
@@ -6,18 +8,62 @@ import {
     Typography,
     Card,
     Box,
-    Button
+    Button,
+    TextField,
+    MenuItem
   } from "@mui/material";
   import { FC, useEffect, useState } from "react";
-  
+  import {useForm, useFieldArray} from "react-hook-form"
+
   import HeaderBreadcrumbs from "../../components/HeaderBreadcrumbs";
   import Page from "../../components/Page";
   import { PATH_DASHBOARD } from "../../routes/paths";
   import useSettings from "../../hooks/useSettings";
+import { RemoveCircleOutline } from "@mui/icons-material";
+import { medicalInterventions } from "../../db";
   
   const ViewPatient: FC = () => {
     const { themeStretch } = useSettings();
     const [content, SetContent] = useState<any>(null);
+    const {
+      register,
+      handleSubmit,
+      formState: { errors },
+      setValue,
+      control,
+      watch
+    } = useForm({
+      mode: "onTouched",
+      criteriaMode: "firstError",
+      shouldFocusError: true,
+      shouldUnregister: false,
+      shouldUseNativeValidation: false,
+      delayError: undefined,
+      defaultValues: {
+        items: [{ dateAndTime:'', medicalIntervention: '', serviceCode: '',quantity: '', dose:'',amount:'', remark:'' }],
+      },
+    });
+    const { fields, append, remove } = useFieldArray({
+      control,
+      name: 'items',
+    });
+    const calculateAmount = (unitCost: number, quantity:any) => {
+      if (unitCost && quantity) {
+        return (unitCost * quantity).toFixed(2);
+      }
+      return '';
+    };
+    useEffect(() => {
+      const updateTotalAmount = () => {
+        let totalAmount = fields?.reduce(
+          (sum, field) => sum + parseFloat(field.amount || '0'),
+          0
+        );
+        setValue('totalAmount', totalAmount.toFixed(2));
+      };
+    
+      updateTotalAmount();
+    }, [fields, setValue]);
     // const [loading,setLoading] = useState(true)
     // const {
     //     state: { row},
@@ -52,9 +98,64 @@ import {
             SetContent(objectData)
         },[])
   
+        const onSubmit = async(data:any) =>{
+          console.log({data})
+          // let newData = {
+          //     ...data
+          //   };
+          //   delete newData?.id
+          //   setLoading(true)
+          //   let text = edit ? "Claim Updated" : "Claim Added";
+          //   try {
+          //     let res;
+          //     if (edit) {
+          //       res = await axiosInstance.put(
+          //         `/users/${formData?.id}/update`,
+          //         newData
+          //       );
+          //     } else {
+          //       res = await axiosInstance.post(`/users/create`, newData);
+          //     }
+          //     enqueueSnackbar(`${text}`, {
+          //         variant: "success",
+          //         action: (key) => (
+          //           <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+          //             <Icon icon={closeFill} />
+          //           </MIconButton>
+          //         ),
+          //       });
+          //     reset();
+          //     handleToggle();
+          //     fetchAllData()
+          //   } catch (error: any) {
+          //     enqueueSnackbar("Error!", {
+          //         variant: "error",
+          //         action: (key) => (
+          //           <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+          //             <Icon icon={closeFill} />
+          //           </MIconButton>
+          //         ),
+          //       });
+          //   } finally{
+          //     setLoading(false)
+          //   }
+      }
         const handlePrint = () => {
           window.print();
         }
+        const handleMedicalInterventionChange = (index, intervention) => {
+          // Find the selected intervention in the medicalInterventions array
+          const selectedIntervention = medicalInterventions.find(
+            (int) => int.intervention === intervention
+          );
+        
+          // Update the corresponding fields in the form data
+          setValue(`items[${index}].serviceCode`, selectedIntervention?.code || '');
+          setValue(
+            `items[${index}].unitCost`,
+            selectedIntervention?.price?.toString() || ''
+          );
+        };
     return (
       <Page title={`View Patient Record | EMT`}>
         <Container maxWidth={themeStretch ? false : "lg"}>
@@ -350,8 +451,130 @@ import {
                     </Grid>
                     </Grid>
             </Card>
-        </Container>
-      </Page>
+            <Card sx={{ p: 3, pb: 10, mb: 2 }}>
+              <Box sx={{mb:2}}>ETC Treatment</Box>
+              <form onSubmit={handleSubmit(onSubmit)}>
+        
+              {fields.map((field, index) => (
+                <Grid key={field.id} mb={2} container spacing={2}>
+              <Grid item sm={12}>
+              <Box>{index+1}).</Box>
+              </Grid>
+              <Grid item xs={12} sm={12} lg={12}>
+              <label>Select Medical Intervention</label>
+              <br />
+                <TextField
+                  {...register(`items[${index}].medicalIntervention`, { required: 'Medical Intervention is required' })}
+                  error={!!errors.items?.[index]?.medicalIntervention}
+                  select
+                  helperText={errors.items?.[index]?.medicalIntervention?.message}
+                  onChange={(e) => handleMedicalInterventionChange(index, e.target.value)}
+
+                >
+                   <MenuItem  value="">Select Medical Intervention</MenuItem>
+                   {medicalInterventions.map((intervention,index) =>(
+                      <MenuItem value={intervention.intervention}>{intervention.intervention}</MenuItem>
+                   ))}
+                 </TextField>
+              </Grid>
+              <Grid item xs={6} sm={2} lg={2}>
+              <label>Service Code</label>
+              <TextField
+                {...register(`items[${index}].serviceCode`, { required: 'Service Code is required' })}
+                error={!!errors.items?.[index]?.serviceCode}
+                helperText={errors.items?.[index]?.serviceCode?.message}
+              />
+              </Grid>
+             
+              <Grid item xs={6} sm={2} lg={2}>
+              <label>Unit Cost</label>
+              <TextField
+                type="number"
+                inputProps={{ step: '0.01' }}
+                {...register(`items[${index}].unitCost`, { required: 'Unit Cost is required', pattern: /^\d+(\.\d{1,2})?$/ })}
+                error={!!errors.items?.[index]?.unitCost}
+                helperText={errors.items?.[index]?.unitCost?.message}
+              />
+              </Grid>
+              <Grid item xs={6} sm={2} lg={2}>
+              <label>Dose</label>
+              <TextField
+              type="text"
+                {...register(`items[${index}].dose`, { required: 'Dose is required' })}
+                error={!!errors.items?.[index]?.dose}
+                helperText={errors.items?.[index]?.dose?.message}
+              />
+              </Grid>
+              <Grid item xs={6} sm={2} lg={2}>
+              <label>Quantity</label>
+              <TextField
+                type="number"
+                {...register(`items[${index}].quantity`, { required: 'Quantity is required', pattern: /^\d+$/ })}
+                error={!!errors.items?.[index]?.quantity}
+                helperText={errors.items?.[index]?.quantity?.message}
+              />
+              </Grid>
+              <Grid item xs={6} sm={2} lg={2}>
+              <label>Amount</label>
+              <TextField
+                value={calculateAmount(field.unitCost, field.quantity)}
+                disabled
+              />
+              </Grid>
+              <Grid item xs={6} sm={3} lg={3}>
+              <label>Remark</label>
+              <TextField
+              type="text"
+              multiline
+                {...register(`items[${index}].remark`)}
+                // error={!!errors.items?.[index]?.remark}
+                // helperText={errors.items?.[index]?.remark?.message}
+              />
+              </Grid>
+              <Button size="small" sx={{background:"grey", height:"40px", mt:6, '&:hover': {
+              // Define the hover styles here
+              backgroundColor: 'lightgray',
+            
+            },}} type="button" onClick={() => remove(index)}>
+                <RemoveCircleOutline />
+              </Button>
+              </Grid>
+          ))}
+
+      <Button type="button" onClick={() => append({ medicalIntervention: '', serviceCode: '', unitCost: '', quantity: '' })}>
+        Add Item
+      </Button>
+      <Grid item xs={12} sm={12} mt={4} lg={12}>
+        <TextField
+          value={parseFloat(watch('totalAmount', 0)).toFixed(2)}
+          disabled
+          label="Total Amount"
+        />
+
+      </Grid>
+               </form>
+           </Card>
+          <Button
+              size="medium"
+              type="submit"
+              variant="contained"
+              className="btnCustom"
+              sx={{mr:2}}
+        
+          >
+              Add New Treatment
+          </Button>
+          <Button
+              size="medium"
+              type="submit"
+              variant="contained"
+        
+        
+          >
+              Discharge Patient
+          </Button>
+              </Container>
+            </Page>
     );
   };
   
