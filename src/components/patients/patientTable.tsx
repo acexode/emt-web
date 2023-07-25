@@ -1,13 +1,12 @@
 import { filter } from "lodash";
-import { Icon } from "@iconify/react";
+// import { Icon } from "@iconify/react";
 import { useState, SetStateAction, FC } from "react";
-import plusFill from "@iconify/icons-eva/plus-fill";
+// import plusFill from "@iconify/icons-eva/plus-fill";
 // material
 import {
   Card,
   Table,
   Stack,
-  Button,
   TableRow,
   TableBody,
   TableCell,
@@ -90,7 +89,7 @@ interface ITable {
   type?:string
 }
 
-const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetchAllUsers,type }) => {
+const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetchAllUsers }) => {
   const { themeStretch } = useSettings();
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");

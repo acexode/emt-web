@@ -1,5 +1,5 @@
 import { filter } from "lodash";
-import { Icon } from "@iconify/react";
+// import { Icon } from "@iconify/react";
 import { useState, SetStateAction, FC } from "react";
 // material
 import {
@@ -13,9 +13,9 @@ import {
   TableContainer,
   TablePagination,
   Skeleton,
-  Button,
+  // Button,
 } from "@mui/material";
-import plusFill from "@iconify/icons-eva/plus-fill";
+// import plusFill from "@iconify/icons-eva/plus-fill";
 
 // routes
 import { PATH_DASHBOARD } from "../../routes/paths";
@@ -30,8 +30,8 @@ import TableListHead from "../table/tableListHead";
 import ListToolbar from "../table/tableListToolbar";
 import MoreMenu from "../table/TableMoreMenu";
 import { AddEditClaims } from "./add-edit-claim";
-import tokenService from "../../services/tokenService";
-import { userType } from "../../constants";
+// import tokenService from "../../services/tokenService";
+// import { userType } from "../../constants";
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
@@ -97,7 +97,7 @@ const CustomClaimTable: FC<ITable> = ({ dataList, page_title, table_Head,loading
   const [modal, setModal] = useState(false);
   const [edit, setEdit] = useState(false);
   const [formData, setFormData] = useState(null);
-  const user = tokenService.getUser();
+  // const user = tokenService.getUser();
 
 
   const toggle = () => {

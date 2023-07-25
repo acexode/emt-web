@@ -113,6 +113,7 @@ const ambulance =[
    //TODO make sure to append FCT360/ to serial no
   
    const onHandleSubmit = async (data:any) => {
+    console.log({data});
           navigate(PATH_DASHBOARD.incidents.root);
         enqueueSnackbar("Incident added!", {
           variant: "success",
