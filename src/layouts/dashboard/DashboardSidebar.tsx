@@ -19,6 +19,7 @@ import useCollapseDrawer from "../../hooks/useCollapseDrawer";
 import { PATH_DASHBOARD } from "../../routes/paths";
 // components
 import Logo from "../../components/Logo";
+import FmhLogo from "../../assets/fmh.jpg"
 import MyAvatar from "../../components/MyAvatar";
 import Scrollbar from "../../components/Scrollbar";
 import NavSection from "../../components/NavSection";
@@ -150,21 +151,21 @@ export default function DashboardSidebar({
       >
         <Stack
           direction="row"
-          alignItems="center"
-          justifyContent="space-between"
+          // alignItems="center"
+          // justifyContent="space-between"
         >
           <Box
             component={RouterLink}
             to="/dashboard/app"
             sx={{ display: "inline-flex",alignItems:"center", textDecoration: "none" }}
           >
-            <Logo />
+            <img src={FmhLogo} width="120" style={{marginRight:3}} /> <Logo />
             <Typography
               gutterBottom
               variant="h6"
               sx={{
                 fontSize: "0.6rem",
-                // ml: 2,
+                ml: -1.3,
                 color: "#000",
                 mb:0
               }}
@@ -172,15 +173,6 @@ export default function DashboardSidebar({
              NEMSAS
             </Typography>
           </Box>
-
-          {/* <MHidden width="lgDown">
-            {!isCollapse && (
-              <IconCollapse
-                onToggleCollapse={onToggleCollapse}
-                collapseClick={collapseClick}
-              />
-            )}
-          </MHidden> */}
         </Stack>
 
         {isCollapse ? (

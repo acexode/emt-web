@@ -35,13 +35,16 @@ export default function AppWelcome({ displayName }: any) {
         }}
       >
         <Typography gutterBottom variant="h4" sx={{color:"#7b0a31"}}>
+        National Emergency Medical Service And Ambulance System (NEMSAS)
+        </Typography>
+        <Typography gutterBottom variant="h6" sx={{color:"#7b0a31"}}>
           Welcome back 👋
           <br /> {!displayName ? "..." : displayName}!
         </Typography>
-
+        
         <Typography
           variant="body2"
-          sx={{ pb: { xs: 3, xl: 5 }, maxWidth: 680, mx: "auto" ,color:"#ad6174"}}
+          sx={{ pb: { xs: 3, xl: 5 }, maxWidth: 680, color:"#ad6174"}}
         >
           This Platform will enable you have real time access to vital
           information on EMT. You can track the utilisation of funds for the provision of
