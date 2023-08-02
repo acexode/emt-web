@@ -15,7 +15,7 @@ const NEMSASDashboard: FC = () => {
   return (
     <Grid container spacing={3}>
     <Grid item xs={12} md={12}>
-          <UserWelcome displayName={userProfile?.name ?? "Dr Doubra"} />
+          <UserWelcome displayName={userProfile?.firstName ?? "NEMSAS User"} />
         </Grid>
         
     <Grid item xs={12} md={12} sx={{mb:-2, mt:4}}>

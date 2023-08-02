@@ -10,8 +10,8 @@ export const authUserReducer = (state: any, action: { type: any; payload: any; }
                 ...state,
                 signedIn: true,
                 token: payload.token,
-                userRole:payload?.user?.role,
-                userProfile: payload?.payload?.user
+                userRole:payload?.user?.userRole,
+                userProfile: payload?.user
             }
         }
         case userActions.SET_USER_PROFILE: {

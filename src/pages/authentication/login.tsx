@@ -4,8 +4,7 @@ import { styled } from "@mui/material/styles";
 import { Box, Stack, Link, Container, Typography } from "@mui/material";
 // routes
 import { PATH_AUTH } from "../../routes/paths";
-
-// layouts
+import FmLogo from "../../assets/fmh.jpg"
 // components
 import Page from "../../components/Page";
 import { MHidden } from "../../components/@material-extend";
@@ -18,11 +17,8 @@ import Logo from "../../components/Logo";
 const RootStyle = styled(Page)(({ theme }) => ({
   [theme.breakpoints.up("md")]: {
     display: "flex",
-    // flexDirection:'row'
   },
 }));
-
-
 
 const ContentStyle = styled("div")(({ theme }) => ({
   maxWidth: 480,
@@ -41,15 +37,13 @@ export default function Login() {
     <RootStyle title={`Login | ${app_title}`}>
       <Container maxWidth="sm">
         <ContentStyle>
+      
           <Stack
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              mb: 5,
-              alignItems: "center",
-            }}
+          flexDirection={"row"}
+          justifyContent="center"
+          gap="2rem"
           >
-            <Logo />
+            <img src={FmLogo} />  <Logo />
           </Stack>
           <Stack direction="row" alignItems="center"  sx={{ mb: 5,mt:5 }}>
             <Box sx={{ flexGrow: 1, display:"flex", flexDirection:"column", alignItems:"center" }}>

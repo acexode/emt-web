@@ -1,13 +1,9 @@
-// @ts-nocheck
-
-import { userActions } from "../actions/user.actions";
 import { authUserReducer } from "../reducers/user.reducer";
 import {
   createContext,
   useContext,
   useEffect,
   useReducer,
-  useState,
 } from "react";
 import { IAuthContext, Props } from "./types";
 // import axiosInstance from "../services/api_service";
@@ -17,8 +13,9 @@ import axios from "axios";
 import { BASE_URL } from "../services/baseurl";
 import { useSnackbar } from "notistack";
 import closeFill from "@iconify/icons-eva/close-fill";
-import { Icon } from "@mui/material";
 import { MIconButton } from "../components/@material-extend";
+import { Icon } from "@iconify/react";
+import { userActions } from "../actions/user.actions";
 
 const initialState = {
   userProfile: null,
@@ -35,19 +32,19 @@ const AuthUserProvider = ({ children }: Props) => {
 
   const user = tokenService.getUser();
   const navigate = useNavigate();
-  // useEffect(() => {
-  //   dispatch({
-  //     type: userActions.SET_USER_PROFILE,
-  //     payload: user,
-  //   });
-  // }, []);
+  useEffect(() => {
+    dispatch({
+      type: userActions.SET_USER_PROFILE,
+      payload: user,
+    });
+  }, []);
   const handleSignOut = () => {
-    // tokenService.clearStorage();
+    tokenService.clearStorage();
+    tokenService.removeToken()
     dispatch({
       type: userActions.SIGN_OUT,
       payload: false,
     });
-    // window.location.href = "/auth/login";
     navigate("/auth/login");
     enqueueSnackbar("Logout success", {
       variant: "success",
@@ -61,19 +58,13 @@ const AuthUserProvider = ({ children }: Props) => {
 
   const handleSignInUser = async (data: any) => {
     try {
-      let userType = data?.email === "etc@test.com" ? "etc" : "ambulance"
-      // const res = await axios.post(`${BASE_URL}/auth/login`, data);
-      let user ={
-        ...data,
-        type:userType
-      }
-
-      // tokenService.setToken(res.data?.token);
-      tokenService.setUser(JSON.stringify(user));
-      // dispatch({
-      //   type: userActions.SIGN_IN,
-      //   payload: res?.data,
-      // });
+      const res = await axios.post(`${BASE_URL}/Account/login`, data);
+      tokenService.setToken(res.data?.data?.token);
+      tokenService.setUser(JSON.stringify(res?.data?.data?.user))
+      dispatch({
+        type: userActions.SIGN_IN,
+        payload: res?.data?.data,
+      });
       enqueueSnackbar("Login success", {
         variant: "success",
         action: (key) => (
@@ -82,7 +73,6 @@ const AuthUserProvider = ({ children }: Props) => {
           </MIconButton>
         ),
       });
-
       window.location.href = "/dashboard/app";
     } catch (error: any) {
       console.log(error);
