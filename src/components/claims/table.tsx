@@ -166,7 +166,7 @@ const CustomClaimTable: FC<ITable> = ({ dataList, page_title, table_Head,loading
               { name: `${page_title}`, href:PATH_DASHBOARD.claims.root },
               { name: "List" },
             ]}
-            // action={ userType.etc_user === user?.type ?
+            // action={ userType.etc_user === user?.userRole ?
             //   <Button
             //     variant="contained"
             //     onClick={toggle}

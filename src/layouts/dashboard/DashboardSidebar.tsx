@@ -101,15 +101,14 @@ export default function DashboardSidebar({
   const {
     userState: { userProfile },
   } = useAuthUserContext();
-  const user = tokenService.getUser();
   useEffect(() => {
-    if(user?.type === userType.etc_user){
+    if(userProfile?.userRole === userType.etc_user){
       setsidebar(sidebarETCConfig);
     }
     else{
       setsidebar(sidebarConfig);
     }
-  }, [user]);
+  }, [userProfile]);
 
   const {
     isCollapse,
@@ -187,12 +186,11 @@ export default function DashboardSidebar({
               <MyAvatar />
               <Box sx={{ ml: 2 }}>
                 <Typography variant="subtitle2" sx={{ color: "#000" }}>
-                  {/* {userProfile?.name} */}
-                 {userType.etc_user === user.type ?  "John Doe" :"Dr Doubra"}
+                 { userProfile?.username}
                 </Typography>
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  {/* {userProfile?.access} */}
-                  Manager
+                  {userProfile?.userRole === userType.etc_user ? "ETC" : "NEMSAS"}
+                  
                 </Typography>
               </Box>
             </AccountStyle>

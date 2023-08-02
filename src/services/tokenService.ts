@@ -6,10 +6,6 @@ class TokenService {
     }
     getUser() {
         return JSON.parse(<string>localStorage.getItem("user"))
-        // const token = this.getToken();
-        // if (token) {
-        //     return jwt_decode(token);
-        // }
     }
 
     setToken(token: string) {

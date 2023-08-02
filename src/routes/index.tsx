@@ -1,6 +1,7 @@
 import { Suspense, lazy } from "react";
 import { Navigate, useLocation, useRoutes } from "react-router-dom";
 import LoadingScreen from "../components/LoadingScreen";
+import AuthGuard from "../guards/AuthGuard";
 // import AuthGuard from "../guards/AuthGuard";
 import GuestGuard from "../guards/GuestGuard";
 import DashboardLayout from "../layouts/dashboard";
@@ -54,9 +55,9 @@ export default function Router() {
     {
       path: "dashboard",
       element: (
+        <AuthGuard>
           <DashboardLayout />
-        // <AuthGuard>
-        // </AuthGuard>
+        </AuthGuard>
       ),
       children: [
         { path: "", element: <Navigate to="/dashboard/app" replace /> },

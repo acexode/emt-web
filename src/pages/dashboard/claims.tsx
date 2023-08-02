@@ -81,7 +81,7 @@ const Claims: FC = () => {
   }, []);
   return (
     <>
-    {userType.etc_user === user?.type ?      <CustomTable page_title='Emergency Treatment Centre' loading={loading} table_Head={TABLE_HEAD} dataList={claims} fetchAllData={fetchAllData} type="etc" />
+    {userType.etc_user === user?.userRole ?      <CustomTable page_title='Emergency Treatment Centre' loading={loading} table_Head={TABLE_HEAD} dataList={claims} fetchAllData={fetchAllData} type="etc" />
  : 
     <Box sx={{ width: '100%' }}>
     <Box sx={{ borderBottom: 1, borderColor: 'divider' ,mx:6}}>
