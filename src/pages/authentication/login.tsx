@@ -11,6 +11,7 @@ import LoginForm from "../../components/authentication/login";
 import { app_title } from "../../constants";
 import Logo from "../../components/Logo";
 import AuthLayout from "../../layouts/AuthLayout";
+import DashboardFooter from "../../layouts/dashboard/DashboardFooter";
 
 // ----------------------------------------------------------------------
 
@@ -74,6 +75,7 @@ export default function Login() {
             </Typography>
           </MHidden>
         </ContentStyle>
+        <DashboardFooter />
       </Container>
     </RootStyle>
   );
