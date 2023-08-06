@@ -3,8 +3,8 @@ import { Link as RouterLink } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Typography } from '@mui/material';
 // components
-import Logo from '../components/Logo';
 //
+import minH from "../assets/minh.png"
 import { MHidden } from '../components/@material-extend';
 
 // ----------------------------------------------------------------------
@@ -21,7 +21,7 @@ const HeaderStyle = styled('header')(({ theme }) => ({
   justifyContent: 'space-between',
   [theme.breakpoints.up('md')]: {
     alignItems: 'flex-start',
-    padding: theme.spacing(7, 5, 0, 7)
+    padding: theme.spacing(4, 5, 0, 4)
   }
 }));
 
@@ -33,7 +33,7 @@ export default function AuthLayout({ children }:any) {
   return (
     <HeaderStyle>
       <RouterLink to="/">
-        <Logo />
+      <img src={minH} width="200" /> 
       </RouterLink>
 
       <MHidden width="smDown">

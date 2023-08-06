@@ -4,13 +4,14 @@ import { styled } from "@mui/material/styles";
 import { Box, Stack, Link, Container, Typography } from "@mui/material";
 // routes
 import { PATH_AUTH } from "../../routes/paths";
-import FmLogo from "../../assets/fmh.jpg"
 // components
 import Page from "../../components/Page";
 import { MHidden } from "../../components/@material-extend";
 import LoginForm from "../../components/authentication/login";
 import { app_title } from "../../constants";
 import Logo from "../../components/Logo";
+import AuthLayout from "../../layouts/AuthLayout";
+import DashboardFooter from "../../layouts/dashboard/DashboardFooter";
 
 // ----------------------------------------------------------------------
 
@@ -35,15 +36,18 @@ const ContentStyle = styled("div")(({ theme }) => ({
 export default function Login() {
   return (
     <RootStyle title={`Login | ${app_title}`}>
+      <AuthLayout>
+
+      </AuthLayout>
       <Container maxWidth="sm">
         <ContentStyle>
       
           <Stack
           flexDirection={"row"}
           justifyContent="center"
-          gap="2rem"
+          // gap="2rem"
           >
-            <img src={FmLogo} />  <Logo />
+           <Logo />
           </Stack>
           <Stack direction="row" alignItems="center"  sx={{ mb: 5,mt:5 }}>
             <Box sx={{ flexGrow: 1, display:"flex", flexDirection:"column", alignItems:"center" }}>
@@ -71,6 +75,7 @@ export default function Login() {
             </Typography>
           </MHidden>
         </ContentStyle>
+        <DashboardFooter />
       </Container>
     </RootStyle>
   );

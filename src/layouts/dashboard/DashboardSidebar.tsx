@@ -19,7 +19,6 @@ import useCollapseDrawer from "../../hooks/useCollapseDrawer";
 import { PATH_DASHBOARD } from "../../routes/paths";
 // components
 import Logo from "../../components/Logo";
-import FmhLogo from "../../assets/fmh.jpg"
 import MyAvatar from "../../components/MyAvatar";
 import Scrollbar from "../../components/Scrollbar";
 import NavSection from "../../components/NavSection";
@@ -150,21 +149,21 @@ export default function DashboardSidebar({
       >
         <Stack
           direction="row"
-          // alignItems="center"
-          // justifyContent="space-between"
+          alignItems="center"
+          justifyContent="space-between"
         >
           <Box
             component={RouterLink}
             to="/dashboard/app"
             sx={{ display: "inline-flex",alignItems:"center", textDecoration: "none" }}
           >
-            <img src={FmhLogo} width="120" style={{marginRight:3}} /> <Logo />
+            <Logo />
             <Typography
               gutterBottom
               variant="h6"
               sx={{
                 fontSize: "0.6rem",
-                ml: -1.3,
+                // ml: 2,
                 color: "#000",
                 mb:0
               }}
@@ -172,6 +171,8 @@ export default function DashboardSidebar({
              NEMSAS
             </Typography>
           </Box>
+
+
         </Stack>
 
         {isCollapse ? (
@@ -186,11 +187,10 @@ export default function DashboardSidebar({
               <MyAvatar />
               <Box sx={{ ml: 2 }}>
                 <Typography variant="subtitle2" sx={{ color: "#000" }}>
-                 { userProfile?.username}
+                { userProfile?.username}
                 </Typography>
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  {userProfile?.userRole === userType.etc_user ? "ETC" : "NEMSAS"}
-                  
+                {userProfile?.userRole === userType.etc_user ? "ETC" : "NEMSAS"}
                 </Typography>
               </Box>
             </AccountStyle>

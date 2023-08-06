@@ -10,6 +10,7 @@ import useCollapseDrawer from '../../hooks/useCollapseDrawer';
 import { MHidden } from '../../components/@material-extend';
 import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
+import minH from "../../assets/minh.png"
 // import NotificationsPopover from './NotificationsPopover';
 
 // ----------------------------------------------------------------------
@@ -65,8 +66,8 @@ export default function DashboardNavbar({ onOpenSidebar }:any) {
         <Searchbar />
         <Box sx={{ flexGrow: 1 }} />
 
-        <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
-          {/* <NotificationsPopover /> */}
+        <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.8 }}>
+          <img src={minH} width="150" /> 
           <AccountPopover />
         </Stack>
       </ToolbarStyle>
