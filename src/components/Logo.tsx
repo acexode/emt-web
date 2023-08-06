@@ -8,8 +8,8 @@ export default function Logo({ sx }: any) {
   const { pathname } = useLocation();
   const itsAuth = pathname === "/auth/login";
   return (
-    <Box sx={{ width: itsAuth ? 150 : 60, height: 40, ...sx }}>
-      <img alt="screen" src={logo} style={{width:"70%", borderRadius:"50%"}} />
+    <Box sx={{ width: itsAuth ? 120 : 60, height: 40, ...sx }}>
+      <img alt="screen" src={logo} style={{width:itsAuth ? "79px": "50px", borderRadius:"50%"}} />
     </Box>
   );
 }
