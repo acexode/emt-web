@@ -1,5 +1,3 @@
-
-// @ts-nocheck
 import {
     Button,
     Dialog,
@@ -9,9 +7,8 @@ import {
     Grid,
     MenuItem,
     TextField,
-    Autocomplete
   } from "@mui/material";
-  import React, { FC, useEffect, useState } from "react";
+  import{ FC, JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useEffect, useState } from "react";
   import {useForm} from "react-hook-form"
   import { useSnackbar } from "notistack";
 
@@ -20,49 +17,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import axiosInstance from "../../../services/api_service";
 import { MIconButton } from "../../@material-extend";
 import closeFill from "@iconify/icons-eva/close-fill";
-import { Icon } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
-// import { levels } from "../../../constants";
+import { Icon } from "@iconify/react";
 
-const states = [
-  "Abia",
-  "Adamawa",
-  "Akwa Ibom",
-  "Anambra",
-  "Bauchi",
-  "Bayelsa",
-  "Benue",
-  "Borno",
-  "Cross River",
-  "Delta",
-  "Ebonyi",
-  "Edo",
-  "Ekiti",
-  "Enugu",
-  "Federal Capital Territory",
-  "Gombe",
-  "Imo",
-  "Jigawa",
-  "Kaduna",
-  "Kano",
-  "Katsina",
-  "Kebbi",
-  "Kogi",
-  "Kwara",
-  "Lagos",
-  "Nasarawa",
-  "Niger",
-  "Ogun",
-  "Ondo",
-  "Osun",
-  "Oyo",
-  "Plateau",
-  "Rivers",
-  "Sokoto",
-  "Taraba",
-  "Yobe",
-  "Zamfara"
-];
   interface IAddEditServiceProvider {
     edit?: boolean,
     modal:boolean,
@@ -73,21 +30,11 @@ const states = [
   }
 
   const schema = yup.object().shape({
-      state: yup.string().required("*State is required"),
-    type: yup.string().required("*Type is required"),
+      code: yup.string().required("*Code is required"),
+    description: yup.string().required("*Description is required"),
+    price: yup.number().required("*price is required"),
+    feeCategoryId: yup.number().required("*Fee Category is required"),
   });
- 
-  const level =[
-    {
-    type:"Ambulance",
-    id:"Ambulance"
-  },
-    {
-    type:"ETC",
-    id:"ETC"
-  },
-  
-]
  
 
 export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formData,modal,toggle,fetchAllUsers}) =>{
@@ -96,8 +43,7 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
         handleSubmit,
         reset,
         formState: { errors },
-        setValue,
-        watch
+  
       } = useForm({
         mode: "onTouched",
         criteriaMode: "firstError",
@@ -108,36 +54,9 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
         resolver: yupResolver(schema),
       });
       const [loading,setLoading] = useState(false)
-      const [locationsLoading,setLocationsLoading] = useState(false)
+      const [feescats,setFeesCats] = useState<any>([])
       const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-      const [locations,setLocations] = useState([])
-      // const [states,setStates] = useState([])
-      const [lgas,setLgas] = useState([])
 
-      useEffect(()=>{
-        const options = states?.map((dt:any,index:number) =>{
-          return {
-            label: dt,
-            id: index
-          }
-        })
-        setLocations(options)
-        // axiosInstance.get(`/locations/states`).then(res =>{
-        //   const options = res?.data?.map((dt:any) =>{
-        //     return {
-        //       label: dt?.name,
-        //       id: dt?.id
-        //     }
-        //   })
-        //   if(watchLevel === levels.state || watchLevel === levels.national){
-        //     setLocations(options)
-        //   }else{
-        //     setStates(options)
-        //   }
-        // }).catch(error =>{
-        //   console.log(error)
-        // })
-    },[])
 
       useEffect(()=>{
           if(edit){
@@ -147,25 +66,42 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
           }
       },[edit])
 
+      useEffect(()=>{
+          axiosInstance.get('FeeCategories/get').then(res =>{
+            let newVal = res.data?.data?.map((dt: { description: any; id: any; })=>{
+              return {
+                label: dt?.description,
+                value: dt?.id
+              }
+            })
+            setFeesCats(newVal)
+          }).catch(error =>{
+            console.log(error)
+          })
+      },[])
+
     const handleToggle =() => toggle()
 
     const onSubmit = async(data:any) =>{
         let newData = {
             ...data,
+            id:formData?.id
           };
-          delete newData?.id
+          delete newData?.feeCategory
+          delete newData?.dateAdded
           setLoading(true)
           let text = edit ? "Service Provider Updated" : "Service Provider Added";
           try {
             let res;
             if (edit) {
               res = await axiosInstance.put(
-                `/serviceProviders/${formData?.id}/update`,
+                `ServicesAndFees/update`,
                 newData
               );
             } else {
-              res = await axiosInstance.post(`/serviceProviders/create`, newData);
+              res = await axiosInstance.post(`ServicesAndFees/add`, data);
             }
+            console.log(res);
             enqueueSnackbar(`${text}`, {
                 variant: "success",
                 action: (key) => (
@@ -178,7 +114,7 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
             handleToggle();
             fetchAllUsers()
           } catch (error: any) {
-            enqueueSnackbar("Error!", {
+            enqueueSnackbar(error?.message, {
                 variant: "error",
                 action: (key) => (
                   <MIconButton size="small" onClick={() => closeSnackbar(key)}>
@@ -190,9 +126,7 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
             setLoading(false)
           }
     }
-    const handleAutocompleteChange = (event, value) => {
-      setValue('locationId', value?.id || ''); // Set the value of 'locationId' field
-    };
+
   
     return (
         <Dialog
@@ -211,37 +145,71 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
          
             
             <Grid item xs={12} sm={6} lg={6}>
-            <label>Select Type</label>
-              <TextField
-                 variant="outlined"
+              
+            <label>Enter Code</label>
+            <TextField
+              variant="outlined"
+              fullWidth                      
+              type="text"
+              {...register('code')}
+              helperText={errors?.code?.message?.toString()}
+              FormHelperTextProps={{
+              className:"helperTextColor"
+              }}
+            />
+            </Grid>
+            <Grid item xs={12} sm={6} lg={6}>
+              
+            <label>Enter Description</label>
+            <TextField
+              variant="outlined"
+              fullWidth                      
+              type="text"
+              {...register('description')}
+              helperText={errors?.description?.message?.toString()}
+              FormHelperTextProps={{
+              className:"helperTextColor"
+              }}
+            />
+            </Grid>
+            <Grid item xs={12} sm={6} lg={6}>
+              
+            <label>Enter Price</label>
+            <TextField
+              variant="outlined"
+              fullWidth                      
+              type="text"
+              {...register('price', { valueAsNumber:true})}
+              helperText={errors?.price?.message?.toString()}
+              FormHelperTextProps={{
+              className:"helperTextColor"
+              }}
+            />
+            </Grid>
+            <Grid item xs={12} sm={6} lg={6}>
+              
+            <label>Select Fee category</label>
+            <TextField
+                variant="outlined"
                 fullWidth
                 select
-                 type="number"
-                {...register("type")}
-               
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                {level?.map((level) => (
-                  <MenuItem value={level.id}>{level.type}</MenuItem>
+                type="text"
+                multiline
+                {...register('feeCategoryId')}
+                helperText={errors?.feeCategoryId?.message?.toString()}
+                FormHelperTextProps={{
+                className:"helperTextColor"
+                }}
+            >
+                {feescats.map((cat: { value: string | number | readonly string[] | undefined; label: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; },index: Key | null | undefined) => (
+                    <MenuItem key={index} value={cat?.value}>
+                        {cat?.label}
+                    </MenuItem>
                 ))}
-              </TextField>
-                <p style={{ color: "red", fontSize: 12 }}>
-                  {errors?.type?.message?.toString()}
-                </p>
+            </TextField>
             </Grid>
     
-            <Grid item xs={12} sm={6} lg={6}>
-            <label>Select State</label>
-            <Autocomplete
-              options={locations}
-              getOptionLabel={(option) => option.label}
-              onChange={handleAutocompleteChange}
-               renderInput={(params) => <TextField {...params} />}
-            />
             
-            </Grid>
           </Grid>
         </DialogContent>
         <DialogActions>

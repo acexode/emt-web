@@ -17,7 +17,7 @@ axiosInstance.interceptors.request.use((config) => {
     if (!token) {
         throw new axios.Cancel("Token is not available. Do login, please.");
     } else {
-        config.headers.Authorization = token;
+        config.headers.Authorization = `Bearer ${token}`;
         return config;
     }
 });

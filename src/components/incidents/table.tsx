@@ -71,7 +71,11 @@ function applySortFilter(
   if (query) {
     return filter(
       array,
-      (_user) => _user?.category?.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      (_user) => 
+      _user?.incidentCategory?.toLowerCase().includes(query.toLowerCase())  ||
+      _user?.incidentLocation?.toLowerCase().includes(query.toLowerCase())  ||
+      _user?.ambulanceType?.toLowerCase().includes(query.toLowerCase())  ||
+      _user?.treatmentCenter?.toLowerCase().includes(query.toLowerCase()) 
     );
   }
   return stabilizedThis.map((el: any[]) => el[0]);
@@ -92,7 +96,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
   const [selected, setSelected] = useState<any>([]);
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(25);
   const [modal, setModal] = useState(false);
   const [edit, setEdit] = useState(false);
   const [formData, setFormData] = useState(null);
@@ -281,7 +285,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                               align="left"
                              
                             >
-                              { row?.category 
+                              { row?.incidentCategory 
                               }
                            
                             </TableCell>
@@ -289,32 +293,32 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                               align="left"
                              
                             >
-                               {row?.location
+                               {row?.incidentLocation
                               }
                             </TableCell>
                             <TableCell
                               align="left"
                               
                             >
-                               {row?.ambulance_type
+                               {row?.ambulanceType
                               }
                             </TableCell>
                             <TableCell
                               align="left"
                               
                             >
-                               {row?.date || "Nil"
+                               {row?.incidentDate || "Nil"
                               }
                             </TableCell>
                             <TableCell align="left">
                           
-                              { row?.status || "Nil"}
+                              { row?.treatmentCenter || "Nil"}
                              
                               </TableCell>
             
 
                             <TableCell align="right">
-                                <MoreMenu handleUpdate={handleUpdate} row={row} fetchAllData={fetchAllData} type="User" />
+                                <MoreMenu handleUpdate={handleUpdate} row={row} fetchAllData={fetchAllData} type="incident" url="Incidents/delete" />
                             </TableCell>
                           </TableRow>
                         );

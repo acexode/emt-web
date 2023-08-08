@@ -1,12 +1,13 @@
 import { FC, useEffect, useState,lazy } from "react";
-import { claimsData2 } from "../../db";
+// import { claimsData2 } from "../../db";
 import axiosInstance from "../../services/api_service";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import tokenService from "../../services/tokenService";
+// import tokenService from "../../services/tokenService";
 import { userType } from "../../constants";
+import { useAuthUserContext } from "../../context/authUser.context";
 const CustomTable = lazy(() => import("../../components/claims/table"))
 
 
@@ -53,10 +54,12 @@ function a11yProps(index: number) {
 }
  
 const Claims: FC = () => {
-  const [claims, setClaims] = useState(claimsData2);
+  const [claims, setClaims] = useState([]);
   const [loading,setLoading] = useState(false)
   const [value, setValue] = useState(0);
-  const user = tokenService.getUser();
+  const {
+    userState: { userProfile },
+  } = useAuthUserContext();
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -66,9 +69,9 @@ const Claims: FC = () => {
   const fetchAllData = () =>{
     setLoading(true)
     axiosInstance
-      .get(`claims`)
+      .get(`Claims/get`)
       .then((res) => {
-        setClaims(res?.data);
+        setClaims(res?.data?.data);
       })
       .catch((error) => {
         console.log(error);
@@ -77,11 +80,11 @@ const Claims: FC = () => {
       })
   }
   useEffect(() => {
-    // fetchAllData()
+    fetchAllData()
   }, []);
   return (
     <>
-    {userType.etc_user === user?.userRole ?      <CustomTable page_title='Emergency Treatment Centre' loading={loading} table_Head={TABLE_HEAD} dataList={claims} fetchAllData={fetchAllData} type="etc" />
+    {userType.etc_user === userProfile?.userRole ?      <CustomTable page_title='Emergency Treatment Centre' loading={loading} table_Head={TABLE_HEAD} dataList={claims} fetchAllData={fetchAllData} type="etc" />
  : 
     <Box sx={{ width: '100%' }}>
     <Box sx={{ borderBottom: 1, borderColor: 'divider' ,mx:6}}>

@@ -38,7 +38,16 @@ const data = [
 const NemsasRunSheets: FC = () => {
   const [incidents, setIncidents] = useState(data);
   const [loading,setLoading] = useState(false)
-
+  // useEffect(()=>{
+  //   axiosInstance
+  //   .get(`Ambulances/get`)
+  //   .then((res) => {
+  //       console.log(res.data)
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   })
+  // },[])
   const fetchAllData = () =>{
     setLoading(true)
     axiosInstance

@@ -14,19 +14,17 @@ import {
   import * as yup from "yup"; 
   import { yupResolver } from "@hookform/resolvers/yup";
    import { useSnackbar } from "notistack";
-  import { useNavigate } from "react-router-dom";
-  
+  import { useLocation, useNavigate } from "react-router-dom";
   import useSettings from "../../../hooks/useSettings";
-//   import axiosInstance from "../../../services/api_service";
-//   import { useAuthUserContext } from "../../../context/authUser.context";
   import { MIconButton } from "../../../components/@material-extend";
-//   import closeFill from "@iconify/icons-eva/close-fill";
-//   import { Icon } from "@mui/material";
+  import closeFill from "@iconify/icons-eva/close-fill";
 import { LoadingButton } from "@mui/lab";
-// import AlertDialog from "./confirmDialog";
-//   interface BodyType {
-//     [key: string]: string;
-//   }
+import { useEffect, useState } from "react";
+import axiosInstance from "../../../services/api_service";
+import MapSelector from "./map";
+import AlertDialog from "./confirmDialog";
+import { Icon } from "@iconify/react";
+
 
 const treatmentTypes =[
     "Federal Medical Centre, Abuja",
@@ -56,7 +54,9 @@ const ambulance =[
   const schema = yup.object().shape({
     incidentDate: yup.string().required("*Incident Date is required"),
     incidentTime: yup.string().required("*Incident Time is required"),
-    callerId: yup.string().required("*Caller ID is required"),
+    callerNumber: yup.string().required("*Caller ID is required"),
+    callerName: yup.string().required("*Caller Name is required"),
+    callerIsPatient: yup.string().required("*Field is required"),
     sex: yup.string().required("*Sex is required"),
     incidentLocation: yup.string().required("*Incident Location is required"),
     street: yup.string().required("*Street is required"),
@@ -64,16 +64,16 @@ const ambulance =[
     areaCouncil: yup.string().required("*Area Council is required"),
     zipCode: yup.string().required("*Zip Code is required"),
     incidentCategory: yup.string(),
-    caseResolvedWithoutAmbulance: yup.string(),
-    ambulanceCode: yup.string(),
+    canResolveWithoutAmbulance: yup.string(),
+    ambulance: yup.string(),
     ambulanceType: yup.string(),
-    treatmentCode: yup.string(),
-    dispatcherFullname: yup.string(),
-    dispatcherID: yup.string(),
-    dispatcherDate: yup.string(),
+    treatmentCenter: yup.string(),
+    dispatchFullName: yup.string(),
+    dispatcherId: yup.string(),
+    dispatchDate: yup.string(),
     supervisorFirstName: yup.string(),
     supervisorLastName: yup.string(),
-    supervisorMiddleInitial: yup.string(),
+    supervisorMiddleName: yup.string(),
     supervisorDate: yup.string(),
     serialNo: yup.string(),
 });
@@ -82,12 +82,18 @@ const ambulance =[
     const ambulance_type =["BLS","ALS","ICU","Mobile Clinic","Boat Ambulance","KEKE (Rural Ambulance)","MotorBike Ambulance"]
   const NewIncidentForm = () => {
     const { themeStretch } = useSettings();
-    // const [open, setOpen] = useState(false);
+    const [latitude, setSelectedLatitude] = useState(null);
+    const [longitude, setSelectedLongitude] = useState(null);
+    const [loading,setLoading] = useState(false)
+    const { state } = useLocation();
+    const row = state?.row || null;
+    const [open, setOpen] = useState(false);
     const {
         register,
         handleSubmit,
         formState: { errors },
-        watch
+        watch,
+        reset
       } = useForm({
         mode: "onTouched",
         criteriaMode: "firstError",
@@ -97,73 +103,84 @@ const ambulance =[
         delayError: undefined,
         resolver: yupResolver(schema),
       });
-      const watchIsCaseSolvedWithAmbulance = watch("caseResolvedWithoutAmbulance") === "Yes"
-    // const [confirmationPayload, setConfirmationPayload] = useState(null);
+      const watchIsCaseSolvedWithAmbulance = watch("canResolveWithoutAmbulance") === "Yes"
+    const [confirmationPayload, setConfirmationPayload] = useState(null);
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     let navigate = useNavigate();
-    // const handleClickOpen = () => {
-    //   setOpen(true);
-    // };
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+    const handleClose = () => {
+      setOpen(false);
+    };
+    useEffect(()=>{
+        if(row){
+          reset(row)
+        }else{
+          reset()
+        }
+    },[row])
   
-    // const handleClose = () => {
-    //   setOpen(false);
-    // };
-  
+//   useEffect(()=>{
+//     axiosInstance
+//     .get(`Ambulances/get`)
+//     .then((res) => {
+//         console.log(res.data)
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//     })
+//   },[])
    
-   //TODO make sure to append FCT360/ to serial no
   
    const onHandleSubmit = async (data:any) => {
-    console.log({data});
-          navigate(PATH_DASHBOARD.incidents.root);
-        enqueueSnackbar("Incident added!", {
-          variant: "success",
-          action: (key) => (
-            <MIconButton size="small" onClick={() => closeSnackbar(key)}>
-              {/* <Icon icon={closeFill} /> */}
-            </MIconButton>
-          ),
-        });
-        // const payload = {
-        //   quarter: quarter,
-        //   year: selectedYear,
-        //   content: questions,
-        //   locationId: userProfile?.locationId,
-        //   userId: userProfile?.id,
-        // };
-        // questions can be sent to API to persist assessment
-        // handleClickOpen();
-    // setConfirmationPayload(payload);
+    let newSerialNo = `FCT360/${data?.serialNo}`
+    let newVal = {
+        ...data,
+        longitude,
+        latitude,
+        serialNo:newSerialNo
+    }
+        handleClickOpen();
+    setConfirmationPayload(newVal);
       
   };
    
-    // const handleSubmitAssessment = async() =>{
-    //   setLoading(true)
-    //   try {
-    //     const res = await axiosInstance.post("/assessments/m-and-e", confirmationPayload);
-    //     console.log(res);
-        // navigate(PATH_DASHBOARD.m_and_e.hf);
-        // enqueueSnackbar("Assessment added!", {
-        //   variant: "success",
-        //   action: (key) => (
-        //     <MIconButton size="small" onClick={() => closeSnackbar(key)}>
-        //       <Icon icon={closeFill} />
-        //     </MIconButton>
-        //   ),
-        // });
-    //   } catch (error) {
-    //     enqueueSnackbar("Error adding Assessment!", {
-    //         variant: "error",
-    //         action: (key) => (
-    //           <MIconButton size="small" onClick={() => closeSnackbar(key)}>
-    //             <Icon icon={closeFill} />
-    //           </MIconButton>
-    //         ),
-    //       });
-    //     console.error("An unexpected error happened occurred:", error);
-    //   } finally{
-    //     setLoading(false)
-    //   }
-    // }
+    const handleIncidents = async() =>{
+      setLoading(true)
+      try {
+        let res;
+        if (row) {
+            res = await axiosInstance.put(
+              `Incidents/update`,
+              confirmationPayload
+            );
+          } else {
+            res = await axiosInstance.post(`Incidents/add`, confirmationPayload);
+          }
+        navigate(PATH_DASHBOARD.incidents.root);
+        enqueueSnackbar(res?.data?.message, {
+          variant: "success",
+          action: (key) => (
+            <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+              <Icon icon={closeFill} />
+            </MIconButton>
+          ),
+        });
+      } catch (error) {
+        enqueueSnackbar("Error reporting incident!", {
+            variant: "error",
+            action: (key) => (
+              <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+                <Icon icon={closeFill} />
+              </MIconButton>
+            ),
+          });
+        console.error("An unexpected error happened occurred:", error);
+      } finally{
+        setLoading(false)
+      }
+    }
     return (
       <Page title="Incident Form: Create new incident | EMT">
         <Container maxWidth={themeStretch ? false : "lg"}>
@@ -188,6 +205,7 @@ const ambulance =[
                             fullWidth                      
                             type="date"
                             {...register('incidentDate')}
+                            defaultValue={row?.incidentDate}
                             helperText={errors?.incidentDate?.message?.toString()}
                             FormHelperTextProps={{
                             className:"helperTextColor"
@@ -214,18 +232,60 @@ const ambulance =[
                    
                     <Grid item sm={4}>
                         <FormLabel >
+                        Caller Name
+                        </FormLabel>
+                        <TextField
+                            variant="outlined"
+                            fullWidth                      
+                            type="text"
+                            {...register('callerName')}
+                            helperText={errors?.callerName?.message?.toString()}
+                            FormHelperTextProps={{
+                            className:"helperTextColor"
+                        }}
+                        >
+                        </TextField>
+                    </Grid>
+                    <Grid item sm={4}>
+                        <FormLabel >
                         Caller ID (Phone Number)
                         </FormLabel>
                         <TextField
                             variant="outlined"
                             fullWidth                      
                             type="text"
-                            {...register('callerId')}
-                            helperText={errors?.callerId?.message?.toString()}
+                            {...register('callerNumber')}
+                            helperText={errors?.callerNumber?.message?.toString()}
                             FormHelperTextProps={{
                             className:"helperTextColor"
                         }}
                         >
+                        </TextField>
+                    </Grid>
+                    <Grid item sm={4}>
+                        <FormLabel >
+                        Is caller the patient ?
+                        </FormLabel>
+                        <TextField
+                            variant="outlined"
+                            fullWidth
+                            select
+                            type="text"
+                            defaultValue={row?.callerIsPatient}
+                            {...register('callerIsPatient')}
+                            helperText={errors?.callerIsPatient?.message?.toString()}
+                            FormHelperTextProps={{
+                            className:"helperTextColor"
+                            }}
+                        >
+                            
+                            <MenuItem value={"Yes"}>
+                            Yes
+                            </MenuItem>
+                            <MenuItem value={"No"}>
+                            No
+                            </MenuItem>
+                            
                         </TextField>
                     </Grid>
                     <Grid item sm={4}>
@@ -238,6 +298,7 @@ const ambulance =[
                             select
                             type="text"
                             {...register('sex')}
+                            defaultValue={row?.sex}
                             helperText={errors?.sex?.message?.toString()}
                             FormHelperTextProps={{
                             className:"helperTextColor"
@@ -344,6 +405,7 @@ const ambulance =[
                             type="text"
                             multiline
                             {...register('incidentCategory')}
+                            defaultValue={row?.incidentCategory}
                             helperText={errors?.incidentCategory?.message?.toString()}
                             FormHelperTextProps={{
                             className:"helperTextColor"
@@ -365,8 +427,9 @@ const ambulance =[
                             fullWidth
                             select
                             type="text"
-                            {...register('caseResolvedWithoutAmbulance')}
-                            helperText={errors?.caseResolvedWithoutAmbulance?.message?.toString()}
+                            {...register('canResolveWithoutAmbulance')}
+                            defaultValue={row?.canResolveWithoutAmbulance}
+                            helperText={errors?.canResolveWithoutAmbulance?.message?.toString()}
                             FormHelperTextProps={{
                             className:"helperTextColor"
                             }}
@@ -394,8 +457,9 @@ const ambulance =[
                             fullWidth
                             select
                             type="text"
-                            {...register('ambulanceCode')}
-                            helperText={errors?.ambulanceCode?.message?.toString()}
+                            {...register('ambulance')}
+                            defaultValue={row?.ambulance}
+                            helperText={errors?.ambulance?.message?.toString()}
                             FormHelperTextProps={{
                             className:"helperTextColor"
                             }}
@@ -420,6 +484,7 @@ const ambulance =[
                             select
                             type="text"
                             multiline
+                            defaultValue={row?.ambulanceType}
                             {...register('ambulanceType')}
                             helperText={errors?.ambulanceType?.message?.toString()}
                             FormHelperTextProps={{
@@ -447,8 +512,9 @@ const ambulance =[
                             fullWidth
                             select
                             type="text"
-                            {...register('treatmentCode')}
-                            helperText={errors?.treatmentCode?.message?.toString()}
+                            defaultValue={row?.treatmentCenter}
+                            {...register('treatmentCenter')}
+                            helperText={errors?.treatmentCenter?.message?.toString()}
                             FormHelperTextProps={{
                             className:"helperTextColor"
                             }}
@@ -477,8 +543,8 @@ const ambulance =[
                             variant="outlined"
                             fullWidth                      
                             type="text"
-                            {...register('dispatcherFullname')}
-                            helperText={errors?.dispatcherFullname?.message?.toString()}
+                            {...register('dispatchFullName')}
+                            helperText={errors?.dispatchFullName?.message?.toString()}
                             FormHelperTextProps={{
                             className:"helperTextColor"
                         }}
@@ -493,8 +559,8 @@ const ambulance =[
                             variant="outlined"
                             fullWidth                      
                             type="text"
-                            {...register('dispatcherID')}
-                            helperText={errors?.dispatcherID?.message?.toString()}
+                            {...register('dispatcherId')}
+                            helperText={errors?.dispatcherId?.message?.toString()}
                             FormHelperTextProps={{
                             className:"helperTextColor"
                         }}
@@ -509,8 +575,8 @@ const ambulance =[
                             variant="outlined"
                             fullWidth                      
                             type="date"
-                            {...register('dispatcherDate')}
-                            helperText={errors?.dispatcherDate?.message?.toString()}
+                            {...register('dispatchDate')}
+                            helperText={errors?.dispatchDate?.message?.toString()}
                             FormHelperTextProps={{
                             className:"helperTextColor"
                         }}
@@ -558,14 +624,14 @@ const ambulance =[
                     </Grid>
                     <Grid item sm={4}>
                         <FormLabel >
-                        Middle Initial
+                        Middle Name
                         </FormLabel>
                         <TextField
                             variant="outlined"
                             fullWidth                      
                             type="text"
-                            {...register('supervisorMiddleInitial')}
-                            helperText={errors?.supervisorMiddleInitial?.message?.toString()}
+                            {...register('supervisorMiddleName')}
+                            helperText={errors?.supervisorMiddleName?.message?.toString()}
                             FormHelperTextProps={{
                             className:"helperTextColor"
                         }}
@@ -591,6 +657,50 @@ const ambulance =[
                      
                     </Grid>
               </Card>
+              <Card sx={{ p: 3, pb: 10, mb: 5 }}>
+                    <Grid container spacing={2}>
+                
+                    <Grid item sm={6}>
+                        <FormLabel >
+                        Serial No
+                        </FormLabel>
+                        <TextField
+                            variant="outlined"
+                            fullWidth                      
+                            type="text"
+                            {...register('serialNo')}
+                            helperText={errors?.serialNo?.message?.toString()}
+                            FormHelperTextProps={{
+                            className:"helperTextColor"
+                        }}
+                        >
+                        </TextField>
+                    </Grid>
+                
+              
+                     
+                    </Grid>
+              </Card>
+              <Card sx={{ p: 3, pb: 10, mb: 5 }}>
+                <Box sx={{mb:2}}>Map Location</Box>
+                    <Grid container spacing={2}>
+                
+                    <Grid item sm={12}>
+                        <FormLabel >
+                        Select a Location on the Map
+                        </FormLabel>
+                        <MapSelector 
+                        setSelectedLatitude={setSelectedLatitude} 
+                        setSelectedLongitude={setSelectedLongitude}
+                        selectedLatitude={latitude}
+                        selectedLongitude={longitude}
+                         />
+                    </Grid>
+               
+                
+                     
+                    </Grid>
+              </Card>
               </>
               }
               
@@ -602,7 +712,7 @@ const ambulance =[
                 Submit
             </LoadingButton>
           </form>
-          {/* <AlertDialog open={open} handleClose={handleClose} loading={loading} handleSubmit={handleSubmitAssessment} /> */}
+          <AlertDialog open={open} handleClose={handleClose} loading={loading} handleSubmit={handleIncidents} title="Incident Reporting" />
 
         </Container>
       </Page>

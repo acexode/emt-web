@@ -69,6 +69,9 @@ export default function Router() {
           path: "new-incidents", element: <NewIncidentForm />
         },
         {
+          path: "view-incidents", element: <ViewIncident />
+        },
+        {
           path: "patients", element: <Patients />
         },
         {
@@ -147,6 +150,9 @@ const ViewETC = Loadable(
 );
 const ViewRunSheet = Loadable(
   lazy(() => import("../pages/dashboard/view_runsheet"))
+);
+const ViewIncident = Loadable(
+  lazy(() => import("../pages/dashboard/view_incident"))
 );
 const NewIncidentForm = Loadable(
   lazy(() => import("../pages/dashboard/components/new_incident"))
