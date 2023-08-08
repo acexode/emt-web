@@ -36,37 +36,37 @@ export const Remove:FC<IRemove> = ({ id, param, fetchData, url,modal,toggle,type
 
 
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
-  let mainUrl = type !== "Ward" ? `${url}/${id}/deactivate` :`${url}/${id}/delete`
   const handleToggle =() => toggle()
 
   const removeRow = () => {
     setLoading(true);
     axiosInstance
     .request({
-      method: type === 'Ward' ? 'delete' : 'patch',
-      url: mainUrl,
+      method:'delete',
+      url: url,
       data: {
         params: { [param]: id },
       },
     })
       .then((res) => {
         console.log(res);
-        enqueueSnackbar(`Deactivated!`, {
+        enqueueSnackbar(`Deleted!`, {
             variant: "success",
             action: (key) => (
               <MIconButton size="small" onClick={() => closeSnackbar(key)}>
-                <Icon icon={closeFill} />
+                <Icon icon={closeFill} color="success" />
               </MIconButton>
             ),
           });
         fetchData();
       })
       .catch((error) => {
-        enqueueSnackbar(error?.response?.data?.message, {
+        console.log(error);
+        enqueueSnackbar(error?.message, {
             variant: "error",
             action: (key) => (
               <MIconButton size="small" onClick={() => closeSnackbar(key)}>
-                <Icon icon={closeFill} />
+                <Icon icon={closeFill} color="error" />
               </MIconButton>
             ),
           });
@@ -81,14 +81,14 @@ export const Remove:FC<IRemove> = ({ id, param, fetchData, url,modal,toggle,type
       <Dialog
         open={modal}
         onClose={handleToggle}
-        maxWidth="md"
+        maxWidth="sm"
         fullWidth
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{`Deactivate ${type}`}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{`Delete ${type}`}</DialogTitle>
 
-        <DialogContent>Are you sure you want to deactivate this?</DialogContent>
+        <DialogContent>Are you sure you want to delete this?</DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleToggle}  sx={{background:"grey",  '&:hover': {
           // Define the hover styles here
@@ -103,7 +103,7 @@ export const Remove:FC<IRemove> = ({ id, param, fetchData, url,modal,toggle,type
                 loading={loading}
                 onClick={removeRow} 
             >
-                Deactivate
+                Delete
             </LoadingButton>
         </DialogActions>
       </Dialog>

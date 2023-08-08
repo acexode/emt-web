@@ -30,6 +30,7 @@ import TableListHead from "../table/tableListHead";
 import ListToolbar from "../table/tableListToolbar";
 import MoreMenu from "../table/TableMoreMenu";
 import { AddEditServiceProvider } from "./components/add-edit-service";
+import { formatDate2, formatter } from "../../utility";
 // import axiosInstance from "../../services/api_service";
 // ----------------------------------------------------------------------
 
@@ -231,6 +232,10 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                             <TableCell align="left">
                             <Skeleton variant="rectangular" width={100} height={30} /> 
                               </TableCell>
+                            
+                            <TableCell align="left">
+                            <Skeleton variant="rectangular" width={100} height={30} /> 
+                              </TableCell>
 
                             <TableCell align="right"></TableCell>
                           </TableRow>
@@ -267,17 +272,27 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                          
                             <TableCell align="left">
                           
-                              { row?.type || "Nil"}
+                              { row?.code || "Nil"}
                              
                               </TableCell>
                             <TableCell align="left">
                           
-                           {row?.state || "Nil"}
+                           {row?.description || "Nil"}
+                             
+                              </TableCell>
+                            <TableCell align="left">
+                          
+                           {formatter.format(row?.price) || "Nil"}
+                             
+                              </TableCell>
+                            <TableCell align="left">
+                          
+                           {formatDate2(row?.dateAdded) || "Nil"}
                              
                               </TableCell>
 
                             <TableCell align="right">
-                                <MoreMenu handleUpdate={handleUpdate} row={row} fetchAllData={fetchAllData} type="User" />
+                                <MoreMenu handleUpdate={handleUpdate} row={row} fetchAllData={fetchAllData} type="Services" url="ServicesAndFees/delete" />
                             </TableCell>
                           </TableRow>
                         );

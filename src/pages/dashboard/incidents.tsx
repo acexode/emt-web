@@ -1,5 +1,4 @@
 import { FC, useEffect, useState,lazy } from "react";
-import { incidentsData } from "../../db";
 import axiosInstance from "../../services/api_service";
 
 const CustomTable = lazy(() => import("../../components/incidents/table"))
@@ -7,25 +6,25 @@ const CustomTable = lazy(() => import("../../components/incidents/table"))
 
 const TABLE_HEAD = [
   { id: "s/n", label: "S/N", alignRight: false },
-  { id: "category", label: "Category", alignRight: false },
-  { id: "location", label: "Location", alignRight: false },
-  { id: "ambulance_type", label: "Ambulance Type", alignRight: false },
-  { id: "date", label: "Date", alignRight: false },
-  { id: "status", label: "Status", alignRight: false },
+  { id: "incidentCategory", label: "Category", alignRight: false },
+  { id: "incidentLocation", label: "Location", alignRight: false },
+  { id: "ambulanceType", label: "Ambulance Type", alignRight: false },
+  { id: "incidentDate", label: "Date", alignRight: false },
+  { id: "treatmentCenter", label: "Treatment Center", alignRight: false },
   { id: "" },
 ];
 
  
 const Incidents: FC = () => {
-  const [incidents, setIncidents] = useState(incidentsData);
+  const [incidents, setIncidents] = useState([]);
   const [loading,setLoading] = useState(false)
 
   const fetchIncidents = () =>{
     setLoading(true)
     axiosInstance
-      .get(`incidents`)
+      .get(`Incidents/get`)
       .then((res) => {
-        setIncidents(res?.data);
+        setIncidents(res?.data?.data)
       })
       .catch((error) => {
         console.log(error);
@@ -34,7 +33,7 @@ const Incidents: FC = () => {
       })
   }
   useEffect(() => {
-    // fetchIncidents()
+    fetchIncidents()
   }, []);
   return (
     <><CustomTable page_title='Incidents' loading={loading} table_Head={TABLE_HEAD} dataList={incidents} fetchAllData={fetchIncidents} /></>

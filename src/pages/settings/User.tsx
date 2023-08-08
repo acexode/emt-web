@@ -1,4 +1,5 @@
 import { useEffect, useState ,lazy} from 'react'
+import axiosInstance from '../../services/api_service';
 // import axiosInstance from '../../services/api_service';
 
 const CustomTable = lazy(() => import("../../components/users/userTable"))
@@ -58,6 +59,16 @@ const UserManagement = () => {
   const [users, setUsers] = useState<any>([]);
   const [loading,setLoading] = useState(true)
 
+    useEffect(()=>{
+    axiosInstance
+    .get(`Account/getUsers`)
+    .then((res) => {
+        console.log(res.data)
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+  },[])
   const fetchAllUsers = () =>{
     setLoading(true)
     const data = []; 

@@ -2,14 +2,14 @@
  import { FC, useRef, useState } from 'react';
 import editFill from '@iconify/icons-eva/edit-fill';
 import eyeFill from '@iconify/icons-eva/eye-fill';
-import { Link as RouterLink ,useNavigate} from 'react-router-dom';
-// import trash2Outline from '@iconify/icons-eva/trash-2-outline';
-// import toggleIcon from '@iconify/icons-eva/toggle-right-outline'
+import { useNavigate} from 'react-router-dom';
+import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 // material
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@mui/material';
 import { userType } from '../../constants';
 import { PATH_DASHBOARD } from '../../routes/paths';
+import { Remove } from '../serviceproviders/components/delete';
 // routes
 
 // ----------------------------------------------------------------------
@@ -22,20 +22,36 @@ interface IMoreMenu {
   url?:string
 };
 
- const MoreMenu:FC<IMoreMenu> = ({ handleUpdate,row,type }) =>{
+ const MoreMenu:FC<IMoreMenu> = ({ handleUpdate,row,type ,fetchAllData,url}) =>{
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
-  // const [modal, setModal] = useState(false);
+  const [modal, setModal] = useState(false);
   let navigate = useNavigate();
-console.log({type});
+
+  const toggle = () => {
+    setModal(!modal);
+
+  };
   const handleView = () =>{
     if(type === userType.ambulance_user){
       navigate(PATH_DASHBOARD.claims.viewAmbulance,{state:{row}})
     }else if(type === "patient"){
       navigate(PATH_DASHBOARD.patients.viewPatient)
     }
-    else{
+    else if (type === "incident"){
+      navigate(PATH_DASHBOARD.incidents.viewIncident,{state:{row}})
+    } else {
       navigate(PATH_DASHBOARD.claims.viewEtc,{state:{row}})
+
+    }
+  }
+
+  const handleEdit = () =>{
+    if (type === "incident"){
+      navigate(PATH_DASHBOARD.incidents.newIncidents,{state:{row}})
+    }
+    else{
+      handleUpdate(row)
     }
   }
 
@@ -55,7 +71,7 @@ console.log({type});
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-     {(type === userType.ambulance_user || type === userType.etc_user || type === "patient" ) &&   <MenuItem
+     {(type === userType.ambulance_user || type === userType.etc_user || type === "patient"  || type === "incident") &&   <MenuItem
 
            sx={{ color: 'text.secondary' }}
            onClick={()=>handleView()}
@@ -67,19 +83,23 @@ console.log({type});
         </MenuItem>}
     
          <MenuItem
-          component={RouterLink}
-          to=""
            sx={{ color: 'text.secondary' }}
-           onClick={()=>handleUpdate(row)}
+           onClick={() =>handleEdit()}
         >
           <ListItemIcon>
             <Icon icon={editFill} width={24} height={24} />
           </ListItemIcon>
           <ListItemText primary="Edit" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
-    
-       
+       {(type === "Services" || type === "incident" ) && <MenuItem onClick={toggle}  sx={{ color: 'text.secondary' }}>
+          <ListItemIcon>
+            <Icon icon={trash2Outline} width={24} height={24} />
+          </ListItemIcon>
+          <ListItemText primary="Delete" primaryTypographyProps={{ variant: 'body2' }} />
+        </MenuItem>}     
       </Menu>
+      <Remove modal={modal} toggle={toggle} fetchData={fetchAllData} id={row?.id} param="id" url={url} type={type} />
+
     </>
   );
 }
