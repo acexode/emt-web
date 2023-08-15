@@ -1,42 +1,23 @@
-export interface IIncident {
+export interface IClaims {
     id: number
-    callerName: string
-    incidentCode:string
-    callerNumber: string
-    incidentDate: string
-    incidentTime: string
-    sex: string
-    incidentLocation: string
-    districtWard: string
-    street: string
-    areaCouncil: string
-    zipCode: string
-    incidentCategory: string
-    canResolveWithoutAmbulance: string
-    ambulance: string
-    ambulanceType: string
-    treatmentCenter: string
-    dispatchFullName: string
-    dispatcherId: string
-    dispatchDate: string
-    supervisorFirstName: string
-    supervisorMiddleName: string
-    supervisorLastName: string
-    supervisorDate: string
-    serialNo: string
-    callerIsPatient: string
-    longitude: number
-    latitude: number
+    title: string
+    incidentId: number
+    runSheetId: number
+    incidentFeeId: number
+    ambulanceId: number
+    hospitalId: number
+    status: string
+    totalPrice: number
     dateAdded: string
+    incidentViewModel: IncidentViewModel
+    runsheetViewModel: RunsheetViewModel
   }
   
-
-  export interface Incident {
+  export interface IncidentViewModel {
     id: number
     callerName: string
     callerNumber: string
     incidentDate: string
-    incidentCode?:string
     incidentTime: string
     description: string
     recommendation: string
@@ -53,10 +34,10 @@ export interface IIncident {
     dispatchFullName: string
     dispatcherId: string
     dispatchDate: string
-    supervisorFirstName: any
-    supervisorMiddleName: any
-    supervisorLastName: any
-    supervisorDate: any
+    supervisorFirstName: string
+    supervisorMiddleName: string
+    supervisorLastName: string
+    supervisorDate: string
     serialNo: string
     callerIsPatient: string
     longitude: number
@@ -68,17 +49,6 @@ export interface IIncident {
     patientViewModel: PatientViewModel
     emergencyTreatmentCenterViewModel: EmergencyTreatmentCenterViewModel
     ambulanceViewModel: AmbulanceViewModel
-  }
-  
-  export interface PatientViewModel {
-    id: number
-    firstName: string
-    middleName: string
-    lastName: string
-    doB: string
-    sex: number
-    phoneNumber: string
-    medicalInterventions: any[]
   }
   
   export interface EmergencyTreatmentCenterViewModel {
@@ -106,5 +76,29 @@ export interface IIncident {
     ambulanceTypeViewModel: any
   }
   
-
+  export interface RunsheetViewModel {
+    id: number
+    title: string
+    incidentId: number
+    ambulanceId: number
+    routeFrom: string
+    routeTo: string
+    takeOffTime: string
+    arrivalTime: string
+    medicUserId: string
+    hospiceUserId: string
+    totalMinutesToHospital: number
+    dateAdded: string
+    incidentViewModel: any
+  }
   
+  export interface PatientViewModel {
+    id: number
+    firstName: string
+    middleName: string
+    lastName: string
+    doB: string
+    sex: number
+    phoneNumber: string
+    medicalInterventions: any[]
+  }

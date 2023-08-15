@@ -31,14 +31,18 @@ import { Icon } from "@iconify/react";
 
   const schema = yup.object().shape({
       name: yup.string().required("*Name is required"),
-    location: yup.string().required("*Location is required"),
-    code: yup.string(),
-    ambulanceTypeId: yup.number(),
-    wardId: yup.number(),
+      location: yup.string().required("*Location is required"),
+      address1: yup.string().required("*Address 1 is required"),
+      address2: yup.string().required("*Address 2 is required"),
+      landmark: yup.string().required("*Landmark is required"),
+      hospitalTypeId: yup.string(),
+      stateId: yup.string(),
+      lgaId: yup.string(),
+   
   });
  
 
-export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formData,modal,toggle,fetchAllUsers}) =>{
+export  const AddEditServiceProviderETC:FC<IAddEditServiceProvider> = ({edit,formData,modal,toggle,fetchAllUsers}) =>{
     const {
         register,
         handleSubmit,
@@ -55,9 +59,10 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
         resolver: yupResolver(schema),
       });
       const [loading,setLoading] = useState(false)
+      const [hospitalTypes,setHospitalTypes] = useState<any>([])
+      const [states,setStates] = useState<any>([])
+      const [lgas,setLgas] = useState<any>([])
       const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-      const [ambulanceTypes,setAmbulanceTypes] = useState<any>([])
-      const [wards,setWards] = useState<any>([])
 
 
       useEffect(()=>{
@@ -69,32 +74,46 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
       },[edit])
 
       useEffect(()=>{
-        axiosInstance.get('AmbulanceTypes/get').then(res =>{
-          const obj = res?.data?.data?.map((dt: { name: any; id:number}) =>{
-            return {
-                label: dt?.name,
-                value: dt?.id
-            }
-        })
-        setAmbulanceTypes(obj)
-        }).catch(error =>{
-          console.log(error)
-        })
-    },[])
+          axiosInstance.get('HospitalTypes/get').then(res =>{
+            const obj = res?.data?.data?.map((dt: { name: any; id:number}) =>{
+              return {
+                  label: dt?.name,
+                  value: dt?.id
+              }
+          })
+          setHospitalTypes(obj)
+          }).catch(error =>{
+            console.log(error)
+          })
+      },[])
       useEffect(()=>{
-        axiosInstance.get('Wards/get').then(res =>{
-          const obj = res?.data?.data?.map((dt: { name: any; id:number}) =>{
-            return {
-                label: dt?.name,
-                value: dt?.id
-            }
-        })
-        setWards(obj)
-        }).catch(error =>{
-          console.log(error)
-        })
-    },[])
-     
+          axiosInstance.get('States/get').then(res =>{
+            const obj = res?.data?.data?.map((dt: { name: any; id:number}) =>{
+              return {
+                  label: dt?.name,
+                  value: dt?.id
+              }
+          })
+          setStates(obj)
+          }).catch(error =>{
+            console.log(error)
+          })
+      },[])
+      useEffect(()=>{
+          axiosInstance.get('Lgas/get').then(res =>{
+            const obj = res?.data?.data?.map((dt: { name: any; id:number}) =>{
+              return {
+                  label: dt?.name,
+                  value: dt?.id
+              }
+          })
+          setLgas(obj)
+          }).catch(error =>{
+            console.log(error)
+          })
+      },[])
+
+ 
 
     const handleToggle =() => toggle()
 
@@ -103,17 +122,18 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
             ...data,
             id:formData?.id
           };
+        
           setLoading(true)
-          let text = edit ? "Ambulance Updated" : "Ambulance Added";
+          let text = edit ? "ETC Updated" : "ETC Added";
           try {
             let res;
             if (edit) {
               res = await axiosInstance.put(
-                `Ambulances/update`,
+                `EmergencyCenters/update`,
                 newData
               );
             } else {
-              res = await axiosInstance.post(`Ambulances/add`, data);
+              res = await axiosInstance.post(`EmergencyCenters/add`, data);
             }
             console.log(res);
             enqueueSnackbar(`${text}`, {
@@ -151,13 +171,16 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{edit ? "Edit Ambulance": "Add Ambulance"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{edit ? "Edit ETC": "Add ETC"}</DialogTitle>
            <form onSubmit={handleSubmit(onSubmit)}>
         <DialogContent>
           <Grid container spacing={2}>
+           
+         
+            
             <Grid item xs={12} sm={6} lg={6}>
               
-            <label>Enter name</label>
+            <label>Enter Name</label>
             <TextField
               variant="outlined"
               fullWidth                      
@@ -183,66 +206,120 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
               }}
             />
             </Grid>
-           {edit && <Grid item xs={12} sm={6} lg={6}>
+            <Grid item xs={12} sm={6} lg={6}>
               
-            <label>Enter Code</label>
+            <label>Enter Landmark</label>
             <TextField
               variant="outlined"
               fullWidth                      
               type="text"
-              {...register('code')}
+              {...register('landmark')}
+              helperText={errors?.landmark?.message?.toString()}
               FormHelperTextProps={{
               className:"helperTextColor"
               }}
             />
-            </Grid>}
+            </Grid>
             <Grid item xs={12} sm={6} lg={6}>
               
-            <label>Select Ambulance Type</label>
+            <label>Enter Address 1</label>
+            <TextField
+              variant="outlined"
+              fullWidth                      
+              type="text"
+              multiline
+              {...register('address1')}
+              helperText={errors?.address1?.message?.toString()}
+              FormHelperTextProps={{
+              className:"helperTextColor"
+              }}
+            />
+            </Grid>
+            <Grid item xs={12} sm={6} lg={6}>
+            <label>Enter Address 2</label>
+            <TextField
+              variant="outlined"
+              fullWidth                      
+              type="text"
+              multiline
+              {...register('address2')}
+              helperText={errors?.address2?.message?.toString()}
+              FormHelperTextProps={{
+              className:"helperTextColor"
+              }}
+            />
+            </Grid>
+            <Grid item xs={12} sm={6} lg={6}>
+              
+            <label>Select Hospital Type</label>
             <TextField
                 variant="outlined"
                 fullWidth
                 select
                 type="text"
-                {...register('ambulanceTypeId')}
-                // helperText={errors?.ambulanceTypeId?.message?.toString()}
+                {...register('hospitalTypeId',{valueAsNumber:true})}
+                helperText={errors?.hospitalTypeId?.message?.toString()}
                 FormHelperTextProps={{
                 className:"helperTextColor"
                 }}
             >
-               <MenuItem value="">
+                 <MenuItem  value={""}>
                         <em>None</em>
-                </MenuItem>
-                {ambulanceTypes?.map((ambulance:any,index:number) =>(
-                   <MenuItem key={index} value={ambulance?.value}>
-                 {ambulance?.label}
-           </MenuItem>
-                ))}
+                    </MenuItem>
+                    {hospitalTypes?.map((hospital:any,index:number) =>(
+                       <MenuItem  key={index} value={hospital?.value}>
+                      {hospital?.label}
+                   </MenuItem>
+                    ))}
             </TextField>
             </Grid>
             <Grid item xs={12} sm={6} lg={6}>
               
-            <label>Select Ward</label>
+            <label>Select State</label>
             <TextField
                 variant="outlined"
                 fullWidth
                 select
                 type="text"
-                multiline
-                {...register('wardId')}
-                // helperText={errors?.wardId?.message?.toString()}
+                {...register('stateId',{valueAsNumber:true})}
+                helperText={errors?.stateId?.message?.toString()}
                 FormHelperTextProps={{
                 className:"helperTextColor"
                 }}
             >
-                <MenuItem value="">
+                 <MenuItem  value={""}>
                         <em>None</em>
                     </MenuItem>
-                    {wards?.map((ward:any,index:number) =>(
-                   <MenuItem key={index} value={ward?.value}>
-                 {ward?.label}
-           </MenuItem>
-                ))}
+                    {states?.map((state:any,index:number) =>(
+                       <MenuItem  key={index} value={state?.value}>
+                      {state?.label}
+                   </MenuItem>
+                    ))}
+            </TextField>
+            </Grid>
+    
+            <Grid item xs={12} sm={6} lg={6}>
+              
+            <label>Select LGA</label>
+            <TextField
+                variant="outlined"
+                fullWidth
+                select
+                type="text"
+                {...register('lgaId',{valueAsNumber:true})}
+                helperText={errors?.lgaId?.message?.toString()}
+                FormHelperTextProps={{
+                className:"helperTextColor"
+                }}
+            >
+                 <MenuItem  value={""}>
+                        <em>None</em>
+                    </MenuItem>
+                    {lgas?.map((lga:any,index:number) =>(
+                       <MenuItem  key={index} value={lga?.value}>
+                      {lga?.label}
+                   </MenuItem>
+                    ))}
             </TextField>
             </Grid>
     

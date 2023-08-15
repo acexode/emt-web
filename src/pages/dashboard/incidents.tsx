@@ -8,9 +8,10 @@ const TABLE_HEAD = [
   { id: "s/n", label: "S/N", alignRight: false },
   { id: "incidentCategory", label: "Category", alignRight: false },
   { id: "incidentLocation", label: "Location", alignRight: false },
-  { id: "ambulanceType", label: "Ambulance Type", alignRight: false },
+  { id: "name", label: "Ambulance", alignRight: false },
   { id: "incidentDate", label: "Date", alignRight: false },
-  { id: "treatmentCenter", label: "Treatment Center", alignRight: false },
+  { id: "emergencyTreatmentCenterViewModel", label: "Treatment Center", alignRight: false },
+  { id: "incidentStatusType", label: "Status", alignRight: false },
   { id: "" },
 ];
 

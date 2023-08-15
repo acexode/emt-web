@@ -45,7 +45,7 @@ export default function FinancialCard() {
     <Card>
       <CardHeader title="INFRASTRUCTURE & EQUIPMENT" />
 
-      <Box sx={{ mt: 3, mx: 3 }} dir="ltr">
+      <Box sx={{ mt: 3, mx: 3,height: 405 }} dir="ltr">
         <ReactApexChart
           type="bar"
           series={CHART_DATA}

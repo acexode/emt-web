@@ -30,7 +30,7 @@ import TableListHead from "../table/tableListHead";
 import ListToolbar from "../table/tableListToolbar";
 import MoreMenu from "../table/TableMoreMenu";
 import { AddEditServiceProvider } from "./components/add-edit-service";
-import { formatDate2, formatter } from "../../utility";
+import { formatDate2 } from "../../utility";
 // import axiosInstance from "../../services/api_service";
 // ----------------------------------------------------------------------
 
@@ -71,8 +71,9 @@ function applySortFilter(
   if (query) {
     return filter(
       array,
-      (_user) =>    _user?.type?.toLowerCase().includes(query.toLowerCase())  ||
-      _user?.state?.toLowerCase().includes(query.toLowerCase()) 
+      (_user) =>    _user?.name?.toLowerCase().includes(query.toLowerCase())  ||
+      _user?.locaton?.toLowerCase().includes(query.toLowerCase()) ||
+      _user?.code?.toLowerCase().includes(query.toLowerCase()) 
     );
   }
   return stabilizedThis.map((el: any[]) => el[0]);
@@ -272,19 +273,21 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                          
                             <TableCell align="left">
                           
+                              { row?.name || "Nil"}
+                             
+                              </TableCell>
+                            <TableCell align="left">
+                          
+                              { row?.location || "Nil"}
+                             
+                              </TableCell>
+                            <TableCell align="left">
+                          
                               { row?.code || "Nil"}
                              
                               </TableCell>
-                            <TableCell align="left">
-                          
-                           {row?.description || "Nil"}
                              
-                              </TableCell>
-                            <TableCell align="left">
-                          
-                           {formatter.format(row?.price) || "Nil"}
-                             
-                              </TableCell>
+                           
                             <TableCell align="left">
                           
                            {formatDate2(row?.dateAdded) || "Nil"}
@@ -292,7 +295,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                               </TableCell>
 
                             <TableCell align="right">
-                                <MoreMenu handleUpdate={handleUpdate} row={row} fetchAllData={fetchAllData} type="Services" url="ServicesAndFees/delete" />
+                                <MoreMenu handleUpdate={handleUpdate} row={row} fetchAllData={fetchAllData} type="Services" url="Ambulances/delete" />
                             </TableCell>
                           </TableRow>
                         );

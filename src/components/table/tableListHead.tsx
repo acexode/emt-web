@@ -1,5 +1,5 @@
  // material
- import { Box, TableRow, TableCell, TableHead, TableSortLabel } from '@mui/material';
+ import { TableRow, TableCell, TableHead, TableSortLabel } from '@mui/material';
 import { FC, JSXElementConstructor, Key, ReactElement, ReactFragment, ReactPortal } from 'react';
 
 // ----------------------------------------------------------------------
@@ -46,9 +46,9 @@ const TableListHead:FC<IListHead> = ({
               onClick={createSortHandler(headCell.id)}
             >
               {headCell.label}
-              {orderBy === headCell.id ? (
+              {/* {orderBy === headCell.id ? (
                 <Box  >{order === 'desc' ? 'sorted descending' : 'sorted ascending'}</Box>
-              ) : null}
+              ) : null} */}
             </TableSortLabel>
           </TableCell>
         ))}

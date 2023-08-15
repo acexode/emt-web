@@ -72,9 +72,10 @@ function applySortFilter(
       array,
       (_user) => _user?.firstName?.toLowerCase().includes(query.toLowerCase())  ||
       _user?.lastName?.toLowerCase().includes(query.toLowerCase()) ||
-      _user?.role?.toLowerCase().includes(query.toLowerCase()) ||
-      _user?.type?.toLowerCase().includes(query.toLowerCase()) ||
-      _user?.state?.toLowerCase().includes(query.toLowerCase()) 
+      _user?.middleName?.toLowerCase().includes(query.toLowerCase()) ||
+      _user?.userType?.toLowerCase().includes(query.toLowerCase()) ||
+      _user?.state?.toLowerCase().includes(query.toLowerCase()) ||
+      _user?.city?.toLowerCase().includes(query.toLowerCase()) 
     );
   }
   return stabilizedThis.map((el: any[]) => el[0]);
@@ -245,6 +246,15 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                             <TableCell align="left">
                             <Skeleton variant="rectangular" width={100} height={30} /> 
                               </TableCell>
+                            <TableCell align="left">
+                            <Skeleton variant="rectangular" width={100} height={30} /> 
+                              </TableCell>
+                            <TableCell align="left">
+                            <Skeleton variant="rectangular" width={100} height={30} /> 
+                              </TableCell>
+                            <TableCell align="left">
+                            <Skeleton variant="rectangular" width={100} height={30} /> 
+                              </TableCell>
 
                             <TableCell align="right"></TableCell>
                           </TableRow>
@@ -295,6 +305,13 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                             </TableCell>
                             <TableCell
                               align="left"
+                             
+                            >
+                               {row?.middleName || "Nil"
+                              }
+                            </TableCell>
+                            <TableCell
+                              align="left"
                               
                             >
                                {row?.email || "Nil"
@@ -304,18 +321,23 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                               align="left"
                               
                             >
-                               {row?.role || "Nil"
+                               {row?.userType || "Nil"
                               }
                             </TableCell>
                            
                             <TableCell align="left">
                           
-                              { row?.type || "Nil"}
+                              { row?.state || "Nil"}
                              
                               </TableCell>
                             <TableCell align="left">
                           
-                           {row?.state || "Nil"}
+                           {row?.city || "Nil"}
+                             
+                              </TableCell>
+                            <TableCell align="left">
+                          
+                           {row?.phone || "Nil"}
                              
                               </TableCell>
 

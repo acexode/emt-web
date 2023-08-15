@@ -14,7 +14,7 @@ const CustomTable = lazy(() => import("../../components/claims/table"))
 const TABLE_HEAD = [
   { id: "s/n", label: "S/N", alignRight: false },
   { id: "serviceProvider", label: "Service Provider", alignRight: false },
-  { id: "incident_code", label: "Incident Code", alignRight: false },
+  { id: "incidentCategory", label: "Incident Category", alignRight: false },
   { id: "patient_name", label: "Patient Name", alignRight: false },
   { id: "date", label: "Incident Date", alignRight: false },
   { id: "status", label: "Status", alignRight: false },
@@ -54,7 +54,8 @@ function a11yProps(index: number) {
 }
  
 const Claims: FC = () => {
-  const [claims, setClaims] = useState([]);
+  const [ambulanceClaims, setAmbulanceClaims] = useState([]);
+  const [etcClaims, setETCClaims] = useState([]);
   const [loading,setLoading] = useState(false)
   const [value, setValue] = useState(0);
   const {
@@ -64,27 +65,35 @@ const Claims: FC = () => {
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-
-
-  const fetchAllData = () =>{
+  const fetchAllData = async () => {
     setLoading(true)
-    axiosInstance
-      .get(`Claims/get`)
-      .then((res) => {
-        setClaims(res?.data?.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      }).finally(()=>{
-        setLoading(false)
-      })
-  }
+    let obj ={
+      id:userProfile?.ambulanceId
+    }
+    let obj2 ={
+      id:userProfile?.etcId
+    }
+    try {
+      const [ambRes, etcRes] = await Promise.all([
+        axiosInstance.post(`Claims/getByAssignedAmbulance`,obj),
+        axiosInstance.post(`Claims/getByAssignedETC`,obj2),
+      ]);
+      setAmbulanceClaims(ambRes?.data?.data)
+      setETCClaims(etcRes?.data?.data)
+    } catch (error) {
+      console.log(error);
+     
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    fetchAllData()
+    fetchAllData();
   }, []);
+
   return (
     <>
-    {userType.etc_user === userProfile?.userRole ?      <CustomTable page_title='Emergency Treatment Centre' loading={loading} table_Head={TABLE_HEAD} dataList={claims} fetchAllData={fetchAllData} type="etc" />
+    {userType.etc_user === userProfile?.userRole ?      <CustomTable page_title='Emergency Treatment Centre' loading={loading} table_Head={TABLE_HEAD} dataList={etcClaims} fetchAllData={fetchAllData} type="etc" />
  : 
     <Box sx={{ width: '100%' }}>
     <Box sx={{ borderBottom: 1, borderColor: 'divider' ,mx:6}}>
@@ -100,11 +109,11 @@ const Claims: FC = () => {
       </Tabs>
     </Box>
     <TabPanel value={value} index={0}>
-    <CustomTable page_title='Ambulance' loading={loading} table_Head={TABLE_HEAD} dataList={claims} fetchAllData={fetchAllData} type="ambulance" />
+    <CustomTable page_title='Ambulance' loading={loading} table_Head={TABLE_HEAD} dataList={ambulanceClaims} fetchAllData={fetchAllData} type="ambulance" />
 
     </TabPanel>
     <TabPanel value={value} index={1}>
-    <CustomTable page_title='Emergency Treatment Centre' loading={loading} table_Head={TABLE_HEAD} dataList={claims} fetchAllData={fetchAllData} type="etc" />
+    <CustomTable page_title='Emergency Treatment Centre' loading={loading} table_Head={TABLE_HEAD} dataList={etcClaims} fetchAllData={fetchAllData} type="etc" />
     </TabPanel>
     </Box>
       }

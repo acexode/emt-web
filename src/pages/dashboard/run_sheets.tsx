@@ -1,5 +1,4 @@
 import { FC, useEffect, useState } from "react";
-// import axiosInstance from "../../services/api_service";
 import HeaderBreadcrumbs from "../../components/HeaderBreadcrumbs";
 import Page from "../../components/Page";
 import { PATH_DASHBOARD } from "../../routes/paths";
@@ -7,53 +6,60 @@ import useSettings from "../../hooks/useSettings";
 import {
     Container,
     Grid,
-    ListItem,
-    ListItemText,
+    // ListItem,
+    // ListItemText,
     Typography,
-    Card,
+    // Card,
     Box,
     TextField,
   } from "@mui/material";
-import { ambulance_run_sheets } from "../../db";
-import { useNavigate } from "react-router-dom";
-// import axiosInstance from "../../services/api_service";
+// import { ambulance_run_sheets } from "../../db";
+// import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../services/api_service";
+import { useAuthUserContext } from "../../context/authUser.context";
  
 const RunSheets: FC = () => {
-    const { themeStretch } = useSettings();
-
-  const [ambulanceRunSheets, _setAmbulanceRunSheets] = useState(ambulance_run_sheets);
-  // const [loading,setLoading] = useState(false)
-  let navigate = useNavigate()
-  const handleClick = (data:any) =>{
-    navigate(PATH_DASHBOARD.ambulance_run_sheets.viewRunSheet,{
-      state: {data}
-    })
-  }
-
-  // const fetchAllAmbulanceRunSheets = () =>{
-  //   setLoading(true)
-  //   axiosInstance
-  //     .get(`ambulance_run_sheets`)
-  //     .then((res) => {
-  //       setAmbulanceRunSheets(res?.data);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     }).finally(()=>{
-  //       setLoading(false)
-  //     })
+  const { themeStretch } = useSettings();
+  // const [ambulanceRunSheets,setAmbulanceRunSheets] = useState([]);
+  const [_loading,setLoading] = useState(false)
+  const {
+    userState: { userProfile },
+  } = useAuthUserContext();
+  // let navigate = useNavigate()
+  // const handleClick = (data:any) =>{
+  //   navigate(PATH_DASHBOARD.ambulance_run_sheets.viewRunSheet,{
+  //     state: {data}
+  //   })
   // }
+
+  const fetchAllAmbulanceRunSheets = () =>{
+    let val = {
+      id: userProfile?.etcId
+    }
+    setLoading(true)
+    axiosInstance
+      .post(`Runsheets/getByAssignedETC`,val)
+      .then((res) => {
+        console.log(res)
+        // setAmbulanceRunSheets(res?.data?.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      }).finally(()=>{
+        setLoading(false)
+      })
+  }
   useEffect(() => {
-    // fetchAllAmbulanceRunSheets()
+    fetchAllAmbulanceRunSheets()
   }, []);
   return (
-    <Page title={`Ambulance Run Sheets | NEMSAS`}>
+    <Page title={`Ambulance Transfer Form | NEMSAS`}>
         <Container maxWidth={themeStretch ? false : "lg"}>
           <HeaderBreadcrumbs
-            heading={`Ambulance Run Sheets`}
+            heading={`Ambulance Transfer Form`}
             links={[
               { name: "Dashboard", href: PATH_DASHBOARD.root },
-              { name: `Ambulande Run Sheets`, href: PATH_DASHBOARD.ambulance_run_sheets.root },
+              { name: `Ambulance Transfer Form`, href: PATH_DASHBOARD.ambulance_run_sheets.root },
               { name: "List" },
             ]}
           />
@@ -70,14 +76,14 @@ const RunSheets: FC = () => {
                     />
             </Grid>
             </Grid>
-            {ambulanceRunSheets?.map((runSheets, index) =>(
+            {/* {ambulanceRunSheets?.map((runSheets, index) =>(
                 <Card sx={{ p: 3, mb: 2 ,cursor:"pointer"}} key={index} onClick={() => handleClick(runSheets)}>
                     <ListItem secondaryAction={  <Typography sx={{color:"hsl(0, 100%, 27%)", cursor:"pointer"}} >{   runSheets?.ambulance_service_provider || "Not Available"}</Typography>}>
                   <ListItemText primary={`Incident No: ${runSheets?.incident_no}`} />
                 </ListItem>
 
                 </Card>
-            ))}
+            ))} */}
         </Container>
       </Page>
 
