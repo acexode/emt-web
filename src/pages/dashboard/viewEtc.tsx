@@ -14,7 +14,7 @@ import {
     Button
   } from "@mui/material";
   import { FC, useEffect, useState } from "react";
-  import {  useLocation } from "react-router-dom";
+  import {  useLocation, useNavigate } from "react-router-dom";
   
   import HeaderBreadcrumbs from "../../components/HeaderBreadcrumbs";
   import Page from "../../components/Page";
@@ -22,11 +22,29 @@ import {
   import useSettings from "../../hooks/useSettings";
 import { formatDate2, formatter, numberToWords } from "../../utility";
 import { IClaims } from "../../types/claims";
-  
+import AlertDialog from "./components/confirmDialog";
+import { useSnackbar } from "notistack";
+import axiosInstance from "../../services/api_service";
+import { MIconButton } from "../../components/@material-extend";
+import closeFill from "@iconify/icons-eva/close-fill";
+import { Icon } from "@iconify/react";
+
   const ViewETC: FC = () => {
     const { themeStretch } = useSettings();
     const [content, SetContent] = useState<IClaims>();
-    // const [loading,setLoading] = useState(true)
+    const [loading,setLoading] = useState(false)
+    const [open, setOpen] = useState(false);
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+    const [confirmationPayload, setConfirmationPayload] = useState<any>(null);
+    const [title,setTitle] = useState("")
+    let navigate = useNavigate();
+
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+    const handleClose = () => {
+      setOpen(false);
+    };
     const {
         state: { row},
       } = useLocation();
@@ -83,6 +101,57 @@ import { IClaims } from "../../types/claims";
   
         const handlePrint = () => {
           window.print();
+        }
+
+        const onHandleSubmit = async (status:any) => {
+          let newVal = {
+            "id": row?.id,
+            "title": row?.title,
+            "incidentId": row?.incidentId,
+            "runSheetId": row?.runSheetId,
+            "incidentFeeId": row?.incidentFeeId,
+            "ambulanceId": row?.ambulanceId,
+            "hospitalId": row?.hospitalId,
+            "status": status,
+            "totalPrice": row?.totalPrice
+          }
+          let t = status === "Approved" ? "Approving Claim" : "Rejecting Claim"
+              handleClickOpen();
+              setTitle(t)
+          setConfirmationPayload(newVal);
+            
+        };
+        const handleClaims = async() =>{
+          setLoading(true)
+          try {
+            let res;
+            res = await axiosInstance.put(
+              `Claims/update`,
+              confirmationPayload
+            );
+            navigate(PATH_DASHBOARD.claims.root);
+            enqueueSnackbar(res?.data?.message, {
+              variant: "success",
+              action: (key) => (
+                <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+                  <Icon icon={closeFill} />
+                </MIconButton>
+              ),
+            });
+          } catch (error) {
+            console.log(error);
+            enqueueSnackbar("Error updating claim!", {
+                variant: "error",
+                action: (key) => (
+                  <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+                    <Icon icon={closeFill} />
+                  </MIconButton>
+                ),
+              });
+            console.error("An unexpected error happened occurred:", error);
+          } finally{
+            setLoading(false)
+          }
         }
     return (
       <Page title={`View ETC Claim | EMT`}>
@@ -428,6 +497,7 @@ import { IClaims } from "../../types/claims";
                 variant="contained"
                 className="btnCustom hidebtn"
                 sx={{mr:2}}
+                onClick={() => onHandleSubmit("Approved")}
           
             >
                 Approve
@@ -437,11 +507,13 @@ import { IClaims } from "../../types/claims";
                 type="submit"
                 variant="contained"
                 className="hidebtn"
-          
+                onClick={() => onHandleSubmit("Rejected")}
             >
                 Reject
             </Button>
         </Container>
+        <AlertDialog open={open} handleClose={handleClose} loading={loading} handleSubmit={handleClaims} title={title} />
+
       </Page>
     );
   };
