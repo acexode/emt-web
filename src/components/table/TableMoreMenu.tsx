@@ -26,7 +26,6 @@ interface IMoreMenu {
   const [isOpen, setIsOpen] = useState(false);
   const [modal, setModal] = useState(false);
   let navigate = useNavigate();
-
   const toggle = () => {
     setModal(!modal);
 
@@ -80,7 +79,7 @@ interface IMoreMenu {
           <ListItemText primary="View" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>}
     
-        { type !== "patient" && <MenuItem
+        { (type !== "patient" && type !== "etc") && <MenuItem
            sx={{ color: 'text.secondary' }}
            onClick={() =>handleEdit()}
         >

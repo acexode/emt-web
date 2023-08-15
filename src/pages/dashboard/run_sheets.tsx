@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, Key, useEffect, useState } from "react";
 import HeaderBreadcrumbs from "../../components/HeaderBreadcrumbs";
 import Page from "../../components/Page";
 import { PATH_DASHBOARD } from "../../routes/paths";
@@ -6,31 +6,34 @@ import useSettings from "../../hooks/useSettings";
 import {
     Container,
     Grid,
-    // ListItem,
-    // ListItemText,
+    ListItem,
+    ListItemText,
     Typography,
-    // Card,
+    Card,
     Box,
     TextField,
+    Skeleton
   } from "@mui/material";
-// import { ambulance_run_sheets } from "../../db";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../services/api_service";
 import { useAuthUserContext } from "../../context/authUser.context";
+import { ITransferSheets } from "../../types/transfer_form";
  
 const RunSheets: FC = () => {
   const { themeStretch } = useSettings();
-  // const [ambulanceRunSheets,setAmbulanceRunSheets] = useState([]);
-  const [_loading,setLoading] = useState(false)
+  const [ambulanceRunSheets,setAmbulanceRunSheets] = useState<ITransferSheets[]>([]);
+  const [loading,setLoading] = useState(true)
+
   const {
     userState: { userProfile },
   } = useAuthUserContext();
-  // let navigate = useNavigate()
-  // const handleClick = (data:any) =>{
-  //   navigate(PATH_DASHBOARD.ambulance_run_sheets.viewRunSheet,{
-  //     state: {data}
-  //   })
-  // }
+  let navigate = useNavigate()
+  const handleClick = (data:any) =>{
+    navigate(PATH_DASHBOARD.ambulance_run_sheets.viewRunSheet,{
+      state: {data}
+    })
+  }
+  
 
   const fetchAllAmbulanceRunSheets = () =>{
     let val = {
@@ -40,8 +43,7 @@ const RunSheets: FC = () => {
     axiosInstance
       .post(`Runsheets/getByAssignedETC`,val)
       .then((res) => {
-        console.log(res)
-        // setAmbulanceRunSheets(res?.data?.data);
+        setAmbulanceRunSheets(res?.data?.data);
       })
       .catch((error) => {
         console.log(error);
@@ -52,6 +54,8 @@ const RunSheets: FC = () => {
   useEffect(() => {
     fetchAllAmbulanceRunSheets()
   }, []);
+  let dummyData = [...Array(5)]
+
   return (
     <Page title={`Ambulance Transfer Form | NEMSAS`}>
         <Container maxWidth={themeStretch ? false : "lg"}>
@@ -76,14 +80,21 @@ const RunSheets: FC = () => {
                     />
             </Grid>
             </Grid>
-            {/* {ambulanceRunSheets?.map((runSheets, index) =>(
+
+            {loading ? dummyData?.map((_dm,index) =>(
+              <Card sx={{ p: 3, mb: 2 ,cursor:"pointer"}} key={index}>
+                  <Skeleton variant="rectangular" width={1000} height={70} />                               
+          </Card>
+            )) :  ambulanceRunSheets?.map((runSheets: { incidentViewModel: {
+              incidentCategory: any; ambulanceViewModel: { name: any; }; incidentLocation: any; 
+}; }, index: Key | null | undefined) =>(
                 <Card sx={{ p: 3, mb: 2 ,cursor:"pointer"}} key={index} onClick={() => handleClick(runSheets)}>
-                    <ListItem secondaryAction={  <Typography sx={{color:"hsl(0, 100%, 27%)", cursor:"pointer"}} >{   runSheets?.ambulance_service_provider || "Not Available"}</Typography>}>
-                  <ListItemText primary={`Incident No: ${runSheets?.incident_no}`} />
+                    <ListItem secondaryAction={  <Typography sx={{color:"hsl(0, 100%, 27%)", cursor:"pointer"}} >{   runSheets?.incidentViewModel?.ambulanceViewModel?.name || "Not Available"}</Typography>}>
+                  <ListItemText primary={`Incident Category: ${runSheets?.incidentViewModel?.incidentCategory}`} />
                 </ListItem>
 
                 </Card>
-            ))} */}
+            ))}
         </Container>
       </Page>
 

@@ -165,7 +165,8 @@ import { Icon } from "@iconify/react";
         longitude,
         latitude,
         treatmentCenter:"",
-        description:""
+        description:"",
+        ambulanceName:""
     }
         handleClickOpen();
     setConfirmationPayload(newVal);
@@ -207,7 +208,6 @@ import { Icon } from "@iconify/react";
         setLoading(false)
       }
     }
-    console.log({row})
     return (
       <Page title="Incident Form: Create new incident | EMT">
         <Container maxWidth={themeStretch ? false : "lg"}>
