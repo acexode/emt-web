@@ -1,4 +1,3 @@
-import { Link as RouterLink } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
 import { Typography } from '@mui/material';
@@ -32,10 +31,7 @@ const HeaderStyle = styled('header')(({ theme }) => ({
 export default function AuthLayout({ children }:any) {
   return (
     <HeaderStyle>
-      <RouterLink to="/">
-      <img src={minH} width="200" /> 
-      </RouterLink>
-
+      <a style={{cursor:"pointer"}} href="https://www.health.gov.ng/" target="_blank" rel="noopener noreferrer">  <img src={minH} width="200" /> </a>
       <MHidden width="smDown">
         <Typography
           variant="body2"

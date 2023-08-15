@@ -14,12 +14,13 @@ import {
   import { PATH_DASHBOARD } from "../../routes/paths";
   import useSettings from "../../hooks/useSettings";
 import { useLocation } from "react-router-dom";
-import { IIncident } from "./types";
+import { Incident } from "./types";
 import AmbulanceMap from "../../components/_dashboard/general-app/map"
+import { formatDate2 } from "../../utility";
   
   const ViewIncident: FC = () => {
     const { themeStretch } = useSettings();
-    const [content, SetContent] = useState<IIncident>()
+    const [content, SetContent] = useState<Incident>()
     const [ambulance,setAmbulance] = useState<any>([])
     // const [loading,setLoading] = useState(true)
     const {
@@ -65,6 +66,62 @@ import AmbulanceMap from "../../components/_dashboard/general-app/map"
             </Button>
               </Grid>
          </Grid>
+         <Card sx={{ p: 3, pb: 10, mb: 2 }}>
+                <Box sx={{mb:2}}>Patient Details</Box>
+                    <Grid container spacing={2}>
+                    <Grid item sm={4}>
+                    <ListItem>
+                      <ListItemText primary={<Typography>
+                     First Name
+                      </Typography>} 
+                      secondary={
+                        <Typography sx={{color:"#7b939c"}} >{content?.patientViewModel?.firstName || "Not Available"}</Typography>
+                      } />
+                    </ListItem>
+                    </Grid>
+                    <Grid item sm={4}>
+                    <ListItem>
+                      <ListItemText primary={<Typography>
+                        Last Name
+                      </Typography>} 
+                      secondary={
+                        <Typography sx={{color:"#7b939c"}} >{content?.patientViewModel?.lastName || "Not Available"}</Typography>
+                      } />
+                    </ListItem>
+                    </Grid>
+                    <Grid item sm={4}>
+                    <ListItem>
+                      <ListItemText primary={<Typography>
+                        Middle Name
+                      </Typography>} 
+                      secondary={
+                        <Typography sx={{color:"#7b939c"}} >{content?.patientViewModel?.middleName || "Not Available"}</Typography>
+                      } />
+                    </ListItem>
+                    </Grid>
+                    <Grid item sm={4}>
+                    <ListItem>
+                      <ListItemText primary={<Typography>
+                        Date
+                      </Typography>} 
+                      secondary={
+                        <Typography sx={{color:"#7b939c"}} >{formatDate2(content?.patientViewModel?.doB) || "Not Available"}</Typography>
+                      } />
+                    </ListItem>
+                    </Grid>
+                    <Grid item sm={4}>
+                    <ListItem>
+                      <ListItemText primary={<Typography>
+                        Gender
+                      </Typography>} 
+                      secondary={
+                        <Typography sx={{color:"#7b939c"}} >{content?.sex || "Not Available"}</Typography>
+                      } />
+                    </ListItem>
+                    </Grid>
+                
+                    </Grid>
+            </Card>
           <Card sx={{ p: 3, pb: 10, mb: 2 }}>
                 <Box sx={{mb:2}}>Incident Details</Box>
                     <Grid container spacing={2}>
@@ -151,6 +208,36 @@ import AmbulanceMap from "../../components/_dashboard/general-app/map"
                     <Grid item sm={4}>
                     <ListItem>
                       <ListItemText primary={<Typography>
+                     Incident Descrption
+                      </Typography>} 
+                      secondary={
+                        <Typography sx={{color:"#7b939c"}} >{content?.description || "Not Available"}</Typography>
+                      } />
+                    </ListItem>
+                    </Grid>
+                    <Grid item sm={4}>
+                    <ListItem>
+                      <ListItemText primary={<Typography>
+                     Recommendation
+                      </Typography>} 
+                      secondary={
+                        <Typography sx={{color:"#7b939c"}} >{content?.recommendation || "Not Available"}</Typography>
+                      } />
+                    </ListItem>
+                    </Grid>
+                    <Grid item sm={4}>
+                    <ListItem>
+                      <ListItemText primary={<Typography>
+                     Triage Category
+                      </Typography>} 
+                      secondary={
+                        <Typography sx={{color:"#7b939c"}} >{content?.traiageCategory || "Not Available"}</Typography>
+                      } />
+                    </ListItem>
+                    </Grid>
+                    <Grid item sm={4}>
+                    <ListItem>
+                      <ListItemText primary={<Typography>
                      Street
                       </Typography>} 
                       secondary={
@@ -209,7 +296,7 @@ import AmbulanceMap from "../../components/_dashboard/general-app/map"
                        Ambulance Type
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.ambulanceType || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.ambulanceViewModel?.name || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -219,7 +306,7 @@ import AmbulanceMap from "../../components/_dashboard/general-app/map"
                        Ambulance
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.ambulance || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.ambulanceViewModel?.ambulanceTypeId || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -234,7 +321,7 @@ import AmbulanceMap from "../../components/_dashboard/general-app/map"
                        Treatment Center
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.treatmentCenter || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.emergencyTreatmentCenterViewModel?.name || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>

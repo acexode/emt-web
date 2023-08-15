@@ -38,18 +38,14 @@ export default function AppWelcome({ displayName }: any) {
         National Emergency Medical Service And Ambulance System (NEMSAS)
         </Typography>
         <Typography gutterBottom variant="h6" sx={{color:"#7b0a31"}}>
-          Welcome back 👋
-          <br /> {!displayName ? "..." : displayName}!
+          Welcome back, {!displayName ? "..." : displayName}! 👋
         </Typography>
         
         <Typography
           variant="body2"
           sx={{ pb: { xs: 3, xl: 5 }, maxWidth: 680, color:"#ad6174"}}
         >
-          This Platform will enable you have real time access to vital
-          information on EMT. You can track the utilisation of funds for the provision of
-          basic healthcare services and generate reports to share with
-          stakeholders.
+         This Platform will enable you have real time access to vital Monitoring and Evaluation Data of Basic Healthcare Provision Fund (BHCPF) for EMT Gateway. You can track emergency healthcare services data and generate reports to share with stakeholders.
         </Typography>
       </CardContent>
 

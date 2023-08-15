@@ -22,7 +22,6 @@ import { MIconButton } from "../../@material-extend";
 import closeFill from "@iconify/icons-eva/close-fill";
 import { Icon } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
-// import { levels } from "../../../constants";
 
 const states = [
   "Abia",
@@ -75,55 +74,41 @@ const states = [
   const schema = yup.object().shape({
     firstName: yup.string().required("*First Name  is required"),
     lastName: yup.string().required("*Last Name  is required"),
+    middleName: yup.string().required("*Middle Name  is required"),
     email: yup.string().email().required("Email Address is required"),
-    // password: yup.string().required("*Password is required").min(8),
-    role: yup.string().required("*Role is required"),
-    access: yup.string().required("*Access is required"),
-    type: yup.string().required("*Type is required"),
+    password: yup.string().min(8),
+    confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password"), null], "Passwords must match")
+    .min(8)
+    .required("Confirm Password is required"), 
+    phoneNumber: yup.string(),
+    userType: yup.string(),
+    sex: yup.number(),
+    street1: yup.string(),
+    street2: yup.string(),
+    city: yup.string(),
+    state: yup.string(),
+    superviserName: yup.string(),
+    
+
   });
-  const access =[
-    {
-    access:"Admin",
-    id:"Admin"
-  },
-    {
-    access:"RO",
-    id:"RO"
-  },
-    {
-    access:"RW",
-    id:"RW"
-  },
-]
+
   const level =[
     {
-    type:"National",
-    id:"National"
+    type:"SuperAdministrator",
+    id:"SuperAdministrator"
   },
     {
-    type:"State",
-    id:"State"
+    type:"ExportAndDeleteNemsasAdmin",
+    id:"ExportAndDeleteNemsasAdmin"
   },
     {
-    type:"Lga",
-    id:"Lga"
+    type:"ExportEmergencyTreatmentUser",
+    id:"ExportEmergencyTreatmentUser"
   },
-    {
-    type:"Ward",
-    id:"Ward"
-  },
+   
 ]
-const roles = [
-    { id: "facility_web", name: 'Facility Web' },
-    { id: "lga_web", name: 'LGA Web' },
-    { id: "state_web", name: 'State Web' },
-    { id: "national_web", name: 'National Web' },
-    { id: "facility_app", name: 'Facility App' },
-    { id: "lga_app", name: 'LGA App' },
-    { id: "state_app", name: 'State App' },
-    { id: "super_admin", name: 'Super Admin' },
-    { id: "hrh_admin", name: 'HRH Admin' }
-  ]
 
 export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchAllUsers}) =>{
     const {
@@ -159,21 +144,6 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
           }
         })
         setLocations(options)
-        // axiosInstance.get(`/locations/states`).then(res =>{
-        //   const options = res?.data?.map((dt:any) =>{
-        //     return {
-        //       label: dt?.name,
-        //       id: dt?.id
-        //     }
-        //   })
-        //   if(watchLevel === levels.state || watchLevel === levels.national){
-        //     setLocations(options)
-        //   }else{
-        //     setStates(options)
-        //   }
-        // }).catch(error =>{
-        //   console.log(error)
-        // })
     },[])
 
       useEffect(()=>{
@@ -197,11 +167,11 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
             let res;
             if (edit) {
               res = await axiosInstance.put(
-                `/users/${formData?.id}/update`,
+                `Account/updateUser`,
                 newData
               );
             } else {
-              res = await axiosInstance.post(`/users/create`, newData);
+              res = await axiosInstance.post(`Account/register`, newData);
             }
             enqueueSnackbar(`${text}`, {
                 variant: "success",
@@ -228,7 +198,7 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
           }
     }
     const handleAutocompleteChange = (event, value) => {
-      setValue('locationId', value?.id || ''); // Set the value of 'locationId' field
+      setValue('state', value?.id || ''); // Set the value of 'locationId' field
     };
   
     return (
@@ -244,7 +214,7 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
            <form onSubmit={handleSubmit(onSubmit)}>
         <DialogContent>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} lg={6}>
+            <Grid item xs={12} sm={4} lg={4}>
                 <label>First Name</label>
                 <TextField
                     defaultValue={formData?.firstName}
@@ -257,7 +227,20 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
                   {errors?.firstName?.message?.toString()}
                 </p>
             </Grid>
-            <Grid item xs={12} sm={6} lg={6}>
+            <Grid item xs={12} sm={4} lg={4}>
+                <label>Middle Name</label>
+                <TextField
+                    defaultValue={formData?.middleName}
+                    variant="outlined"
+                    fullWidth
+                    {...register('middleName')}
+                    type="text"
+                />
+                <p style={{ color: "red", fontSize: 12 }}>
+                  {errors?.middleName?.message?.toString()}
+                </p>
+            </Grid>
+            <Grid item xs={12} sm={4} lg={4}>
                 <label>Last Name</label>
                 <TextField
                     defaultValue={formData?.lastName}
@@ -270,7 +253,7 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
                   {errors?.lastName?.message?.toString()}
                 </p>
             </Grid>
-            <Grid item xs={12} sm={6} lg={6}>
+            <Grid item xs={12} sm={4} lg={4}>
                 <label>Email</label>
                 <TextField
                     defaultValue={formData?.email}
@@ -283,7 +266,30 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
                   {errors?.email?.message?.toString()}
                 </p>
             </Grid>
-            <Grid item xs={12} sm={6} lg={6}>
+            <Grid item xs={12} sm={4} lg={4}>
+            <label>Select Gender</label>
+              <TextField
+                 variant="outlined"
+                fullWidth
+                select
+                 type="text"
+                {...register("sex")}
+               
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value={0}>
+                 Male
+                </MenuItem>
+                <MenuItem value={1}>
+                 Female
+                </MenuItem>
+               
+              </TextField>
+               
+            </Grid>
+            <Grid item xs={12} sm={4} lg={4}>
                 <label>Password</label>
                 <TextField
                     defaultValue={formData?.password}
@@ -294,37 +300,38 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
                 />
                 
             </Grid>
-            <Grid item xs={12} sm={6} lg={6}>
-            <label>Select Role</label>
-              <TextField
-                 variant="outlined"
-                fullWidth
-                 required
-                select
-                 type="number"
-                {...register("role")}
-               
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                {roles?.map((role) => (
-                  <MenuItem value={role.id}>{role?.name}</MenuItem>
-                ))}
-              </TextField>
-                <p style={{ color: "red", fontSize: 12 }}>
-                  {errors?.role?.message?.toString()}
-                </p>
+            <Grid item xs={12} sm={4} lg={4}>
+                <label>Confirm Password</label>
+                <TextField
+                    defaultValue={formData?.confirmPassword}
+                    variant="outlined"
+                    fullWidth
+                    {...register('confirmPassword')}
+                    type="text"
+                />
+                
             </Grid>
+            <Grid item xs={12} sm={4} lg={4}>
+                <label>Phone Number</label>
+                <TextField
+                    defaultValue={formData?.phoneNumber}
+                    variant="outlined"
+                    fullWidth
+                    {...register('phoneNumber')}
+                    type="text"
+                />
+                
+            </Grid>
+           
             
-            <Grid item xs={12} sm={6} lg={6}>
+            <Grid item xs={12} sm={4} lg={4}>
             <label>Select Type</label>
               <TextField
                  variant="outlined"
                 fullWidth
                 select
-                 type="number"
-                {...register("type")}
+                 type="text"
+                {...register("userType")}
                
               >
                 <MenuItem value="">
@@ -335,11 +342,11 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
                 ))}
               </TextField>
                 <p style={{ color: "red", fontSize: 12 }}>
-                  {errors?.type?.message?.toString()}
+                  {errors?.userType?.message?.toString()}
                 </p>
             </Grid>
     
-            <Grid item xs={12} sm={6} lg={6}>
+            <Grid item xs={12} sm={4} lg={4}>
             <label>Select State</label>
             <Autocomplete
               options={locations}
@@ -349,6 +356,40 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
             />
             
             </Grid>
+            <Grid item xs={12} sm={4} lg={4}>
+                <label>City</label>
+                <TextField
+                    defaultValue={formData?.city}
+                    variant="outlined"
+                    fullWidth
+                    {...register('city')}
+                    type="text"
+                />
+                
+            </Grid>
+            <Grid item xs={12} sm={4} lg={4}>
+                <label>Street 1</label>
+                <TextField
+                    defaultValue={formData?.street1}
+                    variant="outlined"
+                    fullWidth
+                    {...register('street1')}
+                    type="text"
+                />
+                
+            </Grid>
+            <Grid item xs={12} sm={4} lg={4}>
+                <label>Street 2</label>
+                <TextField
+                    defaultValue={formData?.street2}
+                    variant="outlined"
+                    fullWidth
+                    {...register('street2')}
+                    type="text"
+                />
+                
+            </Grid>
+           
           </Grid>
         </DialogContent>
         <DialogActions>

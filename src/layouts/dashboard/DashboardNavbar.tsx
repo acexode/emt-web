@@ -65,9 +65,8 @@ export default function DashboardNavbar({ onOpenSidebar }:any) {
 
         <Searchbar />
         <Box sx={{ flexGrow: 1 }} />
-
         <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.8 }}>
-          <img src={minH} width="150" /> 
+        <a style={{cursor:"pointer"}} href="https://www.health.gov.ng/" target="_blank" rel="noopener noreferrer">  <img src={minH} width="150" /> </a>
           <AccountPopover />
         </Stack>
       </ToolbarStyle>

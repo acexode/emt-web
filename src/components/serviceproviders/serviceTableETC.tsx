@@ -2,8 +2,6 @@ import { filter } from "lodash";
 import { Icon } from "@iconify/react";
 import { useState, SetStateAction, FC } from "react";
 import plusFill from "@iconify/icons-eva/plus-fill";
-import { Link as RouterLink } from "react-router-dom";
-
 // material
 import {
   Card,
@@ -24,14 +22,16 @@ import { PATH_DASHBOARD } from "../../routes/paths";
 // hooks
 import useSettings from "../../hooks/useSettings";
 // components
-import Page from "../../components/Page";
-import Scrollbar from "../../components/Scrollbar";
-import SearchNotFound from "../../components/SearchNotFound";
-import HeaderBreadcrumbs from "../../components/HeaderBreadcrumbs";
+import Page from "../Page";
+import Scrollbar from "../Scrollbar";
+import SearchNotFound from "../SearchNotFound";
+import HeaderBreadcrumbs from "../HeaderBreadcrumbs";
 import TableListHead from "../table/tableListHead";
 import ListToolbar from "../table/tableListToolbar";
 import MoreMenu from "../table/TableMoreMenu";
-import { AddEditIncident } from "./add-edit-incident";
+import { formatDate2 } from "../../utility";
+import { AddEditServiceProviderETC } from "./components/add-edit-serviceETC";
+// import axiosInstance from "../../services/api_service";
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
@@ -62,7 +62,7 @@ function applySortFilter(
   query: string
 ) {
 
-  const stabilizedThis = array.map((el: any, index: any) => [el, index]);
+  const stabilizedThis = array?.map((el: any, index: any) => [el, index]);
   stabilizedThis.sort((a: number[], b: number[]) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
@@ -71,11 +71,12 @@ function applySortFilter(
   if (query) {
     return filter(
       array,
-      (_user) => 
-      _user?.incidentCategory?.toLowerCase().includes(query.toLowerCase())  ||
-      _user?.incidentLocation?.toLowerCase().includes(query.toLowerCase())  ||
-      _user?.ambulanceType?.toLowerCase().includes(query.toLowerCase())  ||
-      _user?.treatmentCenter?.toLowerCase().includes(query.toLowerCase()) 
+      (_user) =>    _user?.name?.toLowerCase().includes(query.toLowerCase())  ||
+      _user?.location?.toLowerCase().includes(query.toLowerCase()) ||
+      _user?.landmark?.toLowerCase().includes(query.toLowerCase()) ||
+      _user?.hospitalType?.toLowerCase().includes(query.toLowerCase()) ||
+      _user?.lga?.toLowerCase().includes(query.toLowerCase())  ||
+      _user?.state?.toLowerCase().includes(query.toLowerCase()) 
     );
   }
   return stabilizedThis.map((el: any[]) => el[0]);
@@ -110,7 +111,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
     setModal(!modal);
     setFormData(row);
     setEdit(true);
-  }; 
+  };
 
   const handleRequestSort = (_event: any, property: SetStateAction<string>) => {
     const isAsc = orderBy === property && order === "asc";
@@ -154,7 +155,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
   );
 
   const isUserNotFound = filteredUsers.length === 0 && !loading;
-  let dummyData = [...Array(5)]
+  let dummyData = [...Array(10)]
 
   return (
     <>
@@ -164,19 +165,16 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
             heading={`${page_title}`}
             links={[
               { name: "Dashboard", href: PATH_DASHBOARD.root },
-              { name: `${page_title}`, href:PATH_DASHBOARD.incidents.root },
+              { name: `${page_title}`, href:PATH_DASHBOARD.settings.serviceProviders },
               { name: "List" },
             ]}
             action={
               <Button
                 variant="contained"
-                to={
-                  PATH_DASHBOARD.incidents.newIncidents
-                }
-                component={RouterLink}
+                onClick={toggle}
                 startIcon={<Icon icon={plusFill} />}
               >
-                New Incident
+                New Service Provider
               </Button>
             }
           />
@@ -229,27 +227,28 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                             </TableCell>
                             <TableCell
                               align="left"
-                            >
-                            <Skeleton variant="rectangular" width={100} height={30} /> 
-                            </TableCell>
-                            <TableCell
-                              align="left"
                               
                             >
                              <Skeleton variant="rectangular" width={100} height={30} /> 
                             </TableCell>
-                            <TableCell
-                              align="left"
-                              
-                            >
-                            <Skeleton variant="rectangular" width={100} height={30} /> 
-                            </TableCell>
-                            <TableCell
-                              align="left"
                             
-                            >
-                             <Skeleton variant="rectangular" width={100} height={30} /> 
-                            </TableCell>
+                            
+                            <TableCell align="left">
+                            <Skeleton variant="rectangular" width={100} height={30} /> 
+                              </TableCell>
+                            
+                            <TableCell align="left">
+                            <Skeleton variant="rectangular" width={100} height={30} /> 
+                              </TableCell>
+                            <TableCell align="left">
+                            <Skeleton variant="rectangular" width={100} height={30} /> 
+                              </TableCell>
+                            <TableCell align="left">
+                            <Skeleton variant="rectangular" width={100} height={30} /> 
+                              </TableCell>
+                            <TableCell align="left">
+                            <Skeleton variant="rectangular" width={100} height={30} /> 
+                              </TableCell>
                             <TableCell align="left">
                             <Skeleton variant="rectangular" width={100} height={30} /> 
                               </TableCell>
@@ -282,53 +281,61 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                               align="left"
                              
                             >
-                              { index +1
+                              { index + 1
                               }
                            
                             </TableCell>
-                            <TableCell
-                              align="left"
-                             
-                            >
-                              { row?.incidentCategory 
-                              }
-                           
-                            </TableCell>
-                            <TableCell
-                              align="left"
-                             
-                            >
-                               {row?.incidentLocation
-                              }
-                            </TableCell>
-                            <TableCell
-                              align="left"
-                              
-                            >
-                               {row?.ambulanceViewModel?.name
-                              }
-                            </TableCell>
-                            <TableCell
-                              align="left"
-                              
-                            >
-                               {row?.incidentDate || "Nil"
-                              }
-                            </TableCell>
+                         
                             <TableCell align="left">
                           
-                              { row?.emergencyTreatmentCenterViewModel?.name || "Nil"}
+                              { row?.name || "Nil"}
                              
                               </TableCell>
                             <TableCell align="left">
                           
-                              { row?.incidentStatusType || "Nil"}
+                           {row?.location || "Nil"}
                              
                               </TableCell>
-            
+                            <TableCell align="left">
+                          
+                           {row?.landmark || "Nil"}
+                             
+                              </TableCell>
+                            <TableCell align="left">
+                          
+                           {row?.hospitalType || "Nil"}
+                             
+                              </TableCell>
+                            <TableCell align="left">
+                          
+                           {row?.address1 || "Nil"}
+                             
+                              </TableCell>
+                            <TableCell align="left">
+                          
+                           {row?.address2 || "Nil"}
+                             
+                              </TableCell>
+                          
+                            <TableCell align="left">
+                          
+                           {row?.lga || "Nil"}
+                             
+                              </TableCell>
+                            <TableCell align="left">
+                          
+                           {row?.state || "Nil"}
+                             
+                              </TableCell>
+                          
+                            <TableCell align="left">
+                          
+                           {formatDate2(row?.dateAdded) || "Nil"}
+                             
+                              </TableCell>
 
                             <TableCell align="right">
-                                <MoreMenu handleUpdate={handleUpdate} row={row} fetchAllData={fetchAllData} type="incident" url="Incidents/delete" />
+                                <MoreMenu handleUpdate={handleUpdate} row={row} fetchAllData={fetchAllData} type="Services" url="EmergencyCenters/delete" />
                             </TableCell>
                           </TableRow>
                         );
@@ -365,7 +372,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
           </Card>
         </Container>
       </Page>
-      <AddEditIncident toggle={toggle} modal={modal} formData={formData} edit={edit} fetchAllData={fetchAllData}  />
+      <AddEditServiceProviderETC toggle={toggle}  modal={modal} formData={formData} edit={edit} fetchAllUsers={fetchAllData}  />
     </>
   );
 };

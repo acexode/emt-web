@@ -1,12 +1,9 @@
-import { Link as RouterLink } from "react-router-dom";
 // material
 import { styled } from "@mui/material/styles";
-import { Box, Stack, Link, Container, Typography } from "@mui/material";
+import { Box, Stack, Container, Typography } from "@mui/material";
 // routes
-import { PATH_AUTH } from "../../routes/paths";
 // components
 import Page from "../../components/Page";
-import { MHidden } from "../../components/@material-extend";
 import LoginForm from "../../components/authentication/login";
 import { app_title } from "../../constants";
 import Logo from "../../components/Logo";
@@ -55,25 +52,15 @@ export default function Login() {
                 Sign in to the {app_title} Portal
               </Typography>
               <Typography sx={{ color: "text.secondary" }}>
-                Enter your details below.
+              (National integrated Emergency and medical services)
               </Typography>
+              
             </Box>
           </Stack>
 
           <LoginForm />
 
-          <MHidden width="smUp">
-            <Typography variant="body2" align="center" sx={{ mt: 3 }}>
-              Don’t have an account?&nbsp;
-              <Link
-                variant="subtitle2"
-                component={RouterLink}
-                to={PATH_AUTH.register}
-              >
-                Get started
-              </Link>
-            </Typography>
-          </MHidden>
+    
         </ContentStyle>
         <DashboardFooter />
       </Container>

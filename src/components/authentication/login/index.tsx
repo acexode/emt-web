@@ -97,12 +97,7 @@ const LoginForm:FC = () => {
           <Link component={RouterLink} variant="subtitle2" to={PATH_AUTH.resetPassword}>
             Forgot password ?
           </Link>
-         <div>
-         Don’t have an account ? &nbsp;
-        <Link underline="none" variant="subtitle2" component={RouterLink} to={PATH_AUTH.register}>
-          Get started
-        </Link>
-         </div>
+      
         </Stack>
 
         <LoadingButton  fullWidth size="large" type="submit" variant="contained" loading={isLoading}>

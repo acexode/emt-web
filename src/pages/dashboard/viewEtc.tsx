@@ -20,63 +20,65 @@ import {
   import Page from "../../components/Page";
   import { PATH_DASHBOARD } from "../../routes/paths";
   import useSettings from "../../hooks/useSettings";
-import { formatter } from "../../utility";
+import { formatDate2, formatter, numberToWords } from "../../utility";
+import { IClaims } from "../../types/claims";
   
   const ViewETC: FC = () => {
     const { themeStretch } = useSettings();
-    const [content, SetContent] = useState<any>(null);
+    const [content, SetContent] = useState<IClaims>();
     // const [loading,setLoading] = useState(true)
     const {
         state: { row},
       } = useLocation();
+      console.log({row})
         useEffect(()=>{
-          const objectData = {
-            facility_name:"Gwarimpa General Hospital",
-            facility_code:"A890823",
-            facility_shia_code:"KG73276",
-            incident_code:"H651521",
-            patient_name:"John Doe",
-            patient_code:"PA57873",
-            patient_address:"21 Ajakuta Estate, Abuja",
-            sex:"Male",
-            age:"30 years",
-            nhia:"NHIA32736",
-            dob:"20 August, 1993",
-            billsId: [
-              {
-                medicalIntervention: "Specialist Initial Consultation",
-                serviceCode:"NHIS-010-001",
-                quantity:"1",
-                unitCost: "2000",
-                amount:"200"
-              },
-              {
-                medicalIntervention: "Partial Amputation of the pinna",
-                serviceCode:"NHIS-022-016",
-                quantity:"1",
-                unitCost: "30000",
-                amount:"3000"
-              },
-              {
-                medicalIntervention: "Nursing Care (per day)",
-                serviceCode:"NHIS-010-003",
-                quantity:"13",
-                unitCost: "1000",
-                amount:"13000"
-              },
-              {
-                medicalIntervention: "Hospital Bed Occupancy",
-                serviceCode:"NHIS-010-005",
-                quantity:"12",
-                unitCost: "1000",
-                amount:"1200"
-              },
-            ],
-            totalAmount:"57000",
-            amountInWords:"Fifty Seven Thousand Naira",
-            serialNo:"SE39489"
-          }
-            SetContent(objectData)
+          // const objectData = {
+          //   facility_name:"Gwarimpa General Hospital",
+          //   facility_code:"A890823",
+          //   facility_shia_code:"KG73276",
+          //   incident_code:"H651521",
+          //   patient_name:"John Doe",
+          //   patient_code:"PA57873",
+          //   patient_address:"21 Ajakuta Estate, Abuja",
+          //   sex:"Male",
+          //   age:"30 years",
+          //   nhia:"NHIA32736",
+          //   dob:"20 August, 1993",
+          //   billsId: [
+          //     {
+          //       medicalIntervention: "Specialist Initial Consultation",
+          //       serviceCode:"NHIS-010-001",
+          //       quantity:"1",
+          //       unitCost: "2000",
+          //       amount:"200"
+          //     },
+          //     {
+          //       medicalIntervention: "Partial Amputation of the pinna",
+          //       serviceCode:"NHIS-022-016",
+          //       quantity:"1",
+          //       unitCost: "30000",
+          //       amount:"3000"
+          //     },
+          //     {
+          //       medicalIntervention: "Nursing Care (per day)",
+          //       serviceCode:"NHIS-010-003",
+          //       quantity:"13",
+          //       unitCost: "1000",
+          //       amount:"13000"
+          //     },
+          //     {
+          //       medicalIntervention: "Hospital Bed Occupancy",
+          //       serviceCode:"NHIS-010-005",
+          //       quantity:"12",
+          //       unitCost: "1000",
+          //       amount:"1200"
+          //     },
+          //   ],
+          //   totalAmount:"57000",
+          //   amountInWords:"Fifty Seven Thousand Naira",
+          //   serialNo:"SE39489"
+          // }
+            SetContent(row)
         },[row])
   
         const handlePrint = () => {
@@ -119,7 +121,7 @@ import { formatter } from "../../utility";
                         Facility Name
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.facility_name || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.incidentViewModel?.emergencyTreatmentCenterViewModel?.name || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -129,7 +131,7 @@ import { formatter } from "../../utility";
                         Facility NEMSAS Code
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.facility_code || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{"Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -139,7 +141,7 @@ import { formatter } from "../../utility";
                         Facility NHIA/SHIA Code
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.facility_shia_code || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{"Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -149,7 +151,7 @@ import { formatter } from "../../utility";
                         Incident Code
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.incident_code || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{"Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -163,10 +165,20 @@ import { formatter } from "../../utility";
                     <Grid item sm={6}>
                     <ListItem>
                       <ListItemText primary={<Typography>
-                        Patient Name
+                         First Name
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.patient_name || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.incidentViewModel?.patientViewModel?.firstName || "Not Available"}</Typography>
+                      } />
+                    </ListItem>
+                    </Grid>
+                    <Grid item sm={6}>
+                    <ListItem>
+                      <ListItemText primary={<Typography>
+                         Last Name
+                      </Typography>} 
+                      secondary={
+                        <Typography sx={{color:"#7b939c"}} >{content?.incidentViewModel?.patientViewModel?.lastName || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -176,7 +188,7 @@ import { formatter } from "../../utility";
                         Patient Code
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.patient_code || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{"Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -186,7 +198,7 @@ import { formatter } from "../../utility";
                         Patient Address
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.patient_address || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{ "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -196,17 +208,17 @@ import { formatter } from "../../utility";
                         Sex
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.sex || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.incidentViewModel?.sex || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
                     <Grid item sm={3}>
                     <ListItem>
                       <ListItemText primary={<Typography>
-                        Age
+                        Date of birth
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.age || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{formatDate2(content?.incidentViewModel?.patientViewModel?.doB) || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -216,22 +228,12 @@ import { formatter } from "../../utility";
                         Patient NHIA/SHIA NO
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.nhia || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{ "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
-                    <Grid item sm={6}>
-                    <ListItem>
-                      <ListItemText primary={<Typography>
-                        D.O.B
-                      </Typography>} 
-                      secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.dob || "Not Available"}</Typography>
-                      } />
-                    </ListItem>
-                    </Grid>
-                    
-                    
+                   
+             
                     </Grid>
             </Card>
           <Card sx={{ p: 3, pb: 10, mb: 2 }}>
@@ -249,7 +251,7 @@ import { formatter } from "../../utility";
                     </TableRow>
                     </TableHead>
                     <TableBody>
-                      {content?.billsId?.map((bills:any,index:any) =>(
+                      {/* {content?.billsId?.map((bills:any,index:any) =>(
                         <TableRow
                         key={index}
                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -263,7 +265,7 @@ import { formatter } from "../../utility";
                         <TableCell align="right">{formatter.format(bills?.unitCost)}</TableCell>
                         <TableCell align="right">{bills?.amount}</TableCell>
                         </TableRow>
-                      ))}
+                      ))} */}
                      
                         <TableRow
                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -275,7 +277,7 @@ import { formatter } from "../../utility";
                         <TableCell align="right"></TableCell>
                         <TableCell align="right"></TableCell>
                         <TableCell align="right">Total</TableCell>
-                        <TableCell align="right">{formatter.format(content?.totalAmount)}</TableCell>
+                        <TableCell align="right">{formatter.format(content?.totalPrice ?? 0)}</TableCell>
                     </TableRow>
                 </TableBody>
                     </Table>
@@ -285,7 +287,7 @@ import { formatter } from "../../utility";
                        Total Amount in Words
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.amountInWords || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{numberToWords(content?.totalPrice ?? 0) + " Naira only" || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -405,7 +407,7 @@ import { formatter } from "../../utility";
                 
                     </Grid>
             </Card>
-          <Card sx={{ p: 3, pb: 4, mb: 2 }}>
+          {/* <Card sx={{ p: 3, pb: 4, mb: 2 }}>
                 <Grid container spacing={2}>
                 <Grid item sm={12}>
                 <ListItem>
@@ -419,7 +421,7 @@ import { formatter } from "../../utility";
                 </Grid>
             
                 </Grid>
-            </Card>
+            </Card> */}
             <Button
                 size="medium"
                 type="submit"

@@ -2,7 +2,7 @@ import { replace } from 'lodash';
 import numeral from 'numeral';
 
 
-export const formatDate2 = (d: string | number | Date) => {
+export const formatDate2 = (d: any) => {
     try {
         const date = d instanceof Date ? d : new Date(d);
         const monthNames = [
@@ -60,3 +60,37 @@ export function fShortenNumber(number: any) {
 export function fData(number: any) {
   return numeral(number).format('0.0 b');
 }
+
+export const numberToWords = (num: number) => {
+  const units = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+  const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+  
+  const convertChunk = (number: number) => {
+    if (number < 20) {
+      return units[number];
+    } else {
+      return tens[Math.floor(number / 10)] + ' ' + units[number % 10];
+    }
+  };
+
+  const convertNumber = (number: number, scale: number):any => {
+    if (number === 0) {
+      return '';
+    } else if (number < 100) {
+      return convertChunk(number);
+    } else if (number < 1000) {
+      return units[Math.floor(number / 100)] + ' Hundred ' + convertChunk(number % 100);
+    } else {
+      return convertNumber(Math.floor(number / 1000), scale + 1) + ' ' + scaleNames[scale] + ' ' + convertNumber(number % 1000, 0);
+    }
+  };
+
+  const scaleNames = ['', 'Thousand', 'Million', 'Billion', 'Trillion'];
+  
+  if (num === 0) {
+    return 'Zero';
+  } else {
+    return convertNumber(num, 0);
+  }
+};
+// "One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven"

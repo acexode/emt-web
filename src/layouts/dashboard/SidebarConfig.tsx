@@ -96,7 +96,7 @@ export const sidebarETCConfig = [
         icon: ICONS.booking,
       },
       {
-        title: "Ambulance Run Sheets",
+        title: "Ambulance Transfer Form",
         path: PATH_DASHBOARD.ambulance_run_sheets.root,
         icon: ICONS.reports,
       },

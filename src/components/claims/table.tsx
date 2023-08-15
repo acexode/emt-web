@@ -281,7 +281,7 @@ const CustomClaimTable: FC<ITable> = ({ dataList, page_title, table_Head,loading
                               align="left"
                              
                             >
-                              { row?.service_provider || "NIL" 
+                              { row?.incidentViewModel?.ambulanceViewModel?.name || "NIL" 
                               }
                            
                             </TableCell>
@@ -289,21 +289,21 @@ const CustomClaimTable: FC<ITable> = ({ dataList, page_title, table_Head,loading
                               align="left"
                              
                             >
-                               {row?.incident_code || "Nil"
+                               {row?.incidentViewModel?.incidentCategory || "Nil"
                               }
                             </TableCell>
                             <TableCell
                               align="left"
                               
                             >
-                               {row?.patient_name || "Nil"
+                               {row?.patientViewModel?.firstName || "Nil"
                               }
                             </TableCell>
                             <TableCell
                               align="left"
                               
                             >
-                               {row?.date || "Nil"
+                               {row?.incidentViewModel?.incidentDate || "Nil"
                               }
                             </TableCell>
                             <TableCell align="left">

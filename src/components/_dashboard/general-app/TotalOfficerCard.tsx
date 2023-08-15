@@ -15,13 +15,13 @@ const CHART_DATA = [
 
 export default function HumanResourcesCard() {
   const chartOptions = merge(BaseOptionChart(), {
-    colors: ["#EACE09"],
+    colors: ["#800080"],
     dataLabels: {
       enabled: true,
       offsetX: -3,
       style: {
         fontSize: '12px',
-        colors: ['#000']
+        colors: ['#fff']
       }
     },
     // xaxis: {

@@ -57,7 +57,7 @@ import {
       <Page title={`View Run Sheet | NEMSAS`}>
         <Container maxWidth={themeStretch ? false : "lg"}>
           <HeaderBreadcrumbs
-            heading={`Review Run Sheet`}
+            heading={`Review Patient Transfer Form`}
             links={[
               { name: "Dashboard", href: PATH_DASHBOARD.root },
               { name: `Run Sheet`, href: PATH_DASHBOARD.ambulance_run_sheets.root },
@@ -109,6 +109,7 @@ import {
                             variant="outlined"
                             fullWidth                      
                             type="text"
+                            defaultValue={data?.facilityName}
                             {...register('facilityName')}
                             helperText={errors?.facilityName?.message?.toString()}
                             FormHelperTextProps={{
@@ -172,7 +173,7 @@ import {
                         '&.Mui-checked': {
                         color: "hsl(0, 100%, 27%)",
                         },
-                    }} />} label={<Typography sx={{fontSize:"1rem"}} variant="subtitle2">I hereby confirm that the content of this Run Sheet is accurate</Typography>} />
+                    }} />} label={<Typography sx={{fontSize:"1rem"}} variant="subtitle2">I hereby confirm that I have recieved the patient from the Ambulance</Typography>} />
 
                     </Grid>
 
