@@ -27,6 +27,9 @@ import SearchNotFound from "../SearchNotFound";
 import HeaderBreadcrumbs from "../HeaderBreadcrumbs";
 import TableListHead from "../table/tableListHead";
 import ListToolbar from "../table/tableListToolbar";
+import { ITransferSheets } from "../../types/transfer_form";
+import { formatDateTime } from "../../utility";
+import MoreMenu from "../table/TableMoreMenu";
 // import MoreMenu from "../table/TableMoreMenu";
 // import { AddEditUser } from "./components/add-edit-user";
 // import axiosInstance from "../../services/api_service";
@@ -84,7 +87,7 @@ interface ITable {
   type?:string
 }
 
-const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading }) => {
+const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetchAllData }) => {
   const { themeStretch } = useSettings();
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
@@ -227,6 +230,15 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading }) =
                             <TableCell align="left">
                             <Skeleton variant="rectangular" width={100} height={30} /> 
                               </TableCell>
+                            <TableCell align="left">
+                            <Skeleton variant="rectangular" width={100} height={30} /> 
+                              </TableCell>
+                            <TableCell align="left">
+                            <Skeleton variant="rectangular" width={100} height={30} /> 
+                              </TableCell>
+                            <TableCell align="left">
+                            <Skeleton variant="rectangular" width={100} height={30} /> 
+                              </TableCell>
 
                             <TableCell align="right"></TableCell>
                           </TableRow>
@@ -238,18 +250,15 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading }) =
                         page * rowsPerPage,
                         page * rowsPerPage + rowsPerPage
                       )
-                      .map((row: any, index: number) => {
-                        const isItemSelected =
-                          selected.indexOf(row?.year) !== -1;
-
+                      .map((row: ITransferSheets, index: number) => {
+                       
                         return (
                           <TableRow
                             hover
                             key={index}
                             tabIndex={-1}
                             role="checkbox"
-                            selected={isItemSelected}
-                            aria-checked={isItemSelected}
+                      
                           >
                           
                             <TableCell
@@ -264,7 +273,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading }) =
                               align="left"
                              
                             >
-                              { row?.incident_code || "Nil"
+                              { row?.incidentViewModel?.patientViewModel?.firstName ?  `${row?.incidentViewModel?.patientViewModel?.firstName} ${row?.incidentViewModel?.patientViewModel?.lastName}` : "Nil"
                               }
                            
                             </TableCell>
@@ -272,27 +281,56 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading }) =
                               align="left"
                              
                             >
-                               {row?.date || "Nil"
+                              { row?.incidentViewModel?.emergencyTreatmentCenterViewModel?.name || "Nil"
+                              }
+                           
+                            </TableCell>
+                            <TableCell
+                              align="left"
+                             
+                            >
+                               {row?.incidentViewModel?.ambulanceViewModel?.name || "Nil"
                               }
                             </TableCell>
                             <TableCell
                               align="left"
                               
                             >
-                               {row?.run_time || "Nil"
+                               {row?.incidentViewModel?.runsheetViewModel?.routeFrom || "Nil"
                               }
                             </TableCell>
                             <TableCell
                               align="left"
                               
                             >
-                               {row?.ambulance_name || "Nil"
+                               {row?.incidentViewModel?.runsheetViewModel?.routeTo || "Nil"
+                              }
+                            </TableCell>
+                            <TableCell
+                              align="left"
+                              
+                            >
+                               {formatDateTime(row?.incidentViewModel?.runsheetViewModel?.takeOffTime) || "Nil"
+                              }
+                            </TableCell>
+                            <TableCell
+                              align="left"
+                              
+                            >
+                               {formatDateTime(row?.incidentViewModel?.runsheetViewModel?.arrivalTime) || "Nil"
+                              }
+                            </TableCell>
+                            <TableCell
+                              align="left"
+                              
+                            >
+                               {row?.incidentViewModel?.traiageCategory || "Nil"
                               }
                             </TableCell>
                            
-                            {/* <TableCell align="right">
-                                <MoreMenu handleUpdate={handleUpdate} row={row} fetchAllData={fetchAllData} type="User" />
-                            </TableCell> */}
+                            <TableCell align="right">
+                                <MoreMenu row={row} fetchAllData={fetchAllData} type="runsheets" />
+                            </TableCell>
                           </TableRow>
                         );
                       })}

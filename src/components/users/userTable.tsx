@@ -243,12 +243,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                             >
                              <Skeleton variant="rectangular" width={100} height={30} /> 
                             </TableCell>
-                            <TableCell align="left">
-                            <Skeleton variant="rectangular" width={100} height={30} /> 
-                              </TableCell>
-                            <TableCell align="left">
-                            <Skeleton variant="rectangular" width={100} height={30} /> 
-                              </TableCell>
+                           
                             <TableCell align="left">
                             <Skeleton variant="rectangular" width={100} height={30} /> 
                               </TableCell>
@@ -325,16 +320,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                               }
                             </TableCell>
                            
-                            <TableCell align="left">
-                          
-                              { row?.state || "Nil"}
-                             
-                              </TableCell>
-                            <TableCell align="left">
-                          
-                           {row?.city || "Nil"}
-                             
-                              </TableCell>
+                        
                             <TableCell align="left">
                           
                            {row?.phone || "Nil"}
@@ -342,7 +328,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                               </TableCell>
 
                             <TableCell align="right">
-                                <MoreMenu handleUpdate={handleUpdate} row={row} fetchAllData={fetchAllUsers} type="User" />
+                                <MoreMenu handleUpdate={handleUpdate} row={row} fetchAllData={fetchAllUsers} param={"userId"} type="User" url="Account/deleteUser" />
                             </TableCell>
                           </TableRow>
                         );

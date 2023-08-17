@@ -87,3 +87,7 @@ export const handleFormatData3 = (data: any[]) =>{
       });
       
 }
+
+export function filterNonNullValues(array:any) {
+  return array.filter(item => item !== null);
+}

@@ -1,15 +1,20 @@
 import { useEffect, useState ,lazy} from 'react'
 import { useAuthUserContext } from '../../context/authUser.context';
 import axiosInstance from '../../services/api_service';
+import { filterNonNullValues } from '../../utility/dataFormatter';
 
 const CustomTable = lazy(() => import("../../components/patients/patientTable"))
 const TABLE_HEAD = [
   { id: "sn", label: "S/N", alignRight: false },
   { id: "firstName", label: "First Name", alignRight: false },
   { id: "lastName", label: "Last Name", alignRight: false },
+  { id: "middleName", label: "Middle Name", alignRight: false },
+  { id: "doB", label: "Date of birth", alignRight: false },
   { id: "age", label: "Age", alignRight: false },
-  { id: "incidentType", label: "Incident Type", alignRight: false },
-  { id: "status", label: "Status", alignRight: false },
+  { id: "phoneNumber", label: "Phone Number", alignRight: false },
+  { id: "nhia", label: "NHIA", alignRight: false },
+  { id: "sex", label: "Gender", alignRight: false },
+  { id: "address", label: "Address", alignRight: false },
   { id: "" },
 ];
 
@@ -39,7 +44,7 @@ const Patients = () => {
   }, []);
   return (
     <>
-    <CustomTable page_title='Patient Records' loading={loading} table_Head={TABLE_HEAD} dataList={users} fetchAllUsers={fetchAllUsers} type="patient" />
+    <CustomTable page_title='Patient Records' loading={loading} table_Head={TABLE_HEAD} dataList={filterNonNullValues(users)} fetchAllUsers={fetchAllUsers} type="patient" />
     </>
   )
 }

@@ -22,6 +22,8 @@ import { MIconButton } from "../../@material-extend";
 import closeFill from "@iconify/icons-eva/close-fill";
 import { Icon } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
+import { userTypesArray } from "../../../constants";
+import { useAuthUserContext } from "../../../context/authUser.context";
 
 const states = [
   "Abia",
@@ -72,6 +74,7 @@ const states = [
   }
 
   const schema = yup.object().shape({
+    userName: yup.string().required("*Username  is required"),
     firstName: yup.string().required("*First Name  is required"),
     lastName: yup.string().required("*Last Name  is required"),
     middleName: yup.string().required("*Middle Name  is required"),
@@ -85,30 +88,12 @@ const states = [
     phoneNumber: yup.string(),
     userType: yup.string(),
     sex: yup.number(),
-    street1: yup.string(),
-    street2: yup.string(),
-    city: yup.string(),
-    state: yup.string(),
-    superviserName: yup.string(),
+    organisationName: yup.string(),
+    supervisorUserId: yup.string(),
     
 
   });
 
-  const level =[
-    {
-    type:"SuperAdministrator",
-    id:"SuperAdministrator"
-  },
-    {
-    type:"ExportAndDeleteNemsasAdmin",
-    id:"ExportAndDeleteNemsasAdmin"
-  },
-    {
-    type:"ExportEmergencyTreatmentUser",
-    id:"ExportEmergencyTreatmentUser"
-  },
-   
-]
 
 export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchAllUsers}) =>{
     const {
@@ -131,20 +116,45 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
       const [locationsLoading,setLocationsLoading] = useState(false)
       const { enqueueSnackbar, closeSnackbar } = useSnackbar();
       const [locations,setLocations] = useState([])
-      // const [states,setStates] = useState([])
-      const [lgas,setLgas] = useState([])
-      const [stateId,setStateId] = useState("")
-      const [lgaId,setLgaId] = useState("")
+      const [organisations,setOrganisations] = useState<any>([])
+      const [users,setUsers] = useState<any>([])
+      const [orgVal,setOrgVal] = useState("")
+      const {
+        userState: { userProfile },
+      } = useAuthUserContext();
 
-      useEffect(()=>{
-        const options = states?.map((dt:any,index:number) =>{
+     useEffect(()=>{
+        axiosInstance.get('Account/listOrganisations').then(res =>{
+          let obj = res?.data?.data?.map((dt) =>{
+            return {
+              label: dt?.name,
+              value: dt?.name
+            }
+          })
+          setOrganisations(obj)
+        }).catch(error =>{
+          console.log(error);
+        })
+     },[])
+
+     useEffect(()=>{
+     if(orgVal?.length > 0){
+      let val ={
+        value: orgVal
+      }
+      axiosInstance.post('Account/getUsersByOrganisationName',val).then(res =>{
+        let obj = res?.data?.data?.map((dt)=>{
           return {
-            label: dt,
-            id: index
+            label: `${dt?.firstName} ${dt?.lastName}`,
+            value: dt?.id
           }
         })
-        setLocations(options)
-    },[])
+        setUsers(obj)
+      }).catch(error =>{
+        console.log(error)
+      })
+     }
+     },[orgVal?.length])
 
       useEffect(()=>{
           if(edit){
@@ -159,8 +169,10 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
     const onSubmit = async(data:any) =>{
         let newData = {
             ...data,
+            ambulanceId: userProfile?.ambulanceId,
+            etcId: userProfile?.etcId,
           };
-          delete newData?.id
+          // delete newData?.id
           setLoading(true)
           let text = edit ? "User Updated" : "User Added";
           try {
@@ -185,7 +197,8 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
             handleToggle();
             fetchAllUsers()
           } catch (error: any) {
-            enqueueSnackbar("Error!", {
+            console.log(error)
+            enqueueSnackbar(error?.message, {
                 variant: "error",
                 action: (key) => (
                   <MIconButton size="small" onClick={() => closeSnackbar(key)}>
@@ -198,7 +211,11 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
           }
     }
     const handleAutocompleteChange = (event, value) => {
-      setValue('state', value?.id || ''); // Set the value of 'locationId' field
+      setOrgVal(value?.value)
+      setValue('organisationName', value?.value || '');
+    };
+    const handleUserChange = (event, value) => {
+      setValue('supervisorUserId', value?.value || '');
     };
   
     return (
@@ -215,17 +232,34 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
         <DialogContent>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={4} lg={4}>
+                <label>Username</label>
+                <TextField
+                    defaultValue={formData?.userName}
+                    variant="outlined"
+                    fullWidth
+                    {...register('userName')}
+                    helperText={errors?.userName?.message?.toString()}
+                    FormHelperTextProps={{
+                    className:"helperTextColor"
+                }}
+                    type="text"
+                />
+               
+            </Grid>
+            <Grid item xs={12} sm={4} lg={4}>
                 <label>First Name</label>
                 <TextField
                     defaultValue={formData?.firstName}
                     variant="outlined"
                     fullWidth
                     {...register('firstName')}
+                    helperText={errors?.firstName?.message?.toString()}
+                    FormHelperTextProps={{
+                    className:"helperTextColor"
+                }}
                     type="text"
                 />
-                <p style={{ color: "red", fontSize: 12 }}>
-                  {errors?.firstName?.message?.toString()}
-                </p>
+               
             </Grid>
             <Grid item xs={12} sm={4} lg={4}>
                 <label>Middle Name</label>
@@ -234,11 +268,13 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
                     variant="outlined"
                     fullWidth
                     {...register('middleName')}
+                    helperText={errors?.middleName?.message?.toString()}
+                    FormHelperTextProps={{
+                    className:"helperTextColor"
+                }}
                     type="text"
                 />
-                <p style={{ color: "red", fontSize: 12 }}>
-                  {errors?.middleName?.message?.toString()}
-                </p>
+               
             </Grid>
             <Grid item xs={12} sm={4} lg={4}>
                 <label>Last Name</label>
@@ -247,11 +283,13 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
                     variant="outlined"
                     fullWidth
                     {...register('lastName')}
+                    helperText={errors?.lastName?.message?.toString()}
+                    FormHelperTextProps={{
+                    className:"helperTextColor"
+                }}
                     type="text"
                 />
-                <p style={{ color: "red", fontSize: 12 }}>
-                  {errors?.lastName?.message?.toString()}
-                </p>
+               
             </Grid>
             <Grid item xs={12} sm={4} lg={4}>
                 <label>Email</label>
@@ -260,11 +298,13 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
                     variant="outlined"
                     fullWidth
                     {...register('email')}
+                    helperText={errors?.email?.message?.toString()}
+                    FormHelperTextProps={{
+                    className:"helperTextColor"
+                }}
                     type="email"
                 />
-                <p style={{ color: "red", fontSize: 12 }}>
-                  {errors?.email?.message?.toString()}
-                </p>
+                
             </Grid>
             <Grid item xs={12} sm={4} lg={4}>
             <label>Select Gender</label>
@@ -274,15 +314,19 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
                 select
                  type="text"
                 {...register("sex")}
+                helperText={errors?.sex?.message?.toString()}
+                FormHelperTextProps={{
+                className:"helperTextColor"
+            }}
                
               >
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                <MenuItem value={0}>
+                <MenuItem value={1}>
                  Male
                 </MenuItem>
-                <MenuItem value={1}>
+                <MenuItem value={0}>
                  Female
                 </MenuItem>
                
@@ -296,6 +340,10 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
                     variant="outlined"
                     fullWidth
                     {...register('password')}
+                    helperText={errors?.password?.message?.toString()}
+                    FormHelperTextProps={{
+                    className:"helperTextColor"
+                }}
                     type="text"
                 />
                 
@@ -307,6 +355,10 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
                     variant="outlined"
                     fullWidth
                     {...register('confirmPassword')}
+                    helperText={errors?.confirmPassword?.message?.toString()}
+                    FormHelperTextProps={{
+                    className:"helperTextColor"
+                }}
                     type="text"
                 />
                 
@@ -318,6 +370,10 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
                     variant="outlined"
                     fullWidth
                     {...register('phoneNumber')}
+                    helperText={errors?.phoneNumber?.message?.toString()}
+                    FormHelperTextProps={{
+                    className:"helperTextColor"
+                }}
                     type="text"
                 />
                 
@@ -332,13 +388,17 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
                 select
                  type="text"
                 {...register("userType")}
+                helperText={errors?.userType?.message?.toString()}
+                FormHelperTextProps={{
+                className:"helperTextColor"
+            }}
                
               >
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                {level?.map((level) => (
-                  <MenuItem value={level.id}>{level.type}</MenuItem>
+                {userTypesArray?.map((user) => (
+                  <MenuItem value={user}>{user}</MenuItem>
                 ))}
               </TextField>
                 <p style={{ color: "red", fontSize: 12 }}>
@@ -347,48 +407,30 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
             </Grid>
     
             <Grid item xs={12} sm={4} lg={4}>
-            <label>Select State</label>
+            <label>Select Organization</label>
             <Autocomplete
-              options={locations}
+              options={organisations}
               getOptionLabel={(option) => option.label}
               onChange={handleAutocompleteChange}
+              helperText={errors?.organisationName?.message?.toString()}
+              FormHelperTextProps={{
+              className:"helperTextColor"
+          }}
                renderInput={(params) => <TextField {...params} />}
             />
             
             </Grid>
             <Grid item xs={12} sm={4} lg={4}>
-                <label>City</label>
-                <TextField
-                    defaultValue={formData?.city}
-                    variant="outlined"
-                    fullWidth
-                    {...register('city')}
-                    type="text"
-                />
-                
+            <label>Select Supervisor</label>
+            <Autocomplete
+              options={users}
+              getOptionLabel={(option) => option.label}
+              onChange={handleUserChange}
+               renderInput={(params) => <TextField {...params} />}
+            />
+            
             </Grid>
-            <Grid item xs={12} sm={4} lg={4}>
-                <label>Street 1</label>
-                <TextField
-                    defaultValue={formData?.street1}
-                    variant="outlined"
-                    fullWidth
-                    {...register('street1')}
-                    type="text"
-                />
-                
-            </Grid>
-            <Grid item xs={12} sm={4} lg={4}>
-                <label>Street 2</label>
-                <TextField
-                    defaultValue={formData?.street2}
-                    variant="outlined"
-                    fullWidth
-                    {...register('street2')}
-                    type="text"
-                />
-                
-            </Grid>
+           
            
           </Grid>
         </DialogContent>

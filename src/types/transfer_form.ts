@@ -1,3 +1,5 @@
+import { PatientViewModel } from "./claims"
+
 export interface ITransferSheets {
     id: number
     title: string
@@ -47,9 +49,10 @@ export interface ITransferSheets {
     ambulanceStop: string
     dateStop: string
     incidentStatusType: string
-    patientViewModel: any
+    patientViewModel: PatientViewModel
     emergencyTreatmentCenterViewModel: EmergencyTreatmentCenterViewModel
     ambulanceViewModel: AmbulanceViewModel
+    runsheetViewModel:RunsheetViewModel
   }
   
   export interface EmergencyTreatmentCenterViewModel {
@@ -77,3 +80,18 @@ export interface ITransferSheets {
     ambulanceTypeViewModel: any
   }
   
+  interface RunsheetViewModel {
+    id: number
+    title: string
+    incidentId: number
+    ambulanceId: number
+    routeFrom: string
+    routeTo: string
+    takeOffTime: string
+    arrivalTime: string
+    medicUserId: string
+    hospiceUserId: string
+    totalMinutesToHospital: number
+    dateAdded: string
+    incidentViewModel: any
+  }

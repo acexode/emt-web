@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { replace } from 'lodash';
 import numeral from 'numeral';
 
@@ -94,3 +96,35 @@ export const numberToWords = (num: number) => {
   }
 };
 // "One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven"
+
+
+export function calculateAge(dateOfBirth:any) {
+  const dob = new Date(dateOfBirth);
+  const now = new Date();
+  
+  const yearDiff = now.getUTCFullYear() - dob.getUTCFullYear();
+  const monthDiff = now.getUTCMonth() - dob.getUTCMonth();
+  const dayDiff = now.getUTCDate() - dob.getUTCDate();
+  
+  // Adjust the age if the birthday hasn't occurred yet this year
+  if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+      return (yearDiff - 1).toString();
+  } else {
+      return yearDiff.toString();
+  }
+}
+
+export function formatDateTime(dateTimeString:any) {
+  const options = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    // timeZoneName: 'short'
+  };
+  
+  const formattedDateTime = new Date(dateTimeString).toLocaleString(undefined, options);
+  return formattedDateTime;
+}
