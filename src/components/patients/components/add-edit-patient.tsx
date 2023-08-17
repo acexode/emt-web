@@ -42,13 +42,13 @@ const incidentTypes = ["Domestic Accidents","Fire Accidents"]
   const schema = yup.object().shape({
     firstName: yup.string().required("*First Name  is required"),
     lastName: yup.string().required("*Last Name  is required"),
-    age: yup.string().required("Age is required"),
-    type: yup.string().required("*Type is required"),
-    status:yup.string().required("*Status ")
+    middleName: yup.string(),
+    doB: yup.string().required("Date of birth is required"),
+    sex: yup.number(),
+    phoneNumber:yup.string(),
+    nhia:yup.string(),
+    address:yup.string(),
   });
-
-
-
 
 export  const AddEditPatient:FC<IAddEditPatient> = ({edit,formData,modal,toggle,fetchAllUsers}) =>{
     const {
@@ -69,9 +69,7 @@ export  const AddEditPatient:FC<IAddEditPatient> = ({edit,formData,modal,toggle,
       });
       const [loading,setLoading] = useState(false)
       const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-
-
- 
+  
 
       useEffect(()=>{
           if(edit){
@@ -87,14 +85,13 @@ export  const AddEditPatient:FC<IAddEditPatient> = ({edit,formData,modal,toggle,
         let newData = {
             ...data,
           };
-          delete newData?.id
           setLoading(true)
           let text = edit ? "Record Updated" : "Record Added";
           try {
             let res;
             if (edit) {
               res = await axiosInstance.put(
-                `/patients/${formData?.id}/update`,
+                `/Patients/update`,
                 newData
               );
             } else {
@@ -147,10 +144,24 @@ export  const AddEditPatient:FC<IAddEditPatient> = ({edit,formData,modal,toggle,
                     fullWidth
                     {...register('firstName')}
                     type="text"
+                    helperText={errors?.firstName?.message?.toString()}
+                    FormHelperTextProps={{
+                    className:"helperTextColor"
+                    }}
                 />
-                <p style={{ color: "red", fontSize: 12 }}>
-                  {errors?.firstName?.message?.toString()}
-                </p>
+                
+            </Grid>
+            <Grid item xs={12} sm={6} lg={6}>
+                <label>Middle Name</label>
+                <TextField
+                    defaultValue={formData?.middleName}
+                    variant="outlined"
+                    fullWidth
+                    {...register('middleName')}
+                    type="text"
+                  
+                />
+               
             </Grid>
             <Grid item xs={12} sm={6} lg={6}>
                 <label>Last Name</label>
@@ -160,69 +171,84 @@ export  const AddEditPatient:FC<IAddEditPatient> = ({edit,formData,modal,toggle,
                     fullWidth
                     {...register('lastName')}
                     type="text"
+                    helperText={errors?.lastName?.message?.toString()}
+                    FormHelperTextProps={{
+                    className:"helperTextColor"
+                    }}
                 />
-                <p style={{ color: "red", fontSize: 12 }}>
-                  {errors?.lastName?.message?.toString()}
-                </p>
+                
             </Grid>
             <Grid item xs={12} sm={6} lg={6}>
-                <label>Age</label>
+                <label>Date of birth</label>
                 <TextField
-                    defaultValue={formData?.age}
+                     defaultValue={formData?.doB || ''} 
                     variant="outlined"
                     fullWidth
-                    {...register('age')}
-                    type="text"
+                    {...register('doB')}
+                    type="date"
                 />
-                <p style={{ color: "red", fontSize: 12 }}>
-                  {errors?.age?.message?.toString()}
-                </p>
+              
             </Grid>
-             
-    
             
             <Grid item xs={12} sm={6} lg={6}>
-            <label>Select Type</label>
+            <label>Select Gender</label>
               <TextField
                  variant="outlined"
                 fullWidth
+                defaultValue={formData?.sex} 
                 select
                  type="text"
-                {...register("type")}
+                {...register("sex")}
                
               >
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                {incidentTypes?.map((level) => (
-                  <MenuItem value={level}>{level}</MenuItem>
-                ))}
+                <MenuItem value={1}>
+                Male
+                </MenuItem>
+                <MenuItem value={0}>
+                 Female
+                </MenuItem>
+                
               </TextField>
-                <p style={{ color: "red", fontSize: 12 }}>
-                  {errors?.type?.message?.toString()}
-                </p>
+               
             </Grid>
             <Grid item xs={12} sm={6} lg={6}>
-            <label>Select Status</label>
-              <TextField
-                 variant="outlined"
-                fullWidth
-                select
-                 type="text"
-                {...register("status")}
-               
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                {status?.map((level) => (
-                  <MenuItem value={level}>{level}</MenuItem>
-                ))}
-              </TextField>
-                <p style={{ color: "red", fontSize: 12 }}>
-                  {errors?.status?.message?.toString()}
-                </p>
+                <label>Phone Number</label>
+                <TextField
+                    defaultValue={formData?.phoneNumber}
+                    variant="outlined"
+                    fullWidth
+                    {...register('phoneNumber')}
+                    type="text"
+                    
+                /> 
             </Grid>
+            <Grid item xs={12} sm={6} lg={6}>
+                <label>NHIA</label>
+                <TextField
+                    defaultValue={formData?.nhia}
+                    variant="outlined"
+                    fullWidth
+                    {...register('nhia')}
+                    type="text"
+                    
+                /> 
+            </Grid>
+            <Grid item xs={12} sm={6} lg={6}>
+                <label>Address</label>
+                <TextField
+                    defaultValue={formData?.address}
+                    variant="outlined"
+                    fullWidth
+                    multiline
+                    {...register('address')}
+                    type="text"
+                    
+                /> 
+            </Grid>
+           
   
           </Grid>
         </DialogContent>

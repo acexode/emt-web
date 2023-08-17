@@ -19,9 +19,10 @@ interface IMoreMenu {
   fetchAllData?: any,
   type?:string;
   url?:string
+  param?:string
 };
 
- const MoreMenu:FC<IMoreMenu> = ({ handleUpdate,row,type ,fetchAllData,url}) =>{
+ const MoreMenu:FC<IMoreMenu> = ({ handleUpdate,row,type, param="id" ,fetchAllData,url}) =>{
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [modal, setModal] = useState(false);
@@ -34,7 +35,7 @@ interface IMoreMenu {
     if(type === "ambulance"){
       navigate(PATH_DASHBOARD.claims.viewAmbulance,{state:{row}})
     }else if(type === "patient"){
-      navigate(PATH_DASHBOARD.patients.viewPatient)
+      navigate(PATH_DASHBOARD.patients.viewPatient,{state:{row}})
     }
     else if (type === "incident"){
       navigate(PATH_DASHBOARD.incidents.viewIncident,{state:{row}})
@@ -46,6 +47,9 @@ interface IMoreMenu {
   const handleEdit = () =>{
     if (type === "incident"){
       navigate(PATH_DASHBOARD.incidents.newIncidents,{state:{row}})
+    } else if(type === "runsheets"){
+      navigate(PATH_DASHBOARD.ambulance_run_sheets.viewRunSheet,{state:{data:row}})
+
     }
     else{
       handleUpdate(row)
@@ -79,7 +83,7 @@ interface IMoreMenu {
           <ListItemText primary="View" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>}
     
-        { (type !== "patient" && type !== "etc") && <MenuItem
+        { ( type !== "etc"&& type !== "ambulance" ) && <MenuItem
            sx={{ color: 'text.secondary' }}
            onClick={() =>handleEdit()}
         >
@@ -88,14 +92,14 @@ interface IMoreMenu {
           </ListItemIcon>
           <ListItemText primary="Edit" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>}
-       {(type === "Services" || type === "incident" ) && <MenuItem onClick={toggle}  sx={{ color: 'text.secondary' }}>
+       {(type === "Services" || type === "incident" || type ==="User" ) && <MenuItem onClick={toggle}  sx={{ color: 'text.secondary' }}>
           <ListItemIcon>
             <Icon icon={trash2Outline} width={24} height={24} />
           </ListItemIcon>
           <ListItemText primary="Delete" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>}     
       </Menu>
-      <Remove modal={modal} toggle={toggle} fetchData={fetchAllData} id={row?.id} param="id" url={url} type={type} />
+      <Remove modal={modal} toggle={toggle} fetchData={fetchAllData} id={row?.id} param={param} url={url} type={type} />
 
     </>
   );

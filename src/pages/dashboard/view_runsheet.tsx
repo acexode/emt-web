@@ -44,6 +44,11 @@ import { Icon } from "@iconify/react";
     const [open, setOpen] = useState(false);
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const [confirmationPayload, setConfirmationPayload] = useState(null);
+    const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
+
+    const handleCheckboxClick = () => {
+      setIsCheckboxChecked(!isCheckboxChecked);
+    };
 
 
     let navigate = useNavigate();
@@ -71,17 +76,35 @@ import { Icon } from "@iconify/react";
         state: { data},
       } = useLocation();
 
-
-      const defaultDate = new Date(data?.takeOffTime);
+      const defaultDate = new Date(data?.incidentViewModel?.runsheetViewModel?.arrivalTime);
       const defaultTime = `${defaultDate.getHours().toString().padStart(2, '0')}:${defaultDate.getMinutes().toString().padStart(2, '0')}`;
-      
-      const [selectedDate, setSelectedDate] = useState(defaultDate.toISOString().split('T')[0]);
+      const [selectedDate, setSelectedDate] = useState(defaultDate?.toISOString().split('T')[0]);
       const [selectedTime, setSelectedTime] = useState(defaultTime);
+      const [users,setUsers] = useState([])
       
       useEffect(() => {
         setSelectedDate(defaultDate.toISOString().split('T')[0]);
         setSelectedTime(defaultTime);
       }, [data]);
+
+      useEffect(()=>{
+        if(data){
+         let val ={
+           value: data?.incidentViewModel?.emergencyTreatmentCenterViewModel?.name
+         }
+         axiosInstance.post('Account/getUsersByOrganisationName',val).then(res =>{
+           let obj = res?.data?.data?.map((dt:any)=>{
+             return {
+               label: `${dt?.firstName} ${dt?.lastName}`,
+               value: dt?.id
+             }
+           })
+           setUsers(obj)
+         }).catch(error =>{
+           console.log(error)
+         })
+        }
+        },[data])
 
       useEffect(()=>{
         axiosInstance
@@ -251,16 +274,26 @@ import { Icon } from "@iconify/react";
                         </FormLabel>
                         <TextField
                             variant="outlined"
-                            fullWidth                      
+                            fullWidth
+                            select
                             type="text"
+                            defaultValue={data?.medicUserId}
                             {...register('medicUserId')}
                             helperText={errors?.medicUserId?.message?.toString()}
                             FormHelperTextProps={{
                             className:"helperTextColor"
-                        }}
+                            }}
                         >
+                            <MenuItem value={""}>
+                                None
+                            </MenuItem>
+                           {users?.map((user: any, index:number) =>(
+                            <MenuItem value={user?.value} key={index}>
+                                {user?.label}
+                            </MenuItem>
+                           ))} 
                         </TextField>
-                    </Grid>
+                                            </Grid>
                     
                     <Grid item sm={6}>
                         <FormLabel >
@@ -301,12 +334,16 @@ import { Icon } from "@iconify/react";
                         
                     </Grid>
                     <Grid item sm={12} sx={{mt:2}}>
-                    <FormControlLabel control={<Checkbox defaultChecked sx={{
+                    <FormControlLabel 
+                     onClick={handleCheckboxClick}
+                    control={<Checkbox defaultChecked={isCheckboxChecked} sx={{
                         color: "hsl(0, 100%, 27%)",
                         '&.Mui-checked': {
                         color: "hsl(0, 100%, 27%)",
                         },
-                    }} />} label={<Typography sx={{fontSize:"1rem"}} variant="subtitle2">I hereby confirm that I have recieved the patient from the Ambulance</Typography>} />
+                    }} />} 
+                    label={<Typography sx={{fontSize:"1rem"}}  variant="subtitle2">I hereby confirm that I have recieved the patient from the Ambulance</Typography>}
+                      />
 
                     </Grid>
 
@@ -317,6 +354,7 @@ import { Icon } from "@iconify/react";
                 size="large"
                 type="submit"
                 variant="contained"
+                disabled={!isCheckboxChecked}
                 >
                 Submit
             </LoadingButton>

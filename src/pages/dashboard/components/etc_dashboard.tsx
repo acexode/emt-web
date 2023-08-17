@@ -17,7 +17,7 @@ const ETCDasboard: FC = () => {
         </Grid>
         
         <Grid item xs={12} md={12} sx={{mb:-2, mt:4}}>
-        <Typography variant="h4">ETC - Gwarinpa General Hospital Dashboard</Typography>
+        <Typography variant="h4">ETC - {userProfile?.organisationName}</Typography>
         </Grid>
         {ambData?.map((dt, index) => (
           <Grid item xs={12} md={6} key={index}>

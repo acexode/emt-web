@@ -21,6 +21,8 @@ import {
   import useSettings from "../../hooks/useSettings";
 import { RemoveCircleOutline } from "@mui/icons-material";
 import { medicalInterventions } from "../../db";
+import { useLocation } from "react-router-dom";
+import { formatDate2 } from "../../utility";
   
   const ViewPatient: FC = () => {
     const { themeStretch } = useSettings();
@@ -64,39 +66,40 @@ import { medicalInterventions } from "../../db";
     
       updateTotalAmount();
     }, [fields, setValue]);
-    // const [loading,setLoading] = useState(true)
-    // const {
-    //     state: { row},
-    //   } = useLocation();
+    const [loading,setLoading] = useState(false)
+    const {
+        state: { row},
+      } = useLocation();
+      // console.log({row});
         useEffect(()=>{
-          const objectData = {
-            incidentCode:"A89748",
-            incidentType: "Road Accident",
-            ambulance_name:"R & R Ambulance Service",
-           patientName:"Jane Peter",
-           age: "34 years",
-           gender:"Female",
-           address:"No. 3, Ken Street, Life Camp",
-           nhia:"A3786236",
-           arrivalTime: "10:02pm 24th July, 2023",
-           mainComplaints:"Chest Pain",
-           primary_survey:"N/A",
-           physical_exam_findings:"Normal",
-           triage_category: "Urgent",
-           time:"9:47pm",
-           pulse:"88",
-           blood_pressure:"147/91 ",
-           resp:"32 b/m ",
-           glucose:"10.9 mmol/L",
-           so02:"76%",
-           mental_status:"Unresponsive",
-           immediate_treatment_time:"9:48pm ",
-           medical_intervention:"Cardiopulmonary resuscitation",
-           dose:"Nil",
-           iv:"No"
-          }
-            SetContent(objectData)
-        },[])
+          // const objectData = {
+          //   incidentCode:"A89748",
+          //   incidentType: "Road Accident",
+          //   ambulance_name:"R & R Ambulance Service",
+          //  patientName:"Jane Peter",
+          //  age: "34 years",
+          //  gender:"Female",
+          //  address:"No. 3, Ken Street, Life Camp",
+          //  nhia:"A3786236",
+          //  arrivalTime: "10:02pm 24th July, 2023",
+          //  mainComplaints:"Chest Pain",
+          //  primary_survey:"N/A",
+          //  physical_exam_findings:"Normal",
+          //  triage_category: "Urgent",
+          //  time:"9:47pm",
+          //  pulse:"88",
+          //  blood_pressure:"147/91 ",
+          //  resp:"32 b/m ",
+          //  glucose:"10.9 mmol/L",
+          //  so02:"76%",
+          //  mental_status:"Unresponsive",
+          //  immediate_treatment_time:"9:48pm ",
+          //  medical_intervention:"Cardiopulmonary resuscitation",
+          //  dose:"Nil",
+          //  iv:"No"
+          // }
+            SetContent(row)
+        },[row])
   
         const onSubmit = async(data:any) =>{
           console.log({data})
@@ -236,20 +239,40 @@ import { medicalInterventions } from "../../db";
                     <Grid item sm={6}>
                     <ListItem>
                       <ListItemText primary={<Typography>
-                      Patient Name
+                      First Name
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.patientName || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.firstName || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
                     <Grid item sm={6}>
                     <ListItem>
                       <ListItemText primary={<Typography>
-                      Age
+                      Middle Name
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.age || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.middleName || "Not Available"}</Typography>
+                      } />
+                    </ListItem>
+                    </Grid>
+                    <Grid item sm={6}>
+                    <ListItem>
+                      <ListItemText primary={<Typography>
+                      Last Name
+                      </Typography>} 
+                      secondary={
+                        <Typography sx={{color:"#7b939c"}} >{content?.lastName || "Not Available"}</Typography>
+                      } />
+                    </ListItem>
+                    </Grid>
+                    <Grid item sm={6}>
+                    <ListItem>
+                      <ListItemText primary={<Typography>
+                      Date of birth
+                      </Typography>} 
+                      secondary={
+                        <Typography sx={{color:"#7b939c"}} >{formatDate2(content?.doB) || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -259,7 +282,7 @@ import { medicalInterventions } from "../../db";
                       Gender
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.gender || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.sex === 0 ? "Female" : "Male" || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -544,7 +567,7 @@ import { medicalInterventions } from "../../db";
       <Button type="button" onClick={() => append({ medicalIntervention: '', serviceCode: '', unitCost: '', quantity: '' })}>
         Add Item
       </Button>
-      <Grid item xs={12} sm={12} mt={4} lg={12}>
+      <Grid item mb={4} xs={12} sm={12} mt={4} lg={12}>
         <TextField
           value={parseFloat(watch('totalAmount', 0)).toFixed(2)}
           disabled
@@ -552,9 +575,7 @@ import { medicalInterventions } from "../../db";
         />
 
       </Grid>
-               </form>
-           </Card>
-          <Button
+      <Button
               size="medium"
               type="submit"
               variant="contained"
@@ -568,11 +589,13 @@ import { medicalInterventions } from "../../db";
               size="medium"
               type="submit"
               variant="contained"
-        
-        
+      
           >
               Discharge Patient
           </Button>
+               </form>
+           </Card>
+         
               </Container>
             </Page>
     );

@@ -14,47 +14,96 @@ import {
     Button
   } from "@mui/material";
   import { FC, useEffect, useState } from "react";
-  import {  useLocation } from "react-router-dom";
+  import {  useLocation, useNavigate } from "react-router-dom";
   
   import HeaderBreadcrumbs from "../../components/HeaderBreadcrumbs";
   import Page from "../../components/Page";
   import { PATH_DASHBOARD } from "../../routes/paths";
   import useSettings from "../../hooks/useSettings";
-import { formatter } from "../../utility";
+import { formatter, numberToWords } from "../../utility";
+import { IClaims } from "../../types/claims";
+import axiosInstance from "../../services/api_service";
+import { MIconButton } from "../../components/@material-extend";
+import { useSnackbar } from "notistack";
+import closeFill from "@iconify/icons-eva/close-fill";
+import { Icon } from "@iconify/react";
+import AlertDialog from "./components/confirmDialog";
   
   const ViewAmbulance: FC = () => {
     const { themeStretch } = useSettings();
-    const [content, SetContent] = useState<any>(null);
-    // const [loading,setLoading] = useState(true)
+    const [content, SetContent] = useState<IClaims>();
+    const [loading,setLoading] = useState(false)
+    const [open, setOpen] = useState(false);
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+    const [confirmationPayload, setConfirmationPayload] = useState<any>(null);
+    const [title,setTitle] = useState("")
+    let navigate = useNavigate();
+
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+    const handleClose = () => {
+      setOpen(false);
+    };
     const {
         state: { row},
       } = useLocation();
         useEffect(()=>{
-          const objectData = {
-            providerId:"A890823",
-            nhia: "KG73276",
-            request:"1521",
-            provider_name:"R & R Ambulance Service",
-            listOfServices :[
-              {
-                incidentDate:"22 July, 2023",
-                incidentCode:"A782436",
-                patientCode:"D632763",
-                patientName:"John Peter",
-                nhia:"G897237",
-                serviceType:"ALS",
-                distance:"75k",
-                rate:"800"
-              },
-            ],
-            price:"60000",
-            amountInWords:"Sixty Thousand Naira Only"
-          }
-            SetContent(objectData)
+            SetContent(row)
         },[row])
   
         const handlePrint = () => {
           window.print();
+        }
+        const onHandleSubmit = async (status:any) => {
+          let newVal = {
+            "id": row?.id,
+            "title": row?.title,
+            "incidentId": row?.incidentId,
+            "runSheetId": row?.runSheetId,
+            "incidentFeeId": row?.incidentFeeId,
+            "ambulanceId": row?.ambulanceId,
+            "hospitalId": row?.hospitalId,
+            "status": status,
+            "totalPrice": row?.totalPrice
+          }
+          let t = status === "Approved" ? "Approving Claim" : "Rejecting Claim"
+              handleClickOpen();
+              setTitle(t)
+          setConfirmationPayload(newVal);
+            
+        };
+        const handleClaims = async() =>{
+          setLoading(true)
+          try {
+            let res;
+            res = await axiosInstance.put(
+              `Claims/update`,
+              confirmationPayload
+            );
+            navigate(PATH_DASHBOARD.claims.root);
+            enqueueSnackbar(res?.data?.message, {
+              variant: "success",
+              action: (key) => (
+                <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+                  <Icon icon={closeFill} />
+                </MIconButton>
+              ),
+            });
+          } catch (error) {
+            console.log(error);
+            enqueueSnackbar("Error updating claim!", {
+                variant: "error",
+                action: (key) => (
+                  <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+                    <Icon icon={closeFill} />
+                  </MIconButton>
+                ),
+              });
+            console.error("An unexpected error happened occurred:", error);
+          } finally{
+            setLoading(false)
+          }
         }
     return (
       <Page title={`View Ambulance Claim | NEMSAS`}>
@@ -94,7 +143,7 @@ import { formatter } from "../../utility";
                         Provider ID
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.providerId || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.incidentViewModel?.ambulanceViewModel?.code || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -104,11 +153,21 @@ import { formatter } from "../../utility";
                         Provider NHIA/SHIA ID
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.nhia || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.incidentViewModel?.ambulanceViewModel?.ambulanceId || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
                     <Grid item sm={6}>
+                    <ListItem>
+                      <ListItemText primary={<Typography>
+                        location
+                      </Typography>} 
+                      secondary={
+                        <Typography sx={{color:"#7b939c"}} >{content?.incidentViewModel?.ambulanceViewModel?.location || "Not Available"}</Typography>
+                      } />
+                    </ListItem>
+                    </Grid>
+                    {/* <Grid item sm={6}>
                     <ListItem>
                       <ListItemText primary={<Typography>
                        Request No
@@ -117,14 +176,14 @@ import { formatter } from "../../utility";
                         <Typography sx={{color:"#7b939c"}} >{content?.request || "Not Available"}</Typography>
                       } />
                     </ListItem>
-                    </Grid>
+                    </Grid> */}
                     <Grid item sm={6}>
                     <ListItem>
                       <ListItemText primary={<Typography>
                        Provider Name
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.provider_name || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.incidentViewModel?.ambulanceViewModel?.name || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -148,7 +207,7 @@ import { formatter } from "../../utility";
                     </TableRow>
                     </TableHead>
                     <TableBody>
-                      {content?.listOfServices?.map((services: any,index:any) =>(
+                      {/* {content?.listOfServices?.map((services: any,index:any) =>(
                         <TableRow
                         key={index}
                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -165,7 +224,7 @@ import { formatter } from "../../utility";
                         <TableCell align="right">{services?.distance}</TableCell>
                         <TableCell align="right">{services?.rate} Per Km</TableCell>
                         </TableRow>
-                      ))}
+                      ))} */}
                         
                         <TableRow
                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -180,7 +239,7 @@ import { formatter } from "../../utility";
                         <TableCell align="right"></TableCell>
                         <TableCell align="right"></TableCell>
                         <TableCell align="right">Total Cost</TableCell>
-                        <TableCell align="right">{formatter.format(content?.price)}</TableCell>
+                        <TableCell align="right">{formatter.format(content?.totalPrice ?? 0)}</TableCell>
                     </TableRow>
                 </TableBody>
                     </Table>
@@ -190,7 +249,7 @@ import { formatter } from "../../utility";
                        Total Amount in Words
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.amountInWords || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{numberToWords(content?.totalPrice ?? 0)+ " Naira only" || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -309,7 +368,7 @@ import { formatter } from "../../utility";
                 
                     </Grid>
             </Card>
-          <Card sx={{ p: 3, pb: 4, mb: 2 }}>
+          {/* <Card sx={{ p: 3, pb: 4, mb: 2 }}>
                 <Grid container spacing={2}>
                 <Grid item sm={12}>
                 <ListItem>
@@ -323,14 +382,14 @@ import { formatter } from "../../utility";
                 </Grid>
             
                 </Grid>
-            </Card>
+            </Card> */}
             <Button
                 size="medium"
                 type="submit"
                 variant="contained"
                 className="btnCustom hidebtn"
                 sx={{mr:2}}
-          
+                onClick={() => onHandleSubmit("Approved")}
             >
                 Approve
             </Button>
@@ -339,10 +398,13 @@ import { formatter } from "../../utility";
                 type="submit"
                 variant="contained"
                 className="hidebtn"
+                onClick={() => onHandleSubmit("Rejected")}
             >
                 Reject
             </Button>
         </Container>
+        <AlertDialog open={open} handleClose={handleClose} loading={loading} handleSubmit={handleClaims} title={title} />
+
       </Page>
     );
   };

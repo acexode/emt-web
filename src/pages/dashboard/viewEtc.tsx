@@ -48,7 +48,6 @@ import { Icon } from "@iconify/react";
     const {
         state: { row},
       } = useLocation();
-      console.log({row})
         useEffect(()=>{
           // const objectData = {
           //   facility_name:"Gwarimpa General Hospital",

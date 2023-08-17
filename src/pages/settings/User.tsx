@@ -9,8 +9,6 @@ const TABLE_HEAD = [
   { id: "middleName", label: "Middle Name", alignRight: false },
   { id: "email", label: "Email", alignRight: false },
   { id: "userType", label: "User Type", alignRight: false },
-  { id: "state", label: "State", alignRight: false },
-  { id: "city", label: "City", alignRight: false },
   { id: "phone", label: "Phone", alignRight: false },
   { id: "" },
 ];

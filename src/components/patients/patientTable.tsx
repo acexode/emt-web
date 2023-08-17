@@ -29,6 +29,7 @@ import TableListHead from "../table/tableListHead";
 import ListToolbar from "../table/tableListToolbar";
 import MoreMenu from "../table/TableMoreMenu";
 import { AddEditPatient } from "./components/add-edit-patient";
+import { calculateAge, formatDate2 } from "../../utility";
 // import { AddEditUser } from "./components/add-edit-user";
 // import axiosInstance from "../../services/api_service";
 // ----------------------------------------------------------------------
@@ -245,6 +246,15 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                             <TableCell align="left">
                             <Skeleton variant="rectangular" width={100} height={30} /> 
                               </TableCell>
+                            <TableCell align="left">
+                            <Skeleton variant="rectangular" width={100} height={30} /> 
+                              </TableCell>
+                            <TableCell align="left">
+                            <Skeleton variant="rectangular" width={100} height={30} /> 
+                              </TableCell>
+                            <TableCell align="left">
+                            <Skeleton variant="rectangular" width={100} height={30} /> 
+                              </TableCell>
 
                             <TableCell align="right"></TableCell>
                           </TableRow>
@@ -295,21 +305,45 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                             </TableCell>
                             <TableCell
                               align="left"
+                             
+                            >
+                               {row?.middleName || "Nil"
+                              }
+                            </TableCell>
+                            <TableCell
+                              align="left"
+                             
+                            >
+                               {formatDate2(row?.doB) || "Nil"
+                              }
+                            </TableCell>
+                            <TableCell
+                              align="left"
                               
                             >
-                               {row?.age || "Nil"
+                               {calculateAge(row?.doB)+ " year(s)" || "Nil"
                               }
                             </TableCell>
                   
                            
                             <TableCell align="left">
                           
-                              { row?.type || "Nil"}
+                              { row?.phoneNumber || "Nil"}
                              
                               </TableCell>
                             <TableCell align="left">
                           
-                           {row?.status || "Nil"}
+                           {row?.nhia || "Nil"}
+                             
+                              </TableCell>
+                            <TableCell align="left">
+                          
+                           {row?.sex === 0 ? "Female" : "Male" || "Nil"}
+                             
+                              </TableCell>
+                            <TableCell align="left">
+                          
+                           {row?.address || "Nil"}
                              
                               </TableCell>
 
