@@ -3,7 +3,7 @@ import axiosInstance from "../../services/api_service";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import {Box} from '@mui/material';
 
 const CustomTable = lazy(() => import("../../components/serviceproviders/serviceTable"))
 const CustomTableETC = lazy(() => import("../../components/serviceproviders/serviceTableETC"))

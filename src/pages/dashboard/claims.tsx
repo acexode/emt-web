@@ -4,7 +4,7 @@ import axiosInstance from "../../services/api_service";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import {Box} from '@mui/material';
 // import tokenService from "../../services/tokenService";
 import { userType } from "../../constants";
 import { useAuthUserContext } from "../../context/authUser.context";
