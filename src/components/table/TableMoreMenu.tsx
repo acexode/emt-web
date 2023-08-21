@@ -20,9 +20,10 @@ interface IMoreMenu {
   type?:string;
   url?:string
   param?:string
+  options?:any
 };
 
- const MoreMenu:FC<IMoreMenu> = ({ handleUpdate,row,type, param="id" ,fetchAllData,url}) =>{
+ const MoreMenu:FC<IMoreMenu> = ({ handleUpdate,row,type, param="id" ,fetchAllData,url,options}) =>{
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [modal, setModal] = useState(false);
@@ -35,7 +36,7 @@ interface IMoreMenu {
     if(type === "ambulance"){
       navigate(PATH_DASHBOARD.claims.viewAmbulance,{state:{row}})
     }else if(type === "patient"){
-      navigate(PATH_DASHBOARD.patients.viewPatient,{state:{row}})
+      navigate(PATH_DASHBOARD.patients.viewPatient,{state:{row,options}})
     }
     else if (type === "incident"){
       navigate(PATH_DASHBOARD.incidents.viewIncident,{state:{row}})

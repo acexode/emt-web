@@ -1,6 +1,6 @@
 import { filter } from "lodash";
 // import { Icon } from "@iconify/react";
-import { useState, SetStateAction, FC } from "react";
+import { useState, SetStateAction, FC, useEffect } from "react";
 // import plusFill from "@iconify/icons-eva/plus-fill";
 // material
 import {
@@ -30,6 +30,7 @@ import ListToolbar from "../table/tableListToolbar";
 import MoreMenu from "../table/TableMoreMenu";
 import { AddEditPatient } from "./components/add-edit-patient";
 import { calculateAge, formatDate2 } from "../../utility";
+import axiosInstance from "../../services/api_service";
 // import { AddEditUser } from "./components/add-edit-user";
 // import axiosInstance from "../../services/api_service";
 // ----------------------------------------------------------------------
@@ -101,6 +102,23 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
   const [modal, setModal] = useState(false);
   const [edit, setEdit] = useState(false);
   const [formData, setFormData] = useState(null);
+  const [options,setOptions] = useState([])
+
+  useEffect(()=>{
+    axiosInstance.get("ServicesAndFees/get").then(res =>{
+      const obj = res?.data?.data?.map((dt: { code: any; description: any; price: any; id: any; })=>{
+        return {
+            code :dt?.code,
+            intervention:dt?.description,
+            price: dt?.price,
+            id:dt?.id
+          }
+      })
+      setOptions(obj)
+    }).catch(error =>{
+      console.log(error);
+    })
+},[])
 
   const toggle = () => {
     setModal(!modal);
@@ -348,7 +366,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                               </TableCell>
 
                             <TableCell align="right">
-                                <MoreMenu handleUpdate={handleUpdate} row={row} fetchAllData={fetchAllUsers} type="patient" />
+                                <MoreMenu options={options} handleUpdate={handleUpdate} row={row} fetchAllData={fetchAllUsers} type="patient" />
                             </TableCell>
                           </TableRow>
                         );

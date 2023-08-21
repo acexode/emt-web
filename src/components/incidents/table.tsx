@@ -305,7 +305,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                               align="left"
                               
                             >
-                               {row?.ambulanceViewModel?.name
+                               {row?.ambulanceViewModel?.name || "Nil"
                               }
                             </TableCell>
                             <TableCell

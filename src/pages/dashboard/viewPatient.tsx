@@ -10,7 +10,7 @@ import {
     Box,
     Button,
     TextField,
-    MenuItem
+    Autocomplete
   } from "@mui/material";
   import { FC, useEffect, useState } from "react";
   import {useForm, useFieldArray} from "react-hook-form"
@@ -20,9 +20,15 @@ import {
   import { PATH_DASHBOARD } from "../../routes/paths";
   import useSettings from "../../hooks/useSettings";
 import { RemoveCircleOutline } from "@mui/icons-material";
-import { medicalInterventions } from "../../db";
-import { useLocation } from "react-router-dom";
 import { formatDate2 } from "../../utility";
+import axiosInstance from "../../services/api_service";
+import {  useSnackbar } from "notistack";
+import { MIconButton } from "../../components/@material-extend";
+import closeFill from "@iconify/icons-eva/close-fill";
+import { LoadingButton } from "@mui/lab";
+
+import { Icon } from "@iconify/react";
+import { useLocation } from "react-router-dom";
   
   const ViewPatient: FC = () => {
     const { themeStretch } = useSettings();
@@ -33,7 +39,6 @@ import { formatDate2 } from "../../utility";
       formState: { errors },
       setValue,
       control,
-      watch
     } = useForm({
       mode: "onTouched",
       criteriaMode: "firstError",
@@ -42,12 +47,14 @@ import { formatDate2 } from "../../utility";
       shouldUseNativeValidation: false,
       delayError: undefined,
       defaultValues: {
-        items: [{ dateAndTime:'', medicalIntervention: '', serviceCode: '',quantity: '', dose:'',amount:'', remark:'' }],
+        incidentDrugs: [{ drugId:'', drugName: '', serviceCode: '',quantity: '', dose:'',price:'', remark:'',incident_Id:'',ambulanceId:'',emergencyTreatmentCenterId:'',patientId:'' }],
       },
     });
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
     const { fields, append, remove } = useFieldArray({
       control,
-      name: 'items',
+      name: 'incidentDrugs',
     });
     const calculateAmount = (unitCost: number, quantity:any) => {
       if (unitCost && quantity) {
@@ -55,111 +62,82 @@ import { formatDate2 } from "../../utility";
       }
       return '';
     };
-    useEffect(() => {
-      const updateTotalAmount = () => {
-        let totalAmount = fields?.reduce(
-          (sum, field) => sum + parseFloat(field.amount || '0'),
-          0
-        );
-        setValue('totalAmount', totalAmount.toFixed(2));
-      };
+    // useEffect(() => {
+    //   const updateTotalAmount = () => {
+    //     let totalAmount = fields?.reduce(
+    //       (sum, field) => sum + parseFloat(field.amount || '0'),
+    //       0
+    //     );
+    //     setValue('totalAmount', totalAmount.toFixed(2));
+    //   };
     
-      updateTotalAmount();
-    }, [fields, setValue]);
+    //   updateTotalAmount();
+    // }, [fields, setValue]);
     const [loading,setLoading] = useState(false)
     const {
-        state: { row},
+        state: { row,options},
       } = useLocation();
-      // console.log({row});
-        useEffect(()=>{
-          // const objectData = {
-          //   incidentCode:"A89748",
-          //   incidentType: "Road Accident",
-          //   ambulance_name:"R & R Ambulance Service",
-          //  patientName:"Jane Peter",
-          //  age: "34 years",
-          //  gender:"Female",
-          //  address:"No. 3, Ken Street, Life Camp",
-          //  nhia:"A3786236",
-          //  arrivalTime: "10:02pm 24th July, 2023",
-          //  mainComplaints:"Chest Pain",
-          //  primary_survey:"N/A",
-          //  physical_exam_findings:"Normal",
-          //  triage_category: "Urgent",
-          //  time:"9:47pm",
-          //  pulse:"88",
-          //  blood_pressure:"147/91 ",
-          //  resp:"32 b/m ",
-          //  glucose:"10.9 mmol/L",
-          //  so02:"76%",
-          //  mental_status:"Unresponsive",
-          //  immediate_treatment_time:"9:48pm ",
-          //  medical_intervention:"Cardiopulmonary resuscitation",
-          //  dose:"Nil",
-          //  iv:"No"
-          // }
+
+             useEffect(()=>{
+      
             SetContent(row)
         },[row])
   
         const onSubmit = async(data:any) =>{
-          console.log({data})
-          // let newData = {
-          //     ...data
-          //   };
-          //   delete newData?.id
-          //   setLoading(true)
-          //   let text = edit ? "Claim Updated" : "Claim Added";
-          //   try {
-          //     let res;
-          //     if (edit) {
-          //       res = await axiosInstance.put(
-          //         `/users/${formData?.id}/update`,
-          //         newData
-          //       );
-          //     } else {
-          //       res = await axiosInstance.post(`/users/create`, newData);
-          //     }
-          //     enqueueSnackbar(`${text}`, {
-          //         variant: "success",
-          //         action: (key) => (
-          //           <MIconButton size="small" onClick={() => closeSnackbar(key)}>
-          //             <Icon icon={closeFill} />
-          //           </MIconButton>
-          //         ),
-          //       });
-          //     reset();
-          //     handleToggle();
-          //     fetchAllData()
-          //   } catch (error: any) {
-          //     enqueueSnackbar("Error!", {
-          //         variant: "error",
-          //         action: (key) => (
-          //           <MIconButton size="small" onClick={() => closeSnackbar(key)}>
-          //             <Icon icon={closeFill} />
-          //           </MIconButton>
-          //         ),
-          //       });
-          //   } finally{
-          //     setLoading(false)
-          //   }
+          // console.log({data})
+          let newData = {
+              ...data
+            };
+            delete newData?.totalAmount
+            setLoading(true)
+            let text ="Medical intervention Added";
+            try {
+             let res = await axiosInstance.post(`Patients/addPatientDrugSheet`, newData);
+             console.log(res);
+              enqueueSnackbar(`${text}`, {
+                  variant: "success",
+                  action: (key) => (
+                    <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+                      <Icon icon={closeFill} />
+                    </MIconButton>
+                  ),
+                });
+              // fetchAllData()
+            } catch (error: any) {
+              enqueueSnackbar("Error!", {
+                  variant: "error",
+                  action: (key) => (
+                    <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+                      <Icon icon={closeFill} />
+                    </MIconButton>
+                  ),
+                });
+            } finally{
+              setLoading(false)
+            }
       }
         const handlePrint = () => {
           window.print();
         }
-        const handleMedicalInterventionChange = (index, intervention) => {
-          // Find the selected intervention in the medicalInterventions array
-          const selectedIntervention = medicalInterventions.find(
-            (int) => int.intervention === intervention
-          );
-        
-          // Update the corresponding fields in the form data
-          setValue(`items[${index}].serviceCode`, selectedIntervention?.code || '');
-          setValue(
-            `items[${index}].unitCost`,
-            selectedIntervention?.price?.toString() || ''
-          );
+      
+        const handleAutocompleteChange = (index:number, intervention:string) => {
+         const selectedIntervention = options.find(
+          (int:any) => int.intervention === intervention
+        );
+        // Update the corresponding fields in the form data
+        setValue(`incidentDrugs[${index}].drugId`, selectedIntervention?.id || '');
+        setValue(`incidentDrugs[${index}].drugName`, selectedIntervention?.intervention || '');
+        setValue(`incidentDrugs[${index}].incident_Id`, row?.incident_Id || '');
+        setValue(`incidentDrugs[${index}].ambulanceId`, row?.ambulance_Id || '');
+        setValue(`incidentDrugs[${index}].emergencyTreatmentCenterId`, row?.etC_Id || '');
+        setValue(`incidentDrugs[${index}].patientId`, row?.id || '');
+        setValue(`incidentDrugs[${index}].serviceCode`, selectedIntervention?.code || '');
+        setValue(
+          `incidentDrugs[${index}].price`,
+          selectedIntervention?.price?.toString() || ''
+        );
         };
-    return (
+          return (
       <Page title={`View Patient Record | EMT`}>
         <Container maxWidth={themeStretch ? false : "lg"}>
           <HeaderBreadcrumbs
@@ -477,7 +455,7 @@ import { formatDate2 } from "../../utility";
             <Card sx={{ p: 3, pb: 10, mb: 2 }}>
               <Box sx={{mb:2}}>ETC Treatment</Box>
               <form onSubmit={handleSubmit(onSubmit)}>
-        
+   
               {fields.map((field, index) => (
                 <Grid key={field.id} mb={2} container spacing={2}>
               <Grid item sm={12}>
@@ -486,26 +464,22 @@ import { formatDate2 } from "../../utility";
               <Grid item xs={12} sm={12} lg={12}>
               <label>Select Medical Intervention</label>
               <br />
-                <TextField
-                  {...register(`items[${index}].medicalIntervention`, { required: 'Medical Intervention is required' })}
-                  error={!!errors.items?.[index]?.medicalIntervention}
-                  select
-                  helperText={errors.items?.[index]?.medicalIntervention?.message}
-                  onChange={(e) => handleMedicalInterventionChange(index, e.target.value)}
-
-                >
-                   <MenuItem  value="">Select Medical Intervention</MenuItem>
-                   {medicalInterventions.map((intervention,index) =>(
-                      <MenuItem value={intervention.intervention}>{intervention.intervention}</MenuItem>
-                   ))}
-                 </TextField>
+               
+                  <Autocomplete
+              options={options}
+              getOptionLabel={(option) => option.intervention}
+              onChange={(e) => handleAutocompleteChange(index,e.target.textContent)}
+             
+              renderInput={(params) => <TextField {...params}  />}
+            />
               </Grid>
               <Grid item xs={6} sm={2} lg={2}>
               <label>Service Code</label>
               <TextField
-                {...register(`items[${index}].serviceCode`, { required: 'Service Code is required' })}
-                error={!!errors.items?.[index]?.serviceCode}
-                helperText={errors.items?.[index]?.serviceCode?.message}
+              disabled
+                {...register(`incidentDrugs[${index}].serviceCode`, { required: 'Service Code is required' })}
+                error={!!errors.incidentDrugs?.[index]?.serviceCode}
+                helperText={errors.incidentDrugs?.[index]?.serviceCode?.message}
               />
               </Grid>
              
@@ -513,34 +487,35 @@ import { formatDate2 } from "../../utility";
               <label>Unit Cost</label>
               <TextField
                 type="number"
+                disabled
                 inputProps={{ step: '0.01' }}
-                {...register(`items[${index}].unitCost`, { required: 'Unit Cost is required', pattern: /^\d+(\.\d{1,2})?$/ })}
-                error={!!errors.items?.[index]?.unitCost}
-                helperText={errors.items?.[index]?.unitCost?.message}
+                {...register(`incidentDrugs[${index}].price`, { required: 'Unit Cost is required', pattern: /^\d+(\.\d{1,2})?$/ })}
+                error={!!errors.incidentDrugs?.[index]?.price}
+                helperText={errors.incidentDrugs?.[index]?.price?.message}
               />
               </Grid>
               <Grid item xs={6} sm={2} lg={2}>
               <label>Dose</label>
               <TextField
               type="text"
-                {...register(`items[${index}].dose`, { required: 'Dose is required' })}
-                error={!!errors.items?.[index]?.dose}
-                helperText={errors.items?.[index]?.dose?.message}
+                {...register(`incidentDrugs[${index}].dose`, { required: 'Dose is required' })}
+                error={!!errors.incidentDrugs?.[index]?.dose}
+                helperText={errors.incidentDrugs?.[index]?.dose?.message}
               />
               </Grid>
               <Grid item xs={6} sm={2} lg={2}>
               <label>Quantity</label>
               <TextField
                 type="number"
-                {...register(`items[${index}].quantity`, { required: 'Quantity is required', pattern: /^\d+$/ })}
-                error={!!errors.items?.[index]?.quantity}
-                helperText={errors.items?.[index]?.quantity?.message}
+                {...register(`incidentDrugs[${index}].quantity`, { required: 'Quantity is required', pattern: /^\d+$/ })}
+                error={!!errors.incidentDrugs?.[index]?.quantity}
+                helperText={errors.incidentDrugs?.[index]?.quantity?.message}
               />
               </Grid>
               <Grid item xs={6} sm={2} lg={2}>
               <label>Amount</label>
               <TextField
-                value={calculateAmount(field.unitCost, field.quantity)}
+                value={calculateAmount(field.price, field.quantity)}
                 disabled
               />
               </Grid>
@@ -549,9 +524,9 @@ import { formatDate2 } from "../../utility";
               <TextField
               type="text"
               multiline
-                {...register(`items[${index}].remark`)}
-                // error={!!errors.items?.[index]?.remark}
-                // helperText={errors.items?.[index]?.remark?.message}
+                {...register(`incidentDrugs[${index}].remark`)}
+                // error={!!errors.incidentDrugs?.[index]?.remark}
+                // helperText={errors.incidentDrugs?.[index]?.remark?.message}
               />
               </Grid>
               <Button size="small" sx={{background:"grey", height:"40px", mt:6, '&:hover': {
@@ -564,35 +539,38 @@ import { formatDate2 } from "../../utility";
               </Grid>
           ))}
 
-      <Button type="button" onClick={() => append({ medicalIntervention: '', serviceCode: '', unitCost: '', quantity: '' })}>
-        Add Item
+      <Button type="button" onClick={() => append({ drugId:'', drugName: '', serviceCode: '',quantity: '', dose:'',price:'', remark:'',incident_Id:'',ambulanceId:'',emergencyTreatmentCenterId:'',patientId:'' })}>
+        Add More
       </Button>
-      <Grid item mb={4} xs={12} sm={12} mt={4} lg={12}>
+      {/* <Grid item mb={4} xs={12} sm={12} mt={4} lg={12}>
         <TextField
           value={parseFloat(watch('totalAmount', 0)).toFixed(2)}
           disabled
           label="Total Amount"
         />
 
-      </Grid>
-      <Button
+      </Grid> */}
+     <Grid mt={5}>
+     <LoadingButton
               size="medium"
               type="submit"
               variant="contained"
               className="btnCustom"
               sx={{mr:2}}
+              loading={loading}
         
           >
               Add New Treatment
-          </Button>
-          <Button
+          </LoadingButton>
+          {/* <Button
               size="medium"
               type="submit"
               variant="contained"
       
           >
               Discharge Patient
-          </Button>
+          </Button> */}
+     </Grid>
                </form>
            </Card>
          
