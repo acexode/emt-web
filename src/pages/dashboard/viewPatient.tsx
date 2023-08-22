@@ -77,7 +77,6 @@ import { useLocation } from "react-router-dom";
     const {
         state: { row,options},
       } = useLocation();
-
              useEffect(()=>{
       
             SetContent(row)

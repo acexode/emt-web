@@ -64,6 +64,7 @@ export interface IIncident {
     ambulanceStart: string
     ambulanceStop: string
     dateStop: string
+    eventStatusType: string
     incidentStatusType: string
     patientViewModel: PatientViewModel
     emergencyTreatmentCenterViewModel: EmergencyTreatmentCenterViewModel
