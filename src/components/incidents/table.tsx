@@ -234,6 +234,16 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                             </TableCell>
                             <TableCell
                               align="left"
+                            >
+                            <Skeleton variant="rectangular" width={100} height={30} /> 
+                            </TableCell>
+                            <TableCell
+                              align="left"
+                            >
+                            <Skeleton variant="rectangular" width={100} height={30} /> 
+                            </TableCell>
+                            <TableCell
+                              align="left"
                               
                             >
                              <Skeleton variant="rectangular" width={100} height={30} /> 
@@ -288,7 +298,15 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                             </TableCell>
                             <TableCell
                               align="left"
-                             
+                             width={150}
+                            >
+                              { row?.patientViewModel?.firstName ?`${row?.patientViewModel?.firstName } ${row?.patientViewModel?.lastName}` : "Nil"
+                              }
+                           
+                            </TableCell>
+                            <TableCell
+                              align="left"
+                              width={150}
                             >
                               { row?.incidentCategory 
                               }
@@ -315,7 +333,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                                {row?.incidentDate || "Nil"
                               }
                             </TableCell>
-                            <TableCell align="left">
+                            <TableCell align="left"  width={150}>
                           
                               { row?.emergencyTreatmentCenterViewModel?.name || "Nil"}
                              
@@ -323,6 +341,12 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                             <TableCell align="left">
                           
                               { row?.incidentStatusType || "Nil"}
+                             
+                              </TableCell>
+            
+                            <TableCell align="left"  width={150}>
+                          
+                              { row?.eventStatusType || "Nil"}
                              
                               </TableCell>
             

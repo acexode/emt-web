@@ -6,12 +6,14 @@ const CustomTable = lazy(() => import("../../components/incidents/table"))
 
 const TABLE_HEAD = [
   { id: "s/n", label: "S/N", alignRight: false },
+  { id: "patientViewModel.firstName", label: "Patient", alignRight: false },
   { id: "incidentCategory", label: "Category", alignRight: false },
   { id: "incidentLocation", label: "Location", alignRight: false },
   { id: "name", label: "Ambulance", alignRight: false },
   { id: "incidentDate", label: "Date", alignRight: false },
   { id: "emergencyTreatmentCenterViewModel", label: "Treatment Center", alignRight: false },
-  { id: "incidentStatusType", label: "Status", alignRight: false },
+  { id: "incidentStatusType", label: "Incident Status", alignRight: false },
+  { id: "eventStatusType", label: "Event Status", alignRight: false },
   { id: "" },
 ];
 
