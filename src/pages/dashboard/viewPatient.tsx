@@ -29,7 +29,36 @@ import { LoadingButton } from "@mui/lab";
 
 import { Icon } from "@iconify/react";
 import { useLocation } from "react-router-dom";
+import CustomUsableTable from "../../components/DataGrid";
+import CustomUsableTable2 from "../../components/DataTable";
   
+const TABLE_HEAD = [
+  { id: "sn", label: "S/N", alignRight: false },
+  { id: "drugName", label: "Drug Name", alignRight: false },
+  { id: "quantity", label: "Quantity", alignRight: false },
+  { id: "dose", label: "Dose", alignRight: false },
+  { id: "price", label: "Price", alignRight: false },
+  { id: "dateAdded", label: "Date Added", alignRight: false },
+  { id: "" },
+];
+const TABLE_HEAD2 = [
+  { id: "sn", label: "S/N", alignRight: false },
+  { id: "bloodPressure", label: "Blood Pressure", alignRight: false },
+  { id: "canSpeak", label: "Can speak?", alignRight: false },
+  { id: "glucose", label: "Glucose", alignRight: false },
+  { id: "isInPain", label: "Is in pain?", alignRight: false },
+  { id: "mainComplaint", label: "Complaint", alignRight: false },
+  { id: "oxygen", label: "Oxygen", alignRight: false },
+  { id: "pulse", label: "Pulse", alignRight: false },
+  { id: "resp", label: "RESP", alignRight: false },
+  { id: "sizeOfFluid", label: "Size of fluid", alignRight: false },
+  { id: "sp02", label: "SP02", alignRight: false },
+  { id: "unResponsive", label: "Unresponsive", alignRight: false,width:"400" },
+  { id: "timeTaken", label: "Time Taken", alignRight: false,width:"400" },
+  { id: "" },
+];
+
+
   const ViewPatient: FC = () => {
     const { themeStretch } = useSettings();
     const [content, SetContent] = useState<any>(null);
@@ -136,6 +165,8 @@ import { useLocation } from "react-router-dom";
           selectedIntervention?.price?.toString() || ''
         );
         };
+
+        console.log({content,row})
           return (
       <Page title={`View Patient Record | EMT`}>
         <Container maxWidth={themeStretch ? false : "lg"}>
@@ -340,7 +371,7 @@ import { useLocation } from "react-router-dom";
                         </Grid>
                     </Grid>
             </Card> 
-            <Card sx={{ p: 3, pb: 10, mb: 2 }}>
+            {/* <Card sx={{ p: 3, pb: 10, mb: 2 }}>
                 <Box sx={{mb:2}}>Vital Sign</Box>
                     <Grid container spacing={2}>
                         <Grid item sm={4}>
@@ -450,7 +481,9 @@ import { useLocation } from "react-router-dom";
                     </ListItem>
                     </Grid>
                     </Grid>
-            </Card>
+            </Card> */}
+            <CustomUsableTable2 table_Head={TABLE_HEAD2} dataList={row?.medicalInterventions} />
+            <CustomUsableTable table_Head={TABLE_HEAD} dataList={row?.drugs} />
             <Card sx={{ p: 3, pb: 10, mb: 2 }}>
               <Box sx={{mb:2}}>ETC Treatment</Box>
               <form onSubmit={handleSubmit(onSubmit)}>

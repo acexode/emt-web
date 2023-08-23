@@ -308,7 +308,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                               align="left"
                               width={150}
                             >
-                              { row?.incidentCategory 
+                              { row?.incidentCategory || "Nil"
                               }
                            
                             </TableCell>
@@ -316,7 +316,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                               align="left"
                              
                             >
-                               {row?.incidentLocation
+                               {row?.incidentLocation || "Nil"
                               }
                             </TableCell>
                             <TableCell
