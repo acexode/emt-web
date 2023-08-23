@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import {  Card, CardHeader, Grid ,Typography} from "@mui/material";
  import { cardData, cardData2, claimsData } from "../../../db";
 import {  FinancialCard, HumanResourcesCard, ServicesCard, UserWelcome } from "../../../components/_dashboard/general-app";
@@ -6,20 +6,43 @@ import ClaimsCard from "../../../components/_dashboard/general-app/ClaimsCard";
 import ServicesCardTwo from "../../../components/_dashboard/general-app/ServiceCardTwo";
 import { useAuthUserContext } from "../../../context/authUser.context";
 import AmbulanceMap from "../../../components/_dashboard/general-app/map";
+import axiosInstance from "../../../services/api_service";
 
 const NEMSASDashboard: FC = () => {
+  const [incidents, setIncidents] = useState([]);
+
    const {
     userState: { userProfile },
   } = useAuthUserContext();
 
-  const newAmbulances = [
-    { id: 1, lat: 9.0820, lng: 8.6753, name: 'Ambulance 1' }, // Example location within Nigeria (Abuja)
-    { id: 2, lat: 6.5244, lng: 3.3792, name: 'Ambulance 2' }, // Example location within Nigeria (Lagos)
-    { id: 3, lat: 7.5244, lng: 5.3792, name: 'Ambulance 3' }, // Example location within Nigeria (Lagos)
-    { id: 4, lat: 5.5244, lng: 6.3792, name: 'Ambulance 4' }, // Example location within Nigeria (Lagos)
-    { id: 5, lat: 6.5244, lng: 7.3792, name: 'Ambulance 5' }, // Example location within Nigeria (Lagos)
-    // Add more ambulances here
-  ];
+
+  useEffect(()=>{
+    axiosInstance
+    .get(`Incidents/get`)
+    .then((res) => {
+      const obj = res?.data?.data?.map((dt: { id: any; latitude: any; longitude: any; ambulanceViewModel: { name: any; }; }) =>{
+        return {
+          id: dt?.id,
+          lat: dt?.latitude,
+          lng:dt?.longitude,
+          name:dt?.ambulanceViewModel?.name
+        }
+      })
+      setIncidents(obj)
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+  },[])
+
+  // const newAmbulances = [
+  //   { id: 1, lat: 9.0820, lng: 8.6753, name: 'Ambulance 1' }, // Example location within Nigeria (Abuja)
+  //   { id: 2, lat: 6.5244, lng: 3.3792, name: 'Ambulance 2' }, // Example location within Nigeria (Lagos)
+  //   { id: 3, lat: 7.5244, lng: 5.3792, name: 'Ambulance 3' }, // Example location within Nigeria (Lagos)
+  //   { id: 4, lat: 5.5244, lng: 6.3792, name: 'Ambulance 4' }, // Example location within Nigeria (Lagos)
+  //   { id: 5, lat: 6.5244, lng: 7.3792, name: 'Ambulance 5' }, // Example location within Nigeria (Lagos)
+  //   // Add more ambulances here
+  // ];
 
   return (
     <Grid container spacing={3}>
@@ -72,7 +95,7 @@ const NEMSASDashboard: FC = () => {
         <Grid item xs={12} md={12} lg={12}>
           <Card>
           <CardHeader title="DISPATCHED AMBULANCES" />
-          <AmbulanceMap newAmbulances={newAmbulances} />
+         { <AmbulanceMap newAmbulances={incidents} />}
           </Card>
         </Grid>
         </Grid>
