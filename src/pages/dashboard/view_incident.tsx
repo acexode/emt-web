@@ -29,7 +29,7 @@ import { formatDate2 } from "../../utility";
         useEffect(()=>{
             SetContent(row)
             const newAmbulances = [
-              { id: 1, lat: row?.latitude, lng: row?.longitude, name: 'Ambulance 1' }, // Example location within Nigeria (Abuja)
+              { id: 1, lat: row?.latitude, lng: row?.longitude, name: row?.ambulanceViewModel?.name }, // Example location within Nigeria (Abuja)
             ];
             setAmbulance(newAmbulances)
         },[row])
