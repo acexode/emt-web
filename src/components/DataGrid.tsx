@@ -1,41 +1,27 @@
 import { filter } from "lodash";
-// import { Icon } from "@iconify/react";
 import { useState, SetStateAction, FC } from "react";
 // material
 import {
   Card,
   Table,
-  Stack,
   TableRow,
   TableBody,
   TableCell,
-  Container,
   TableContainer,
   TablePagination,
-  Skeleton,
-  Button,
-  // Button,
+  Box,
+  
 } from "@mui/material";
-import plusFill from "@iconify/icons-eva/plus-fill";
 
 // routes
-import { PATH_DASHBOARD } from "../../routes/paths";
 // hooks
-import useSettings from "../../hooks/useSettings";
 // components
-import Page from "../../components/Page";
-import Scrollbar from "../../components/Scrollbar";
-import SearchNotFound from "../../components/SearchNotFound";
-import HeaderBreadcrumbs from "../../components/HeaderBreadcrumbs";
-import TableListHead from "../table/tableListHead";
-import ListToolbar from "../table/tableListToolbar";
-import MoreMenu from "../table/TableMoreMenu";
-import { AddEditClaims } from "./add-edit-claim";
-import { Icon } from "@iconify/react";
-import { useAuthUserContext } from "../../context/authUser.context";
-import { userType } from "../../constants";
-// import tokenService from "../../services/tokenService";
-// import { userType } from "../../constants";
+import Scrollbar from "./Scrollbar";
+import SearchNotFound from "./SearchNotFound";
+import TableListHead from "./table/tableListHead";
+import ListToolbar from "./table/tableListToolbar";
+import { formatDate2, formatter } from "../utility";
+
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
@@ -66,7 +52,7 @@ function applySortFilter(
   query: string
 ) {
 
-  const stabilizedThis = array.map((el: any, index: any) => [el, index]);
+  const stabilizedThis = array?.map((el: any, index: any) => [el, index]);
   stabilizedThis.sort((a: number[], b: number[]) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
@@ -75,7 +61,8 @@ function applySortFilter(
   if (query) {
     return filter(
       array,
-      (_user) => _user?.category?.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      (_user) => _user?.drugName?.toLowerCase().includes(query.toLowerCase()) 
+     
     );
   }
   return stabilizedThis.map((el: any[]) => el[0]);
@@ -85,38 +72,19 @@ interface ITable {
   table_Head: any;
   dataList: any;
   page_title: string;
-  loading?:boolean;
-  fetchAllData:any;
+  loading?:boolean,
+  fetchAllUsers:any;
   type?:string
 }
 
-const CustomClaimTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetchAllData,type }) => {
-  const { themeStretch } = useSettings();
+const CustomUsableTable: FC<ITable> = ({ dataList, table_Head,loading }) => {
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
   const [selected, setSelected] = useState<any>([]);
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [modal, setModal] = useState(false);
-  const [edit, setEdit] = useState(false);
-  const [formData, setFormData] = useState(null);
-  // const user = tokenService.getUser();
-  const {
-    userState: { userProfile },
-  } = useAuthUserContext();
 
-
-  const toggle = () => {
-    setModal(!modal);
-    setFormData(null);
-    setEdit(false);
-  };
-  const handleUpdate = (row:any) => {
-    setModal(!modal);
-    setFormData(row);
-    setEdit(true);
-  }; 
 
   const handleRequestSort = (_event: any, property: SetStateAction<string>) => {
     const isAsc = orderBy === property && order === "asc";
@@ -160,31 +128,12 @@ const CustomClaimTable: FC<ITable> = ({ dataList, page_title, table_Head,loading
   );
 
   const isUserNotFound = filteredUsers.length === 0 && !loading;
-  let dummyData = [...Array(5)]
 
   return (
     <>
-      <Page title={`${page_title}: List | NEMSAS`}>
-        <Container maxWidth={themeStretch ? false : "lg"}>
-          <HeaderBreadcrumbs
-            heading={`${page_title}`}
-            links={[
-              { name: "Dashboard", href: PATH_DASHBOARD.root },
-              { name: `${page_title}`, href:PATH_DASHBOARD.claims.root },
-              { name: "List" },
-            ]}
-            action={ userProfile?.userRole === userType.etc_user ?
-              <Button
-                variant="contained"
-                onClick={toggle}
-                startIcon={<Icon icon={plusFill} />}
-              >
-                New Claim
-              </Button> : null
-            }
-          />
-
-          <Card>
+      
+          <Card sx={{ p: 3,mb:2}}>
+          <Box sx={{mb:2}}>Drugs Administered</Box>
             <ListToolbar
               numSelected={selected.length}
               filterName={filterName}
@@ -203,59 +152,7 @@ const CustomClaimTable: FC<ITable> = ({ dataList, page_title, table_Head,loading
                     onRequestSort={handleRequestSort}
                     onSelectAllClick={handleSelectAllClick}
                   />
-                 { loading ? <TableBody>
-                   {dummyData?.map((_dum) =>(
-                         <TableRow
-                            hover
-                      
-                            tabIndex={-1}
-                            role="checkbox"
-                          
-                          >
-                            <TableCell
-                              component="th"
-                              scope="row"
-                              padding="none"
-                            >
-                              <Stack
-                                direction="row"
-                                alignItems="center"
-                                spacing={2}
-                              >            
-                                <Skeleton variant="rectangular" width={100} height={30} />                               
-                              </Stack>
-                            </TableCell>
-                            <TableCell
-                              align="left"
-                            >
-                            <Skeleton variant="rectangular" width={100} height={30} /> 
-                            </TableCell>
-                            <TableCell
-                              align="left"
-                              
-                            >
-                             <Skeleton variant="rectangular" width={100} height={30} /> 
-                            </TableCell>
-                            <TableCell
-                              align="left"
-                              
-                            >
-                            <Skeleton variant="rectangular" width={100} height={30} /> 
-                            </TableCell>
-                            <TableCell
-                              align="left"
-                            
-                            >
-                             <Skeleton variant="rectangular" width={100} height={30} /> 
-                            </TableCell>
-                            <TableCell align="left">
-                            <Skeleton variant="rectangular" width={100} height={30} /> 
-                              </TableCell>
-
-                            <TableCell align="right"></TableCell>
-                          </TableRow>
-                   ))}
-                  </TableBody> :
+                
                   <TableBody>
                     {filteredUsers
                       .slice(
@@ -276,11 +173,11 @@ const CustomClaimTable: FC<ITable> = ({ dataList, page_title, table_Head,loading
                             aria-checked={isItemSelected}
                           >
                           
-                          <TableCell
+                            <TableCell
                               align="left"
                              
                             >
-                              { index +1
+                              { index + 1
                               }
                            
                             </TableCell>
@@ -288,7 +185,7 @@ const CustomClaimTable: FC<ITable> = ({ dataList, page_title, table_Head,loading
                               align="left"
                              
                             >
-                              { row?.incidentViewModel?.ambulanceViewModel?.name || "NIL" 
+                              { row?.drugName || "Nil"
                               }
                            
                             </TableCell>
@@ -296,32 +193,32 @@ const CustomClaimTable: FC<ITable> = ({ dataList, page_title, table_Head,loading
                               align="left"
                              
                             >
-                               {row?.incidentViewModel?.incidentCategory || "Nil"
+                               {row?.quantity || "Nil"
                               }
                             </TableCell>
                             <TableCell
                               align="left"
-                              
+                             
                             >
-                               {row?.patientViewModel?.firstName || "Nil"
+                               {row?.dose || "Nil"
                               }
                             </TableCell>
-                            <TableCell
-                              align="left"
-                              
-                            >
-                               {row?.incidentViewModel?.incidentDate || "Nil"
-                              }
-                            </TableCell>
+                           
+                  
+                           
                             <TableCell align="left">
                           
-                              { row?.status || "Nil"}
+                              { formatter.format(row?.price) || "Nil"}
                              
                               </TableCell>
+                            <TableCell align="left">
+                          
+                           {formatDate2(row?.dateAdded) || "Nil"}
+                             
+                              </TableCell>
+                        
 
-                            <TableCell align="right">
-                                <MoreMenu handleUpdate={handleUpdate} row={row} fetchAllData={fetchAllData} type={type} />
-                            </TableCell>
+                        
                           </TableRow>
                         );
                       })}
@@ -331,7 +228,6 @@ const CustomClaimTable: FC<ITable> = ({ dataList, page_title, table_Head,loading
                       </TableRow>
                     )}
                   </TableBody>
-}
                   {(isUserNotFound) && (
                     <TableBody>
                       <TableRow>
@@ -355,11 +251,9 @@ const CustomClaimTable: FC<ITable> = ({ dataList, page_title, table_Head,loading
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
           </Card>
-        </Container>
-      </Page>
-      <AddEditClaims toggle={toggle} modal={modal} formData={formData} edit={edit} fetchAllData={fetchAllData}  />
+       
     </>
   );
 };
 
-export default CustomClaimTable;
+export default CustomUsableTable;

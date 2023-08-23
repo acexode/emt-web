@@ -78,6 +78,7 @@ const Claims: FC = () => {
         axiosInstance.post(`Claims/getByAssignedAmbulance`,obj),
         axiosInstance.post(`Claims/getByAssignedETC`,obj2),
       ]);
+    
       setAmbulanceClaims(ambRes?.data?.data)
       setETCClaims(etcRes?.data?.data)
     } catch (error) {

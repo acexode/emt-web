@@ -1,5 +1,5 @@
-
 // @ts-nocheck
+
 import {
     Button,
     Dialog,
@@ -11,7 +11,13 @@ import {
     TextField,
     Autocomplete,
     Box,
-    
+    Table,
+    TableBody,
+    TableCell,
+    TableRow,
+    TableContainer,
+    TableHead,
+    IconButton
   } from "@mui/material";
   import React, { FC, useEffect, useState } from "react";
   import {useForm, useFieldArray, Controller} from "react-hook-form"
@@ -24,6 +30,8 @@ import closeFill from "@iconify/icons-eva/close-fill";
 import { Icon } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import axiosInstance from "../../services/api_service";
+import Scrollbar from "../Scrollbar";
+
 
 
   interface IAddEditClaims {
@@ -33,57 +41,14 @@ import axiosInstance from "../../services/api_service";
     formData?:any
     fetchAllData?:any
   }
-
+const headLabel = [
+ "S/N", "Medical Intervention", "Service Code", "Unit Cost","Quantity","Amount",""
+]
   const schema = yup.object().shape({
     patientName: yup.string().required("*Patient Name is required"),
-    category: yup.string().required("*Category is required"),
-    location: yup.string().required("*Location is required"),
-    ambulance_type: yup.string().required("*Ambulance Type is required"),
-    date: yup.string().required("*Date is required"),
-    status: yup.string().required("*Status is required"),
   });
-  const status =[
-    {
-    name:"Dispatched",
-    id:0
-  },
-    {
-    name:"Resolved",
-    id:1
-  },
-    {
-    name:"No Dispatch Needed",
-    id:2
-  },
-    {
-    name:"No Action",
-    id:3
-  },
-]
-  const ambulanceTypes =[
-    {
-    type:"Keke",
-    id:0
-  },
-    {
-    type:"BLS",
-    id:1
-  },
-    {
-    type:"ALS",
-    id:2
-  },
-    {
-    type:"Motor Bike",
-    id:3
-  },
-]
-const category = [
-    { id: 0, name: 'Paedetric' },
-    { id: 1, name: 'Neonatal' },
-    { id: 2, name: 'General Surgery' },
-   
-  ]
+ 
+
 
 export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fetchAllData}) =>{
     const {
@@ -108,13 +73,28 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
       });
       const [loading,setLoading] = useState(false)
       const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-      const [locations,setLocations] = useState([])
+      const [options,setOptions] = useState<any>([])
    
       const { fields, append, remove } = useFieldArray({
         control,
         name: 'items',
       });
-      const calculateAmount = (unitCost, quantity) => {
+      useEffect(()=>{
+        axiosInstance.get("ServicesAndFees/get").then(res =>{
+          const obj = res?.data?.data?.map((dt: { code: any; description: any; price: any; id: any; })=>{
+            return {
+                code :dt?.code,
+                intervention:dt?.description,
+                price: dt?.price,
+                id:dt?.id
+              }
+          })
+          setOptions(obj)
+        }).catch(error =>{
+          console.log(error);
+        })
+    },[])
+      const calculateAmount = (unitCost:number, quantity:number) => {
         if (unitCost && quantity) {
           return (unitCost * quantity).toFixed(2);
         }
@@ -180,9 +160,14 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
         //     setLoading(false)
         //   }
     }
-    const handleAutocompleteChange = (event, value) => {
-      setValue('locationId', value?.id || ''); // Set the value of 'locationId' field
-    };
+  
+    const handleAutocompleteChange = (index:number, intervention:any) => {
+      //  // Update the corresponding fields in the form data
+     setValue(`items[${index}].medicalIntervention`, intervention?.id || '');
+     setValue(`items[${index}].serviceCode`, intervention?.code || '');
+     setValue(`items[${index}].unitCost`, intervention?.price || '');
+    
+     };
   
     return (
         <Dialog
@@ -196,8 +181,9 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
         <DialogTitle id="alert-dialog-title">{edit ? "Edit Claim": "Add Claim"}</DialogTitle>
            <form onSubmit={handleSubmit(onSubmit)}>
         <DialogContent>
+          <Grid container spacing={3}>
         <Grid item xs={12} sm={6} lg={6}>
-            <label>Incident Code</label>
+            <label>Select Patient</label>
               <TextField
                  variant="outlined"
                 fullWidth
@@ -212,65 +198,123 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
                   {errors?.incidentCode?.message?.toString()}
                 </p>
             </Grid>
-          {fields.map((field, index) => (
-            <Grid key={field.id} mb={2} container spacing={2}>
-           <Grid item sm={12}>
-           <Box>{index+1}).</Box>
-           </Grid>
-           <Grid item xs={6} sm={3} lg={3}>
-           <label>Medical Intervention</label>
-            <TextField
-              {...register(`items[${index}].medicalIntervention`, { required: 'Medical Intervention is required' })}
-              error={!!errors.items?.[index]?.medicalIntervention}
-              helperText={errors.items?.[index]?.medicalIntervention?.message}
-            />
-          </Grid>
-          <Grid item xs={6} sm={3} lg={3}>
-          <label>Service Code</label>
-          <TextField
-            {...register(`items[${index}].serviceCode`, { required: 'Service Code is required' })}
-            error={!!errors.items?.[index]?.serviceCode}
-            helperText={errors.items?.[index]?.serviceCode?.message}
-          />
-          </Grid>
-          <Grid item xs={6} sm={3} lg={3}>
-          <label>Unit Cost</label>
-          <TextField
-            type="number"
-            inputProps={{ step: '0.01' }}
-            {...register(`items[${index}].unitCost`, { required: 'Unit Cost is required', pattern: /^\d+(\.\d{1,2})?$/ })}
-            error={!!errors.items?.[index]?.unitCost}
-            helperText={errors.items?.[index]?.unitCost?.message}
-          />
-          </Grid>
-          <Grid item xs={6} sm={3} lg={3}>
-          <label>Quantity</label>
-          <TextField
-            type="number"
-            {...register(`items[${index}].quantity`, { required: 'Quantity is required', pattern: /^\d+$/ })}
-            error={!!errors.items?.[index]?.quantity}
-            helperText={errors.items?.[index]?.quantity?.message}
-          />
-          </Grid>
-          <Grid item xs={6} sm={3} lg={3}>
-          <label>Amount</label>
-          <TextField
-            value={calculateAmount(field.unitCost, field.quantity)}
-            disabled
-          />
-          </Grid>
-          <Button size="small" sx={{background:"grey", height:"40px", mt:6,ml:2, '&:hover': {
-          // Define the hover styles here
-          backgroundColor: 'lightgray',
-        
-        },}} type="button" onClick={() => remove(index)}>
-            <RemoveCircleOutline />
-          </Button>
-          </Grid>
-      ))}
+        {/* <Grid item xs={12} sm={6} lg={6}>
+            <label>Incident Code</label>
+              <TextField
+                 variant="outlined"
+                fullWidth
+                 required
+                 type="text"
+                {...register("incidentCode")}
+               
+              />
+                
+              
+                <p style={{ color: "red", fontSize: 12 }}>
+                  {errors?.incidentCode?.message?.toString()}
+                </p>
+            </Grid> */}
+            </Grid>
+            <Scrollbar>
+              <TableContainer>
+                  <Table>
+                  <TableHead>
+                    <TableRow>
+                  
+                      {headLabel.map((headCell:string,index:number) => (
+                        <TableCell
+                          key={index}
+                          width={400}
+                        >
+                      {headCell}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                    <TableBody>
+                    {fields.map((field, index) => (
+                       
+                 <TableRow>
+
+                
+                        <TableCell
+                           align="left"
+                          >
+                            <Box>{index+1}</Box>
+                          </TableCell>
+                     
+               
+                      <TableCell
+                            align="left"
+                            >
+                                 <Autocomplete
+                          options={options}
+                          fullWidth
+                          getOptionLabel={(option) => option.intervention}
+                          // onChange={(e) => handleAutocompleteChange(index,e.target.textContent)}
+                          onChange={(_event, selectedOption) => handleAutocompleteChange(index, selectedOption)}
+
+                          renderInput={(params) => <TextField {...params}  />}
+                        />
+                            </TableCell>
+                            <TableCell
+                            align="left"
+                            >
+                               <TextField
+                               disabled
+                        {...register(`items[${index}].serviceCode`, { required: 'Service Code is required' })}
+                        error={!!errors.items?.[index]?.serviceCode}
+                        helperText={errors.items?.[index]?.serviceCode?.message}
+                      />
+                              </TableCell>
+                            <TableCell
+                            align="left"
+                            >
+                               <TextField
+                        type="number"
+                        inputProps={{ step: '0.01' }}
+                        disabled
+                        {...register(`items[${index}].unitCost`, { required: 'Unit Cost is required', pattern: /^\d+(\.\d{1,2})?$/ })}
+                        error={!!errors.items?.[index]?.unitCost}
+                        helperText={errors.items?.[index]?.unitCost?.message}
+                      />
+                              </TableCell>
+                            <TableCell
+                            align="left"
+                            >
+                               <TextField
+                        type="number"
+                        {...register(`items[${index}].quantity`, { required: 'Quantity is required', pattern: /^\d+$/ })}
+                        error={!!errors.items?.[index]?.quantity}
+                        helperText={errors.items?.[index]?.quantity?.message}
+                      />
+                              </TableCell>
+                            <TableCell
+                            align="left"
+                            >
+                               <TextField
+                        value={calculateAmount(field.unitCost, field.quantity)}
+                        disabled
+                      />
+                              </TableCell>
+                            <TableCell
+                            align="left"
+                            >
+                              <IconButton size="small" onClick={() => remove(index)}>
+                        <RemoveCircleOutline />
+                      </IconButton>
+                              </TableCell>
+                      </TableRow>
+                   
+                  ))}
+                      
+                    </TableBody>
+                  </Table>
+              </TableContainer>
+            </Scrollbar>
 
       <Button type="button" onClick={() => append({ medicalIntervention: '', serviceCode: '', unitCost: '', quantity: '' })}>
-        Add Item
+        Add More
       </Button>
       <Grid item xs={12} sm={12} mt={4} lg={12}>
         <TextField
@@ -279,9 +323,9 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
           label="Total Amount"
         />
 
-      </Grid>
+   
  
-           
+      </Grid>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleToggle} sx={{background:"grey",  '&:hover': {

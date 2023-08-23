@@ -31,10 +31,12 @@ import { Icon } from "@iconify/react";
 
   const schema = yup.object().shape({
       name: yup.string().required("*Name is required"),
-    location: yup.string().required("*Location is required"),
-    code: yup.string(),
-    ambulanceTypeId: yup.number(),
-    wardId: yup.number(),
+      location: yup.string().required("*Location is required"),
+      code: yup.string(),
+      ambulanceTypeId: yup.number(),
+      wardId: yup.number(),
+      stateId: yup.number(),
+      lgaId: yup.number(),
   });
  
 
@@ -58,6 +60,8 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
       const { enqueueSnackbar, closeSnackbar } = useSnackbar();
       const [ambulanceTypes,setAmbulanceTypes] = useState<any>([])
       const [wards,setWards] = useState<any>([])
+      const [states,setStates] = useState<any>([])
+      const [lgas,setLgas] = useState<any>([])
 
 
       useEffect(()=>{
@@ -94,6 +98,32 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
           console.log(error)
         })
     },[])
+    useEffect(()=>{
+      axiosInstance.get('States/get').then(res =>{
+        const obj = res?.data?.data?.map((dt: { name: any; id:number}) =>{
+          return {
+              label: dt?.name,
+              value: dt?.id
+          }
+      })
+      setStates(obj)
+      }).catch(error =>{
+        console.log(error)
+      })
+  },[])
+  useEffect(()=>{
+      axiosInstance.get('Lgas/get').then(res =>{
+        const obj = res?.data?.data?.map((dt: { name: any; id:number}) =>{
+          return {
+              label: dt?.name,
+              value: dt?.id
+          }
+      })
+      setLgas(obj)
+      }).catch(error =>{
+        console.log(error)
+      })
+  },[])
      
 
     const handleToggle =() => toggle()
@@ -104,7 +134,7 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
             id:formData?.id
           };
           setLoading(true)
-          let text = edit ? "Ambulance Updated" : "Ambulance Added";
+          // let text = edit ? "Ambulance Updated" : "Ambulance Added";
           try {
             let res;
             if (edit) {
@@ -115,8 +145,7 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
             } else {
               res = await axiosInstance.post(`Ambulances/add`, data);
             }
-            console.log(res);
-            enqueueSnackbar(`${text}`, {
+            enqueueSnackbar(res?.data?.message, {
                 variant: "success",
                 action: (key) => (
                   <MIconButton size="small" onClick={() => closeSnackbar(key)}>
@@ -220,6 +249,50 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
                 ))}
             </TextField>
             </Grid>
+            <Grid item xs={12} sm={6} lg={6}>
+              
+              <label>Select State</label>
+              <TextField
+                  variant="outlined"
+                  fullWidth
+                  select
+                  type="text"
+                  {...register('stateId',{valueAsNumber:true})}
+                
+              >
+                   <MenuItem  value={""}>
+                          <em>None</em>
+                      </MenuItem>
+                      {states?.map((state:any,index:number) =>(
+                         <MenuItem  key={index} value={state?.value}>
+                        {state?.label}
+                     </MenuItem>
+                      ))}
+              </TextField>
+              </Grid>
+      
+              <Grid item xs={12} sm={6} lg={6}>
+                
+              <label>Select LGA</label>
+              <TextField
+                  variant="outlined"
+                  fullWidth
+                  select
+                  type="text"
+                  {...register('lgaId',{valueAsNumber:true})}
+                
+              >
+                   <MenuItem  value={""}>
+                          <em>None</em>
+                      </MenuItem>
+                      {lgas?.map((lga:any,index:number) =>(
+                         <MenuItem  key={index} value={lga?.value}>
+                        {lga?.label}
+                     </MenuItem>
+                      ))}
+              </TextField>
+              </Grid>
+      
             <Grid item xs={12} sm={6} lg={6}>
               
             <label>Select Ward</label>

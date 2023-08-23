@@ -37,7 +37,7 @@ import { Icon } from "@iconify/react";
     triageCategory: yup.string().required("*Triage Category is required"),
     incidentLocation: yup.string().required("*Incident Location is required"),
     street: yup.string().required("*Street is required"),
-    districtWard: yup.string().required("*District Ward is required"),
+    districtWard: yup.string(),
     areaCouncil: yup.string().required("*Area Council is required"),
     zipCode: yup.string(),
     incidentCategory: yup.string(),
@@ -57,9 +57,9 @@ import { Icon } from "@iconify/react";
         firstName: yup.string().required('*First Name is required'),
         middleName: yup.string(),
         lastName: yup.string().required('*Last Name is required'),
-        doB: yup.string().required('*Date of Birth is required'),
+        doB: yup.string(),
         // sex: yup.number().required('*Sex is required'),
-        phoneNumber: yup.string().required('*Phone Number is required'),
+        phoneNumber: yup.string(),
       }),
 });
 
@@ -285,11 +285,7 @@ import { Icon } from "@iconify/react";
                             type="text"
                             {...register('patient.phoneNumber')}
                             defaultValue={row?.patientViewModel?.phoneNumber}
-
-                            helperText={errors?.patient?.phoneNumber?.message?.toString()}
-                            FormHelperTextProps={{
-                            className:"helperTextColor"
-                        }}
+                        
                         >
                         </TextField>
                     </Grid>
@@ -304,10 +300,6 @@ import { Icon } from "@iconify/react";
                             {...register('patient.doB')}
                             defaultValue={row?.patientViewModel?.doB}
 
-                            helperText={errors?.patient?.doB?.message?.toString()}
-                            FormHelperTextProps={{
-                            className:"helperTextColor"
-                        }}
                         >
                         </TextField>
                     </Grid>
@@ -502,16 +494,13 @@ import { Icon } from "@iconify/react";
                             fullWidth                      
                             type="text"
                             {...register('districtWard')}
-                            helperText={errors?.districtWard?.message?.toString()}
-                            FormHelperTextProps={{
-                            className:"helperTextColor"
-                        }}
+                           
                         >
                         </TextField>
                     </Grid>
                     <Grid item sm={4}>
                         <FormLabel >
-                    Area Council
+                    Area Council / LGA
                         </FormLabel>
                         <TextField
                             variant="outlined"
