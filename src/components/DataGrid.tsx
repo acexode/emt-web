@@ -133,7 +133,7 @@ const CustomUsableTable: FC<ITable> = ({ dataList, table_Head,loading }) => {
     <>
       
           <Card sx={{ p: 3,mb:2}}>
-          <Box sx={{mb:2}}>Drugs Administered</Box>
+          <Box sx={{mb:2}}>ETC Treatment</Box>
             <ListToolbar
               numSelected={selected.length}
               filterName={filterName}

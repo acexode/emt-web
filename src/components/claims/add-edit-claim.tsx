@@ -31,6 +31,7 @@ import { Icon } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import axiosInstance from "../../services/api_service";
 import Scrollbar from "../Scrollbar";
+import { useAuthUserContext } from "../../context/authUser.context";
 
 
 
@@ -42,10 +43,10 @@ import Scrollbar from "../Scrollbar";
     fetchAllData?:any
   }
 const headLabel = [
- "S/N", "Medical Intervention", "Service Code", "Unit Cost","Quantity","Amount",""
+ "S/N", "Medical Intervention",  "Unit Cost", "Dose","Quantity","Amount",""
 ]
   const schema = yup.object().shape({
-    patientName: yup.string().required("*Patient Name is required"),
+    patientId: yup.string().required("*Patient Name is required"),
   });
  
 
@@ -68,12 +69,16 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
         delayError: undefined,
         resolver: yupResolver(schema),
         defaultValues: {
-          items: [{ medicalIntervention: '', serviceCode: '', unitCost: '', quantity: '' }],
+          items: [{ medicalIntervention: '', dose: '', price: '', quantity: '' }],
         },
       });
       const [loading,setLoading] = useState(false)
       const { enqueueSnackbar, closeSnackbar } = useSnackbar();
       const [options,setOptions] = useState<any>([])
+      const [patients,setPatients] = useState<any>([])
+      const {
+        userState: { userProfile },
+      } = useAuthUserContext();
    
       const { fields, append, remove } = useFieldArray({
         control,
@@ -90,6 +95,24 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
               }
           })
           setOptions(obj)
+        }).catch(error =>{
+          console.log(error);
+        })
+    },[])
+      useEffect(()=>{
+        let val = {
+          id: userProfile?.etcId
+        }
+        axiosInstance.post('Patients/getByAssignedETC',val).then(res =>{
+          const obj = res?.data?.data?.map((dt) =>{
+            return {
+              incident_id: dt?.incident_Id,
+              patientId: dt?.id,
+              emergencyTreatmentCenterId:  dt?.etC_Id,
+              label: `${dt?.firstName} ${dt?.middleName} ${dt?.lastName}`
+            }
+          })
+          setPatients(obj)
         }).catch(error =>{
           console.log(error);
         })
@@ -123,6 +146,7 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
         let newData = {
             ...data
           };
+          console.log({newData})
         //   delete newData?.id
         //   setLoading(true)
         //   let text = edit ? "Claim Updated" : "Claim Added";
@@ -162,18 +186,26 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
     }
   
     const handleAutocompleteChange = (index:number, intervention:any) => {
+      console.log({intervention});
       //  // Update the corresponding fields in the form data
-     setValue(`items[${index}].medicalIntervention`, intervention?.id || '');
-     setValue(`items[${index}].serviceCode`, intervention?.code || '');
+     setValue(`items[${index}].medicalIntervention`, intervention?.intervention || '');
+     setValue(`items[${index}].serviceFeeId`, intervention?.id || '');
+    //  setValue(`items[${index}].dose`, intervention?.code || '');
      setValue(`items[${index}].unitCost`, intervention?.price || '');
     
      };
+
+     const handlePatientName = (e:any,val:any) =>{
+      setValue("patientId",val?.patientId)
+      setValue("incidentId",val?.incident_id)
+      setValue("emergencyTreatmentCenterId",val?.emergencyTreatmentCenterId)
+     }
   
     return (
         <Dialog
         open={modal}
         onClose={handleToggle}
-        maxWidth="md"
+        maxWidth="lg"
         fullWidth
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
@@ -184,36 +216,18 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
           <Grid container spacing={3}>
         <Grid item xs={12} sm={6} lg={6}>
             <label>Select Patient</label>
-              <TextField
-                 variant="outlined"
-                fullWidth
-                 required
-                 type="text"
-                {...register("incidentCode")}
-               
-              />
-                
-              
+               <Autocomplete
+                  options={patients}
+                  fullWidth
+                  getOptionLabel={(option) => option.label}
+                  onChange={handlePatientName}
+                  renderInput={(params) => <TextField {...params}  />}
+                />
                 <p style={{ color: "red", fontSize: 12 }}>
-                  {errors?.incidentCode?.message?.toString()}
+                  {errors?.patientId?.message?.toString()}
                 </p>
             </Grid>
-        {/* <Grid item xs={12} sm={6} lg={6}>
-            <label>Incident Code</label>
-              <TextField
-                 variant="outlined"
-                fullWidth
-                 required
-                 type="text"
-                {...register("incidentCode")}
-               
-              />
-                
-              
-                <p style={{ color: "red", fontSize: 12 }}>
-                  {errors?.incidentCode?.message?.toString()}
-                </p>
-            </Grid> */}
+       
             </Grid>
             <Scrollbar>
               <TableContainer>
@@ -245,7 +259,7 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
                      
                
                       <TableCell
-                            align="left"
+                            style={{ width: '200rem' }}
                             >
                                  <Autocomplete
                           options={options}
@@ -257,18 +271,10 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
                           renderInput={(params) => <TextField {...params}  />}
                         />
                             </TableCell>
+                           
                             <TableCell
-                            align="left"
-                            >
-                               <TextField
-                               disabled
-                        {...register(`items[${index}].serviceCode`, { required: 'Service Code is required' })}
-                        error={!!errors.items?.[index]?.serviceCode}
-                        helperText={errors.items?.[index]?.serviceCode?.message}
-                      />
-                              </TableCell>
-                            <TableCell
-                            align="left"
+                            align="right"
+                            style={{ width: '60rem' }}
                             >
                                <TextField
                         type="number"
@@ -279,8 +285,20 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
                         helperText={errors.items?.[index]?.unitCost?.message}
                       />
                               </TableCell>
+                              <TableCell
+                            align="right"
+                            style={{ width: '60rem' }}
+                            >
+                               <TextField
+                        {...register(`items[${index}].dose`, { required: 'Dose is required' })}
+                        error={!!errors.items?.[index]?.dose}
+                        helperText={errors.items?.[index]?.dose?.message}
+                      />
+                              </TableCell>
                             <TableCell
-                            align="left"
+                            align="right"
+                            style={{ width: '60rem' }}
+
                             >
                                <TextField
                         type="number"
@@ -290,7 +308,8 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
                       />
                               </TableCell>
                             <TableCell
-                            align="left"
+                            align="right"
+                            style={{ width: '80rem' }}
                             >
                                <TextField
                         value={calculateAmount(field.unitCost, field.quantity)}
@@ -313,7 +332,7 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
               </TableContainer>
             </Scrollbar>
 
-      <Button type="button" onClick={() => append({ medicalIntervention: '', serviceCode: '', unitCost: '', quantity: '' })}>
+      <Button type="button" onClick={() => append({ medicalIntervention: '', dose: '', unitCost: '', quantity: '' })}>
         Add More
       </Button>
       <Grid item xs={12} sm={12} mt={4} lg={12}>

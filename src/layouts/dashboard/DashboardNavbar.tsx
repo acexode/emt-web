@@ -8,7 +8,6 @@ import { Box, Stack, AppBar, Toolbar, IconButton } from '@mui/material';
 import useCollapseDrawer from '../../hooks/useCollapseDrawer';
 // components
 import { MHidden } from '../../components/@material-extend';
-import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
 import minH from "../../assets/minh.png"
 // import NotificationsPopover from './NotificationsPopover';
@@ -62,8 +61,6 @@ export default function DashboardNavbar({ onOpenSidebar }:any) {
             <Icon icon={menu2Fill} />
           </IconButton>
         </MHidden>
-
-        <Searchbar />
         <Box sx={{ flexGrow: 1 }} />
         <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.8 }}>
         <a style={{cursor:"pointer"}} href="https://www.health.gov.ng/" target="_blank" rel="noopener noreferrer">  <img src={minH} width="150" /> </a>

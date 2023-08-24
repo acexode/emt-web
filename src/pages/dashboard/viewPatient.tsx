@@ -34,7 +34,7 @@ import CustomUsableTable2 from "../../components/DataTable";
   
 const TABLE_HEAD = [
   { id: "sn", label: "S/N", alignRight: false },
-  { id: "drugName", label: "Drug Name", alignRight: false },
+  { id: "drugName", label: "Medical Intervention", alignRight: false },
   { id: "quantity", label: "Quantity", alignRight: false },
   { id: "dose", label: "Dose", alignRight: false },
   { id: "price", label: "Price", alignRight: false },
@@ -166,7 +166,7 @@ const TABLE_HEAD2 = [
         );
         };
 
-        console.log({content,row})
+        // console.log({content,row})
           return (
       <Page title={`View Patient Record | EMT`}>
         <Container maxWidth={themeStretch ? false : "lg"}>

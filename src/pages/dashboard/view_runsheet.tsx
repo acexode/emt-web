@@ -32,8 +32,10 @@ import { Icon } from "@iconify/react";
     // ambulanceServiceProvider: yup.string().required("*Ambulance Service Provider is required"),
     // facilityName: yup.string().required("*Facility name is required"),
     medicUserId: yup.string().required("*Receiving officer is required"),
+    approve: yup.boolean(),
     // dateOfTransfer: yup.string().required("*Date is required"),
     // transferTime: yup.string().required("*Time of transfer is required"),
+    
 });
 
   const ViewRunSheet: FC = () => {
@@ -76,11 +78,14 @@ import { Icon } from "@iconify/react";
         state: { data},
       } = useLocation();
 
-      const defaultDate = new Date(data?.incidentViewModel?.runsheetViewModel?.arrivalTime);
+      const defaultDate = data?.incidentViewModel?.runsheetViewModel?.arrivalTime
+      ? new Date(data.incidentViewModel.runsheetViewModel.arrivalTime)
+      : new Date();
       const defaultTime = `${defaultDate.getHours().toString().padStart(2, '0')}:${defaultDate.getMinutes().toString().padStart(2, '0')}`;
       const [selectedDate, setSelectedDate] = useState(defaultDate?.toISOString().split('T')[0]);
       const [selectedTime, setSelectedTime] = useState(defaultTime);
       const [users,setUsers] = useState([])
+
       
       useEffect(() => {
         setSelectedDate(defaultDate.toISOString().split('T')[0]);
@@ -145,7 +150,10 @@ import { Icon } from "@iconify/react";
             ...data2,
             id:data?.id,
             incidentId: data?.incidentId,
-            hospiceUserId: data?.hospiceUserId
+            hospiceUserId: data?.hospiceUserId,
+            patient_Id: data?.patient_Id,
+            etC_Id: data?.etC_Id,
+            runSheetId: data?.runSheetId,
           
         }
             handleClickOpen();
@@ -170,8 +178,8 @@ import { Icon } from "@iconify/react";
                 </MIconButton>
               ),
             });
-          } catch (error) {
-            enqueueSnackbar("Error reviewing transfer form!", {
+          } catch (error:any) {
+            enqueueSnackbar(error?.response?.data?.title, {
                 variant: "error",
                 action: (key) => (
                   <MIconButton size="small" onClick={() => closeSnackbar(key)}>
@@ -332,6 +340,32 @@ import { Icon } from "@iconify/react";
                         }}
                        />
                         
+                    </Grid>
+                    <Grid item sm={6}>
+                        <FormLabel >
+                       Do you approve ?
+                        </FormLabel>
+                        <TextField
+                            variant="outlined"
+                            fullWidth
+                            select
+                            type="text"
+                            {...register('approve')}
+                            // helperText={errors?.ambulanceId?.message?.toString()}
+                            // FormHelperTextProps={{
+                            // className:"helperTextColor"
+                            // }}
+                        >
+                            <MenuItem value={""}>
+                                None
+                            </MenuItem>
+                            <MenuItem value={"true"} >
+                               Yes
+                            </MenuItem>              
+                            <MenuItem value={"false"} >
+                               No
+                            </MenuItem>              
+                        </TextField>
                     </Grid>
                     <Grid item sm={12} sx={{mt:2}}>
                     <FormControlLabel 
