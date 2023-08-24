@@ -75,7 +75,10 @@ function applySortFilter(
       _user?.incidentCategory?.toLowerCase().includes(query.toLowerCase())  ||
       _user?.incidentLocation?.toLowerCase().includes(query.toLowerCase())  ||
       _user?.ambulanceType?.toLowerCase().includes(query.toLowerCase())  ||
-      _user?.treatmentCenter?.toLowerCase().includes(query.toLowerCase()) 
+      _user?.treatmentCenter?.toLowerCase().includes(query.toLowerCase()) ||
+      _user?.patientViewModel?.firstName?.toLowerCase().includes(query.toLowerCase()) ||
+      _user?.ambulanceViewModel?.name?.toLowerCase().includes(query.toLowerCase()) ||
+      _user?.emergencyTreatmentCenterViewModel?.name?.toLowerCase().includes(query.toLowerCase()) 
     );
   }
   return stabilizedThis.map((el: any[]) => el[0]);
