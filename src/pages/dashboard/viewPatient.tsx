@@ -10,7 +10,9 @@ import {
     Box,
     Button,
     TextField,
-    Autocomplete
+    Autocomplete,
+    Skeleton
+
   } from "@mui/material";
   import { FC, useEffect, useState } from "react";
   import {useForm, useFieldArray} from "react-hook-form"
@@ -31,10 +33,12 @@ import { Icon } from "@iconify/react";
 import { useLocation } from "react-router-dom";
 import CustomUsableTable from "../../components/DataGrid";
 import CustomUsableTable2 from "../../components/DataTable";
+import { IPatients } from "../../types/patient";
+import { errorMessages } from "../../constants";
   
 const TABLE_HEAD = [
   { id: "sn", label: "S/N", alignRight: false },
-  { id: "drugName", label: "Medical Intervention", alignRight: false },
+  { id: "medicalIntervention", label: "Medical Intervention", alignRight: false },
   { id: "quantity", label: "Quantity", alignRight: false },
   { id: "dose", label: "Dose", alignRight: false },
   { id: "price", label: "Price", alignRight: false },
@@ -47,7 +51,7 @@ const TABLE_HEAD2 = [
   { id: "canSpeak", label: "Can speak?", alignRight: false },
   { id: "glucose", label: "Glucose", alignRight: false },
   { id: "isInPain", label: "Is in pain?", alignRight: false },
-  { id: "mainComplaint", label: "Complaint", alignRight: false },
+  // { id: "mainComplaint", label: "Complaint", alignRight: false },
   { id: "oxygen", label: "Oxygen", alignRight: false },
   { id: "pulse", label: "Pulse", alignRight: false },
   { id: "resp", label: "RESP", alignRight: false },
@@ -61,13 +65,17 @@ const TABLE_HEAD2 = [
 
   const ViewPatient: FC = () => {
     const { themeStretch } = useSettings();
-    const [content, SetContent] = useState<any>(null);
+    const [content, SetContent] = useState<IPatients>(null);
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+    const [loading,setLoading] = useState(false)
+    const [loadingData,setLoadingData] = useState(false)
     const {
       register,
       handleSubmit,
       formState: { errors },
       setValue,
       control,
+      reset,
     } = useForm({
       mode: "onTouched",
       criteriaMode: "firstError",
@@ -76,15 +84,17 @@ const TABLE_HEAD2 = [
       shouldUseNativeValidation: false,
       delayError: undefined,
       defaultValues: {
-        incidentDrugs: [{ drugId:'', drugName: '', serviceCode: '',quantity: '', dose:'',price:'', remark:'',incident_Id:'',ambulanceId:'',emergencyTreatmentCenterId:'',patientId:'' }],
+        incidentDrugs: [{ serviceFeeId:'', medicalIntervention: '', quantity: '', dose:'',price:'', remark:'',incident_Id:'',ambulanceId:'',emergencyTreatmentCenterId:'',patientId:'' }],
       },
     });
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-
+    const {
+      state: { row,options},
+    } = useLocation();
     const { fields, append, remove } = useFieldArray({
       control,
       name: 'incidentDrugs',
     });
+
     const calculateAmount = (unitCost: number, quantity:any) => {
       if (unitCost && quantity) {
         return (unitCost * quantity).toFixed(2);
@@ -102,15 +112,25 @@ const TABLE_HEAD2 = [
     
     //   updateTotalAmount();
     // }, [fields, setValue]);
-    const [loading,setLoading] = useState(false)
-    const {
-        state: { row,options},
-      } = useLocation();
-             useEffect(()=>{
-      
-            SetContent(row)
-        },[row])
   
+        const fetchUser = () =>{
+          setLoadingData(true)
+          let val = {
+            id: row?.id
+          }
+            axiosInstance.post('Patients/get',val).then(res =>{
+              SetContent(res?.data?.data)
+            }).catch(error =>{
+              console.log(error);
+            }).finally(()=>{
+              setLoadingData(false)
+            })
+        }
+        useEffect(() => {
+          if(row?.id){
+            fetchUser()
+          }
+        }, [row?.id]);
         const onSubmit = async(data:any) =>{
           // console.log({data})
           let newData = {
@@ -130,9 +150,11 @@ const TABLE_HEAD2 = [
                     </MIconButton>
                   ),
                 });
-              // fetchAllData()
-            } catch (error: any) {
-              enqueueSnackbar("Error!", {
+                fetchUser()
+                reset()
+            } catch (error) {
+              let errorMessage = errorMessages[error?.response?.status]
+              enqueueSnackbar(errorMessage, {
                   variant: "error",
                   action: (key) => (
                     <MIconButton size="small" onClick={() => closeSnackbar(key)}>
@@ -153,20 +175,18 @@ const TABLE_HEAD2 = [
           (int:any) => int.intervention === intervention
         );
         // Update the corresponding fields in the form data
-        setValue(`incidentDrugs[${index}].drugId`, selectedIntervention?.id || '');
-        setValue(`incidentDrugs[${index}].drugName`, selectedIntervention?.intervention || '');
-        setValue(`incidentDrugs[${index}].incident_Id`, row?.incident_Id || '');
-        setValue(`incidentDrugs[${index}].ambulanceId`, row?.ambulance_Id || '');
-        setValue(`incidentDrugs[${index}].emergencyTreatmentCenterId`, row?.etC_Id || '');
-        setValue(`incidentDrugs[${index}].patientId`, row?.id || '');
-        setValue(`incidentDrugs[${index}].serviceCode`, selectedIntervention?.code || '');
+        setValue(`incidentDrugs[${index}].serviceFeeId`, selectedIntervention?.id || '');
+        setValue(`incidentDrugs[${index}].medicalIntervention`, selectedIntervention?.intervention || '');
+        setValue(`incidentDrugs[${index}].incident_Id`, content?.incident_Id || '');
+        setValue(`incidentDrugs[${index}].ambulanceId`, content?.ambulance_Id || '');
+        setValue(`incidentDrugs[${index}].emergencyTreatmentCenterId`, content?.etC_Id || '');
+        setValue(`incidentDrugs[${index}].patientId`, content?.id || '');
+        // setValue(`incidentDrugs[${index}].serviceCode`, selectedIntervention?.code || '');
         setValue(
           `incidentDrugs[${index}].price`,
           selectedIntervention?.price?.toString() || ''
         );
         };
-
-        // console.log({content,row})
           return (
       <Page title={`View Patient Record | EMT`}>
         <Container maxWidth={themeStretch ? false : "lg"}>
@@ -205,7 +225,7 @@ const TABLE_HEAD2 = [
                        Incident Code
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.incidentCode || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{ loadingData ? <Skeleton variant="rectangular" width={100} height={30} />  : content?.extraDetails?.incidentCode || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -215,7 +235,7 @@ const TABLE_HEAD2 = [
                        Incident Type
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.incidentType || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{loadingData ? <Skeleton variant="rectangular" width={100} height={30} />  : content?.extraDetails?.incidentCategory || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -225,20 +245,11 @@ const TABLE_HEAD2 = [
                       Ambulance Name
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.ambulance_name || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{loadingData ? <Skeleton variant="rectangular" width={100} height={30} />  : content?.extraDetails?.ambulanceName || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
-                    <Grid item sm={6}>
-                    <ListItem>
-                      <ListItemText primary={<Typography>
-                      Mental Status
-                      </Typography>} 
-                      secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.mental_status || "Not Available"}</Typography>
-                      } />
-                    </ListItem>
-                    </Grid>
+                   
                     </Grid>
             </Card>
           <Card sx={{ p: 3, pb: 10, mb: 2 }}>
@@ -250,7 +261,7 @@ const TABLE_HEAD2 = [
                       First Name
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.firstName || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{loadingData ? <Skeleton variant="rectangular" width={100} height={30} />  : content?.firstName || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -260,7 +271,7 @@ const TABLE_HEAD2 = [
                       Middle Name
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.middleName || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{loadingData ? <Skeleton variant="rectangular" width={100} height={30} />  : content?.middleName || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -270,7 +281,7 @@ const TABLE_HEAD2 = [
                       Last Name
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.lastName || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{loadingData ? <Skeleton variant="rectangular" width={100} height={30} />  : content?.lastName || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -290,7 +301,7 @@ const TABLE_HEAD2 = [
                       Gender
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.sex === 0 ? "Female" : "Male" || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{loadingData ? <Skeleton variant="rectangular" width={100} height={30} />  : content?.sex === 0 ? "Female" : "Male" || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -300,7 +311,7 @@ const TABLE_HEAD2 = [
                       Address
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.address || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{loadingData ? <Skeleton variant="rectangular" width={100} height={30} />  : content?.address || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -310,7 +321,7 @@ const TABLE_HEAD2 = [
                       NHIA/No
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.nhia || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{loadingData ? <Skeleton variant="rectangular" width={100} height={30} />  : content?.nhia || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -320,7 +331,7 @@ const TABLE_HEAD2 = [
                     Arrival Time
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.arrivalTime || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{loadingData ? <Skeleton variant="rectangular" width={100} height={30} />  : content?.extraDetails?.arrivalTime || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -330,7 +341,7 @@ const TABLE_HEAD2 = [
                         Main Complaints/Impression
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.mainComplaints || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{loadingData ? <Skeleton variant="rectangular" width={100} height={30} />  : content?.medicalInterventions[0]?.mainComplaint || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -340,7 +351,7 @@ const TABLE_HEAD2 = [
                         Primary Survey
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.primary_survey || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{loadingData ? <Skeleton variant="rectangular" width={100} height={30} />  : content?.medicalInterventions[0]?.primarySurvey || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -355,7 +366,7 @@ const TABLE_HEAD2 = [
                         Physical Exam Findings
                         </Typography>} 
                         secondary={
-                            <Typography sx={{color:"#7b939c"}} >{content?.physical_exam_findings || "Not Available"}</Typography>
+                            <Typography sx={{color:"#7b939c"}} >{loadingData ? <Skeleton variant="rectangular" width={100} height={30} />  : content?.medicalInterventions[0]?.physicalExaminationFindings || "Not Available"}</Typography>
                         } />
                         </ListItem>
                         </Grid>
@@ -365,125 +376,15 @@ const TABLE_HEAD2 = [
                         Triage Category
                         </Typography>} 
                         secondary={
-                            <Typography sx={{color:"#7b939c"}} >{content?.triage_category || "Not Available"}</Typography>
+                            <Typography sx={{color:"#7b939c"}} >{loadingData ? <Skeleton variant="rectangular" width={100} height={30} />  : content?.extraDetails?.triageCategory || "Not Available"}</Typography>
                         } />
                         </ListItem>
                         </Grid>
                     </Grid>
             </Card> 
-            {/* <Card sx={{ p: 3, pb: 10, mb: 2 }}>
-                <Box sx={{mb:2}}>Vital Sign</Box>
-                    <Grid container spacing={2}>
-                        <Grid item sm={4}>
-                        <ListItem>
-                        <ListItemText primary={<Typography>
-                       Time
-                        </Typography>} 
-                        secondary={
-                            <Typography sx={{color:"#7b939c"}} >{content?.time || "Not Available"}</Typography>
-                        } />
-                        </ListItem>
-                        </Grid>
-                        <Grid item sm={4}>
-                        <ListItem>
-                        <ListItemText primary={<Typography>
-                       Pulse
-                        </Typography>} 
-                        secondary={
-                            <Typography sx={{color:"#7b939c"}} >{content?.pulse || "Not Available"}</Typography>
-                        } />
-                        </ListItem>
-                        </Grid>
-                        <Grid item sm={4}>
-                        <ListItem>
-                        <ListItemText primary={<Typography>
-                       Blood Pressure
-                        </Typography>} 
-                        secondary={
-                            <Typography sx={{color:"#7b939c"}} >{content?.blood_pressure || "Not Available"}</Typography>
-                        } />
-                        </ListItem>
-                        </Grid>
-                        <Grid item sm={4}>
-                        <ListItem>
-                        <ListItemText primary={<Typography>
-                       Resp
-                        </Typography>} 
-                        secondary={
-                            <Typography sx={{color:"#7b939c"}} >{content?.resp || "Not Available"}</Typography>
-                        } />
-                        </ListItem>
-                        </Grid>
-                        <Grid item sm={4}>
-                        <ListItem>
-                        <ListItemText primary={<Typography>
-                       Glucose
-                        </Typography>} 
-                        secondary={
-                            <Typography sx={{color:"#7b939c"}} >{content?.glucose || "Not Available"}</Typography>
-                        } />
-                        </ListItem>
-                        </Grid>
-                        <Grid item sm={4}>
-                        <ListItem>
-                        <ListItemText primary={<Typography>
-                            Sp02
-                        </Typography>} 
-                        secondary={
-                            <Typography sx={{color:"#7b939c"}} >{content?.so02 || "Not Available"}</Typography>
-                        } />
-                        </ListItem>
-                        </Grid>
-                    </Grid>
-            </Card> 
-            
-            <Card sx={{ p: 3, pb: 10, mb: 2 }}>
-                <Box sx={{mb:2}}>Immediate Treatment</Box>
-                    <Grid container spacing={2}>
-                    <Grid item sm={4}>
-                    <ListItem>
-                      <ListItemText primary={<Typography>
-                      Time
-                      </Typography>} 
-                      secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.immediate_treatment_time || "Not Available"}</Typography>
-                      } />
-                    </ListItem>
-                    </Grid>
-                    <Grid item sm={4}>
-                    <ListItem>
-                      <ListItemText primary={<Typography>
-                      Medical Intervention
-                      </Typography>} 
-                      secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.medical_intervention || "Not Available"}</Typography>
-                      } />
-                    </ListItem>
-                    </Grid>
-                    <Grid item sm={4}>
-                    <ListItem>
-                      <ListItemText primary={<Typography>
-                     Dose
-                      </Typography>} 
-                      secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.dose || "Not Available"}</Typography>
-                      } />
-                    </ListItem>
-                    </Grid>
-                    <Grid item sm={4}>
-                    <ListItem>
-                      <ListItemText primary={<Typography>
-                     IV
-                      </Typography>} 
-                      secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.iv || "Not Available"}</Typography>
-                      } />
-                    </ListItem>
-                    </Grid>
-                    </Grid>
-            </Card> */}
-            <CustomUsableTable2 table_Head={TABLE_HEAD2} dataList={row?.medicalInterventions} />
-            <CustomUsableTable table_Head={TABLE_HEAD} dataList={row?.drugs} />
+           
+            <CustomUsableTable2 table_Head={TABLE_HEAD2} dataList={content?.medicalInterventions} />
+            <CustomUsableTable table_Head={TABLE_HEAD} dataList={content?.drugs} />
             <Card sx={{ p: 3, pb: 10, mb: 2 }}>
               <Box sx={{mb:2}}>ETC Treatment</Box>
               <form onSubmit={handleSubmit(onSubmit)}>
@@ -505,7 +406,7 @@ const TABLE_HEAD2 = [
               renderInput={(params) => <TextField {...params}  />}
             />
               </Grid>
-              <Grid item xs={6} sm={2} lg={2}>
+              {/* <Grid item xs={6} sm={2} lg={2}>
               <label>Service Code</label>
               <TextField
               disabled
@@ -513,7 +414,7 @@ const TABLE_HEAD2 = [
                 error={!!errors.incidentDrugs?.[index]?.serviceCode}
                 helperText={errors.incidentDrugs?.[index]?.serviceCode?.message}
               />
-              </Grid>
+              </Grid> */}
              
               <Grid item xs={6} sm={2} lg={2}>
               <label>Unit Cost</label>
@@ -544,14 +445,8 @@ const TABLE_HEAD2 = [
                 helperText={errors.incidentDrugs?.[index]?.quantity?.message}
               />
               </Grid>
-              <Grid item xs={6} sm={2} lg={2}>
-              <label>Amount</label>
-              <TextField
-                value={calculateAmount(field.price, field.quantity)}
-                disabled
-              />
-              </Grid>
-              <Grid item xs={6} sm={3} lg={3}>
+            
+              <Grid item xs={6} sm={3} lg={2}>
               <label>Remark</label>
               <TextField
               type="text"
@@ -559,6 +454,13 @@ const TABLE_HEAD2 = [
                 {...register(`incidentDrugs[${index}].remark`)}
                 // error={!!errors.incidentDrugs?.[index]?.remark}
                 // helperText={errors.incidentDrugs?.[index]?.remark?.message}
+              />
+              </Grid>
+              <Grid item xs={6} sm={2} lg={2} mr={4}>
+              <label>Amount</label>
+              <TextField
+                value={calculateAmount(field.price, field.quantity)}
+                disabled
               />
               </Grid>
               <Button size="small" sx={{background:"grey", height:"40px", mt:6, '&:hover': {
@@ -571,17 +473,10 @@ const TABLE_HEAD2 = [
               </Grid>
           ))}
 
-      <Button type="button" onClick={() => append({ drugId:'', drugName: '', serviceCode: '',quantity: '', dose:'',price:'', remark:'',incident_Id:'',ambulanceId:'',emergencyTreatmentCenterId:'',patientId:'' })}>
+      <Button type="button" onClick={() => append({ serviceFeeId:'', medicalIntervention: '', quantity: '', dose:'',price:'', remark:'',incident_Id:'',ambulanceId:'',emergencyTreatmentCenterId:'',patientId:'' })}>
         Add More
       </Button>
-      {/* <Grid item mb={4} xs={12} sm={12} mt={4} lg={12}>
-        <TextField
-          value={parseFloat(watch('totalAmount', 0)).toFixed(2)}
-          disabled
-          label="Total Amount"
-        />
-
-      </Grid> */}
+     
      <Grid mt={5}>
      <LoadingButton
               size="medium"

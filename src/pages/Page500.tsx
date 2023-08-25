@@ -5,6 +5,7 @@ import { Box, Button, Typography, Container } from "@mui/material";
 // components
 import Page from "../components/Page";
 import SeverErrorIllustration from "../assets/illustration_500";
+import { PATH_DASHBOARD } from "../routes/paths";
 
 // ----------------------------------------------------------------------
 
@@ -33,7 +34,7 @@ export default function Page500() {
           <SeverErrorIllustration sx={{ height: 260, my: { xs: 5, sm: 10 } }} />
 
           <Button
-              to="/auth/login"
+              to={PATH_DASHBOARD.root}
             size="large"
             variant="contained"
             component={RouterLink}

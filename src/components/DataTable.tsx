@@ -1,4 +1,3 @@
-import { filter } from "lodash";
 import { useState, SetStateAction, FC } from "react";
 // material
 import {
@@ -26,47 +25,47 @@ import { formatDateTime } from "../utility";
 
 // ----------------------------------------------------------------------
 
-function descendingComparator(
-  a: { [x: string]: number },
-  b: { [x: string]: number },
-  orderBy: string | number
-) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
+// function descendingComparator(
+//   a: { [x: string]: number },
+//   b: { [x: string]: number },
+//   orderBy: string | number
+// ) {
+//   if (b[orderBy] < a[orderBy]) {
+//     return -1;
+//   }
+//   if (b[orderBy] > a[orderBy]) {
+//     return 1;
+//   }
+//   return 0;
+// }
 
-function getComparator(order: string, orderBy: string) {
-  return order === "desc"
-    ? (a: any, b: any) => descendingComparator(a, b, orderBy)
-    : (a: any, b: any) => -descendingComparator(a, b, orderBy);
-}
+// function getComparator(order: string, orderBy: string) {
+//   return order === "desc"
+//     ? (a: any, b: any) => descendingComparator(a, b, orderBy)
+//     : (a: any, b: any) => -descendingComparator(a, b, orderBy);
+// }
 
-function applySortFilter(
-  array: any[],
-  comparator: { (a: any, b: any): number; (arg0: any, arg1: any): any },
-  query: string
-) {
+// function applySortFilter(
+//   array: any[],
+//   comparator: { (a: any, b: any): number; (arg0: any, arg1: any): any },
+//   query: string
+// ) {
 
-  const stabilizedThis = array?.map((el: any, index: any) => [el, index]);
-  stabilizedThis.sort((a: number[], b: number[]) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  if (query) {
-    return filter(
-      array,
-      (_user) => _user?.drugName?.toLowerCase().includes(query.toLowerCase()) 
+//   const stabilizedThis = array?.map((el: any, index: any) => [el, index]);
+//   stabilizedThis?.sort((a: number[], b: number[]) => {
+//     const order = comparator(a[0], b[0]);
+//     if (order !== 0) return order;
+//     return a[1] - b[1];
+//   });
+//   if (query) {
+//     return filter(
+//       array,
+//       (_user) => _user?.drugName?.toLowerCase().includes(query.toLowerCase()) 
      
-    );
-  }
-  return stabilizedThis.map((el: any[]) => el[0]);
-}
+//     );
+//   }
+//   return stabilizedThis.map((el: any[]) => el[0]);
+// }
 
 interface ITable {
   table_Head: any;
@@ -111,15 +110,15 @@ const CustomUsableTable2: FC<ITable> = ({ dataList, table_Head,loading }) => {
   };
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - dataList.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - dataList?.length) : 0;
 
-  const filteredUsers = applySortFilter(
-    dataList,
-    getComparator(order, orderBy),
-    filterName
-  );
+  // const filteredUsers = applySortFilter(
+  //   dataList,
+  //   getComparator(order, orderBy),
+  //   filterName
+  // );
 
-  const isUserNotFound = filteredUsers.length === 0 && !loading;
+  const isUserNotFound = dataList?.length === 0 && !loading;
 
   return (
     <>
@@ -139,15 +138,15 @@ const CustomUsableTable2: FC<ITable> = ({ dataList, table_Head,loading }) => {
                     order={order}
                     orderBy={orderBy}
                     headLabel={table_Head}
-                    rowCount={dataList.length}
+                    rowCount={dataList?.length}
                     numSelected={selected.length}
                     onRequestSort={handleRequestSort}
                     onSelectAllClick={handleSelectAllClick}
                   />
                 
                   <TableBody>
-                    {filteredUsers
-                      .slice(
+                    {dataList
+                      ?.slice(
                         page * rowsPerPage,
                         page * rowsPerPage + rowsPerPage
                       )
@@ -204,13 +203,13 @@ const CustomUsableTable2: FC<ITable> = ({ dataList, table_Head,loading }) => {
                               }
                             </TableCell>
                            
-                            <TableCell
+                            {/* <TableCell
                               align="left"
                              
                             >
                                {row?.mainComplaint || "Nil"
                               }
-                            </TableCell>
+                            </TableCell> */}
                             <TableCell
                               align="left"
                              

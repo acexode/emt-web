@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import {
     Button,
     Dialog,
@@ -19,6 +21,7 @@ import { MIconButton } from "../../@material-extend";
 import closeFill from "@iconify/icons-eva/close-fill";
 import { LoadingButton } from "@mui/lab";
 import { Icon } from "@iconify/react";
+import { errorMessages } from "../../../constants";
 
   interface IAddEditServiceProvider {
     edit?: boolean,
@@ -62,8 +65,6 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
       const [wards,setWards] = useState<any>([])
       const [states,setStates] = useState<any>([])
       const [lgas,setLgas] = useState<any>([])
-
-
       useEffect(()=>{
           if(edit){
             reset(formData)
@@ -156,8 +157,10 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
             reset();
             handleToggle();
             fetchAllUsers()
-          } catch (error: any) {
-            enqueueSnackbar(error?.message, {
+          } catch (error) {
+            console.log(error);
+            let errorMessage = errorMessages[error?.response?.status]
+            enqueueSnackbar(errorMessage, {
                 variant: "error",
                 action: (key) => (
                   <MIconButton size="small" onClick={() => closeSnackbar(key)}>
@@ -257,7 +260,7 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
                   fullWidth
                   select
                   type="text"
-                  {...register('stateId',{valueAsNumber:true})}
+                  {...register('stateId',{valueAsNumber:true,})}
                 
               >
                    <MenuItem  value={""}>
@@ -302,7 +305,7 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
                 select
                 type="text"
                 multiline
-                {...register('wardId')}
+                {...register('wardId',{valueAsNumber:true})}
                 // helperText={errors?.wardId?.message?.toString()}
                 FormHelperTextProps={{
                 className:"helperTextColor"

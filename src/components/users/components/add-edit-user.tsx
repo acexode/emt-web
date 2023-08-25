@@ -88,8 +88,11 @@ const states = [
     phoneNumber: yup.string(),
     userType: yup.string(),
     sex: yup.number(),
-    organisationName: yup.string(),
-    supervisorUserId: yup.string(),
+    // organisationName: yup.string(),
+    // supervisorUserId: yup.string(),
+    stateId: yup.number(),
+    lgaId: yup.number(),
+    wardId: yup.number()
     
 
   });
@@ -119,6 +122,10 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
       const [organisations,setOrganisations] = useState<any>([])
       const [users,setUsers] = useState<any>([])
       const [orgVal,setOrgVal] = useState("")
+      const [supervisorUserId,setSupervisorUserId] = useState("")
+      const [wards,setWards] = useState<any>([])
+      const [states,setStates] = useState<any>([])
+      const [lgas,setLgas] = useState<any>([])
       const {
         userState: { userProfile },
       } = useAuthUserContext();
@@ -136,7 +143,45 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
           console.log(error);
         })
      },[])
-
+     useEffect(()=>{
+      axiosInstance.get('Wards/get').then(res =>{
+        const obj = res?.data?.data?.map((dt: { name: any; id:number}) =>{
+          return {
+              label: dt?.name,
+              value: dt?.id
+          }
+      })
+      setWards(obj)
+      }).catch(error =>{
+        console.log(error)
+      })
+  },[])
+    useEffect(()=>{
+      axiosInstance.get('States/get').then(res =>{
+        const obj = res?.data?.data?.map((dt: { name: any; id:number}) =>{
+          return {
+              label: dt?.name,
+              value: dt?.id
+          }
+      })
+      setStates(obj)
+      }).catch(error =>{
+        console.log(error)
+      })
+  },[])
+  useEffect(()=>{
+      axiosInstance.get('Lgas/get').then(res =>{
+        const obj = res?.data?.data?.map((dt: { name: any; id:number}) =>{
+          return {
+              label: dt?.name,
+              value: dt?.id
+          }
+      })
+      setLgas(obj)
+      }).catch(error =>{
+        console.log(error)
+      })
+  },[])
      useEffect(()=>{
      if(orgVal?.length > 0){
       let val ={
@@ -171,7 +216,10 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
             ...data,
             ambulanceId: userProfile?.ambulanceId,
             etcId: userProfile?.etcId,
+            organisationName: orgVal,
+            supervisorUserId:supervisorUserId
           };
+          // console.log(data, newData);
           // delete newData?.id
           setLoading(true)
           let text = edit ? "User Updated" : "User Added";
@@ -193,12 +241,12 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
                   </MIconButton>
                 ),
               });
-            reset();
-            handleToggle();
+            // reset();
+            // handleToggle();
             fetchAllUsers()
           } catch (error: any) {
             console.log(error)
-            enqueueSnackbar(error?.message, {
+            enqueueSnackbar(error?.response?.data?.title, {
                 variant: "error",
                 action: (key) => (
                   <MIconButton size="small" onClick={() => closeSnackbar(key)}>
@@ -212,9 +260,10 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
     }
     const handleAutocompleteChange = (event, value) => {
       setOrgVal(value?.value)
-      setValue('organisationName', value?.value || '');
+      setValue('organisationName', orgVal || '');
     };
     const handleUserChange = (event, value) => {
+      setSupervisorUserId(value?.value)
       setValue('supervisorUserId', value?.value || '');
     };
   
@@ -431,7 +480,75 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
             
             </Grid>
            
-           
+            <Grid item xs={12} sm={4} lg={4}>
+              
+              <label>Select State</label>
+              <TextField
+                  variant="outlined"
+                  fullWidth
+                  select
+                  type="text"
+                  {...register('stateId',{valueAsNumber:true})}
+                
+              >
+                   <MenuItem  value={""}>
+                          <em>None</em>
+                      </MenuItem>
+                      {states?.map((state:any,index:number) =>(
+                         <MenuItem  key={index} value={state?.value}>
+                        {state?.label}
+                     </MenuItem>
+                      ))}
+              </TextField>
+              </Grid>
+      
+              <Grid item xs={12} sm={4} lg={4}>
+                
+              <label>Select LGA</label>
+              <TextField
+                  variant="outlined"
+                  fullWidth
+                  select
+                  type="text"
+                  {...register('lgaId',{valueAsNumber:true})}
+                
+              >
+                   <MenuItem  value={""}>
+                          <em>None</em>
+                      </MenuItem>
+                      {lgas?.map((lga:any,index:number) =>(
+                         <MenuItem  key={index} value={lga?.value}>
+                        {lga?.label}
+                     </MenuItem>
+                      ))}
+              </TextField>
+              </Grid>
+      
+            <Grid item xs={12} sm={4} lg={4}>
+              
+            <label>Select Ward</label>
+            <TextField
+                variant="outlined"
+                fullWidth
+                select
+                type="text"
+                multiline
+                {...register('wardId')}
+                // helperText={errors?.wardId?.message?.toString()}
+                FormHelperTextProps={{
+                className:"helperTextColor"
+                }}
+            >
+                <MenuItem value="">
+                        <em>None</em>
+                    </MenuItem>
+                    {wards?.map((ward:any,index:number) =>(
+                   <MenuItem key={index} value={ward?.value}>
+                 {ward?.label}
+           </MenuItem>
+                ))}
+            </TextField>
+            </Grid>
           </Grid>
         </DialogContent>
         <DialogActions>
