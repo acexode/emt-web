@@ -18,6 +18,7 @@ import closeFill from "@iconify/icons-eva/close-fill";
 import { Icon } from "@mui/material";
 // import { useAuthUserContext } from "../../../context/authUser.context";
 import { LoadingButton } from "@mui/lab";
+import {errorMessages} from "../../../constants/index"
 
 interface IRemove {
     modal:boolean,
@@ -33,8 +34,6 @@ export const Remove:FC<IRemove> = ({ id, param, fetchData, url,modal,toggle,type
   const [loading, setLoading] = useState(false);
   const theme = useTheme();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-
-
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const handleToggle =() => toggle()
 
@@ -61,8 +60,8 @@ export const Remove:FC<IRemove> = ({ id, param, fetchData, url,modal,toggle,type
         fetchData();
       })
       .catch((error) => {
-        console.log(error);
-        enqueueSnackbar(error?.message, {
+        let errorMessage = errorMessages[error?.response?.status]
+        enqueueSnackbar(errorMessage, {
             variant: "error",
             action: (key) => (
               <MIconButton size="small" onClick={() => closeSnackbar(key)}>

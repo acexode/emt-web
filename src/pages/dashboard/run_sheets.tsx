@@ -15,6 +15,7 @@ const TABLE_HEAD = [
   { id: "takeOffTime", label: "Take Off Time", alignRight: false },
   { id: "arrivalTime", label: "Arrival Time", alignRight: false },
   { id: "traiageCategory", label: "Triage Category", alignRight: false },
+  { id: "approve", label: "Status", alignRight: false },
   { id: "" },
 ];
 

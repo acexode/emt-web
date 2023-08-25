@@ -7,6 +7,7 @@ import { Box, Button, Typography, Container } from "@mui/material";
 import { MotionContainer, varBounceIn } from "../components/animate";
 import Page from "../components/Page";
 import PageNotFoundIllustration from "../assets/illustration_404";
+import { PATH_DASHBOARD } from "../routes/paths";
 
 // ----------------------------------------------------------------------
 
@@ -21,6 +22,7 @@ const RootStyle = styled(Page)(({ }) => ({
 // ----------------------------------------------------------------------
 
 export default function Page404() {
+
   return (
     <RootStyle title="404 Page Not Found | BHCPF">
       <Container>
@@ -43,7 +45,7 @@ export default function Page404() {
             </motion.div>
 
             <Button
-              to="/auth/login"
+              to={PATH_DASHBOARD.root}
               size="large"
               variant="contained"
               component={RouterLink}

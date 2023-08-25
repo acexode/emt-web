@@ -41,7 +41,7 @@ import { Icon } from "@iconify/react";
     areaCouncil: yup.string().required("*Area Council is required"),
     zipCode: yup.string(),
     incidentCategory: yup.string(),
-    canResolveWithoutAmbulance: yup.string(),
+    canResolveWithoutAmbulance: yup.string().required("* This is required"),
     ambulanceId: yup.string(),
     ambulanceType: yup.string(),
     emergencyTreatmentCenterId: yup.string(),
@@ -168,8 +168,21 @@ import { Icon } from "@iconify/react";
         description:"",
         ambulanceName:""
     }
+    if(latitude === null && longitude === null){
+        enqueueSnackbar("Latitude and Longitude is required!", {
+            variant: "error",
+            action: (key) => (
+              <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+                <Icon icon={closeFill} />
+              </MIconButton>
+            ),
+          });
+    }
+    else{
         handleClickOpen();
-    setConfirmationPayload(newVal);
+        setConfirmationPayload(newVal);
+    }
+      
       
   };
    

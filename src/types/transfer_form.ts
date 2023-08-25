@@ -9,6 +9,7 @@ export interface ITransferSheets {
     routeTo: string
     takeOffTime: string
     arrivalTime: string
+    approve: boolean
     medicUserId: string
     hospiceUserId: string
     totalMinutesToHospital: number

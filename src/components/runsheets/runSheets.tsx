@@ -239,6 +239,9 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                             <TableCell align="left">
                             <Skeleton variant="rectangular" width={100} height={30} /> 
                               </TableCell>
+                            <TableCell align="left">
+                            <Skeleton variant="rectangular" width={100} height={30} /> 
+                              </TableCell>
 
                             <TableCell align="right"></TableCell>
                           </TableRow>
@@ -325,6 +328,13 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                               
                             >
                                {row?.incidentViewModel?.traiageCategory || "Nil"
+                              }
+                            </TableCell>
+                            <TableCell
+                              align="left"
+                              
+                            >
+                               {row?.approve ? "Approved" : "Rejected" || "Nil"
                               }
                             </TableCell>
                            

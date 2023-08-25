@@ -32,6 +32,10 @@ axiosInstance.interceptors.response.use(
                 reject(error);
             });
         }
+        // if(error.response.status === 500){
+        //     // @ts-ignore
+        //     window.location = "/500"
+        // }
         if (error.response.status === 401) {
             tokenService.removeToken();
 
