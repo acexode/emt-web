@@ -7,14 +7,11 @@ const CustomTable = lazy(() => import("../../components/runsheets/runSheets"))
 
 const TABLE_HEAD = [
   { id: "s/n", label: "S/N", alignRight: false },
-  { id: "patientName", label: "Patient", alignRight: false },
-  { id: "name", label: "Facility", alignRight: false },
-  { id: "amb_name", label: "Ambulance", alignRight: false },
-  { id: "routeFrom", label: "Route From", alignRight: false },
-  { id: "routeTo", label: "Route To", alignRight: false },
-  { id: "takeOffTime", label: "Take Off Time", alignRight: false },
+  { id: "incidentViewModel?.patientViewModel.lastName", label: "Patient", alignRight: false },
+  { id: "incidentViewModel.emergencyTreatmentCenterViewModel.name", label: "Facility", alignRight: false },
+  { id: "incidentViewModel.ambulanceViewModel.name", label: "Ambulance", alignRight: false },
   { id: "arrivalTime", label: "Arrival Time", alignRight: false },
-  { id: "traiageCategory", label: "Triage Category", alignRight: false },
+  { id: "incidentViewModel.traiageCategory", label: "Triage Category", alignRight: false },
   { id: "approve", label: "Status", alignRight: false },
   { id: "" },
 ];

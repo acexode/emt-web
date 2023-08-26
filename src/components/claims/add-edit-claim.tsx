@@ -121,6 +121,31 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
           console.log(error);
         })
     },[])
+
+    // useEffect(()=>{
+    //   axiosInstance
+    //   .get(`Incidents/get`)
+    //   .then((res) => {
+    //     console.log(res?.data?.data);
+    //     const obj = res?.data?.data?.map((dt) =>{
+    //       return {
+    //         incident_id: dt?.id,
+    //           patientId: dt?.patientViewModel?.id,
+    //           emergencyTreatmentCenterId:  dt?.emergencyTreatmentCenterViewModel?.id,
+    //           label: `${dt?.patientViewModel?.firstName} ${dt?.patientViewModel?.middleName} ${dt?.patientViewModel?.lastName}`
+    //       }
+    //     })
+    //     setPatients(obj)
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   })
+    // },[])
+
+
+
+
+
       const calculateAmount = (unitCost:number, quantity:number) => {
         if (unitCost && quantity) {
           return (parseInt(unitCost) * parseInt(quantity)).toFixed(2);
@@ -174,7 +199,7 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
                 ),
               });
             reset();
-            // handleToggle();
+            handleToggle();
             fetchAllData()
           } catch (error) {
               const errorMessage =errorMessages[error?.response?.status]

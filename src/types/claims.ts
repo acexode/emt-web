@@ -8,6 +8,7 @@ export interface IClaims {
     hospitalId: number
     status: string
     totalPrice: number
+    distanceCovered: number
     dateAdded: string
     incidentViewModel: IncidentViewModel
     runsheetViewModel: RunsheetViewModel
@@ -49,6 +50,7 @@ export interface IClaims {
     patientViewModel: PatientViewModel
     emergencyTreatmentCenterViewModel: EmergencyTreatmentCenterViewModel
     ambulanceViewModel: AmbulanceViewModel
+    drugList:DrugList
   }
   
   export interface EmergencyTreatmentCenterViewModel {
@@ -71,6 +73,7 @@ export interface IClaims {
     location: string
     ambulanceTypeId: number
     wardId: number
+    nhiAorSHIA: string
     ambulanceId: number
     dateAdded: string
     ambulanceTypeViewModel: any
@@ -97,8 +100,17 @@ export interface IClaims {
     firstName: string
     middleName: string
     lastName: string
+    nhia: string
     doB: string
     sex: number
     phoneNumber: string
+    address: string
     medicalInterventions: any[]
+  }
+
+  export interface DrugList{
+    drugName:string,
+    quantity:number,
+    dose: number,
+    price:number
   }

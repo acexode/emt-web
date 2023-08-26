@@ -28,7 +28,7 @@ import HeaderBreadcrumbs from "../HeaderBreadcrumbs";
 import TableListHead from "../table/tableListHead";
 import ListToolbar from "../table/tableListToolbar";
 import { ITransferSheets } from "../../types/transfer_form";
-import { formatDateTime } from "../../utility";
+import { formatDateTime, formatter } from "../../utility";
 import MoreMenu from "../table/TableMoreMenu";
 // import MoreMenu from "../table/TableMoreMenu";
 // import { AddEditUser } from "./components/add-edit-user";
@@ -72,10 +72,7 @@ function applySortFilter(
   if (query) {
     return filter(
       array,
-      (_user) => _user?.incidentViewModel?.patientViewModel?.lastName?.toLowerCase().includes(query.toLowerCase()) || 
-      _user?.incidentViewModel?.emergencyTreatmentCenterViewModel?.name?.toLowerCase().includes(query.toLowerCase()) || 
-      _user?.incidentViewModel?.ambulanceViewModel?.name?.toLowerCase().includes(query.toLowerCase()) || 
-      _user?.incidentViewModel?.traiageCategory?.toLowerCase().includes(query.toLowerCase()) 
+      (_user) => _user?.ambulance_name?.toLowerCase().includes(query.toLowerCase()) 
     );
   }
   return stabilizedThis.map((el: any[]) => el[0]);
@@ -90,7 +87,7 @@ interface ITable {
   type?:string
 }
 
-const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetchAllData }) => {
+const CustomTableNemsas: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetchAllData }) => {
   const { themeStretch } = useSettings();
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
@@ -165,7 +162,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
             heading={`${page_title}`}
             links={[
               { name: "Dashboard", href: PATH_DASHBOARD.root },
-              { name: `${page_title}`, href:PATH_DASHBOARD.settings.userManagement },
+              { name: `${page_title}`, href:PATH_DASHBOARD.nemsas_run_sheets.root },
               { name: "List" },
             ]}
           
@@ -233,7 +230,15 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                             <TableCell align="left">
                             <Skeleton variant="rectangular" width={100} height={30} /> 
                               </TableCell>
-                           
+                            <TableCell align="left">
+                            <Skeleton variant="rectangular" width={100} height={30} /> 
+                              </TableCell>
+                            <TableCell align="left">
+                            <Skeleton variant="rectangular" width={100} height={30} /> 
+                              </TableCell>
+                            <TableCell align="left">
+                            <Skeleton variant="rectangular" width={100} height={30} /> 
+                              </TableCell>
                             <TableCell align="left">
                             <Skeleton variant="rectangular" width={100} height={30} /> 
                               </TableCell>
@@ -290,12 +295,39 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                                {row?.incidentViewModel?.ambulanceViewModel?.name || "Nil"
                               }
                             </TableCell>
-                           
+                            <TableCell
+                              align="left"
+                              
+                            >
+                               {row?.routeFrom || "Nil"
+                              }
+                            </TableCell>
+                            <TableCell
+                              align="left"
+                              
+                            >
+                               {row?.routeTo || "Nil"
+                              }
+                            </TableCell>
+                            <TableCell
+                              align="left"
+                              style={{width:"100px"}}
+                            >
+                               {formatDateTime(row?.takeOffTime) || "Nil"
+                              }
+                            </TableCell>
                             <TableCell
                               align="left"
                               
                             >
                                {formatDateTime(row?.arrivalTime) || "Nil"
+                              }
+                            </TableCell>
+                            <TableCell
+                              align="left"
+                              
+                            >
+                               {row?.totalMinutesToHospital || "Nil"
                               }
                             </TableCell>
                             <TableCell
@@ -309,7 +341,14 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                               align="left"
                               
                             >
-                               {row?.approve ? "Approved" : "Not Approved" || "Nil"
+                               {formatter.format(row?.price) || "Nil"
+                              }
+                            </TableCell>
+                            <TableCell
+                              align="left"
+                              
+                            >
+                               {row?.approve ? "Approved" : "Rejected" || "Nil"
                               }
                             </TableCell>
                            
@@ -355,4 +394,4 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
   );
 };
 
-export default CustomTable;
+export default CustomTableNemsas;

@@ -9,6 +9,7 @@ import {Box} from '@mui/material';
 import { userType } from "../../constants";
 import { useAuthUserContext } from "../../context/authUser.context";
 const CustomTable = lazy(() => import("../../components/claims/table"))
+const CustomClaimAmbTable = lazy(() => import("../../components/claims/ambClaims"))
 
 
 const TABLE_HEAD = [
@@ -18,6 +19,19 @@ const TABLE_HEAD = [
   { id: "patientName", label: "Patient Name", alignRight: false },
   { id: "incidentDate", label: "Incident Date", alignRight: false },
   { id: "totalAmount", label: "Total Amount", alignRight: false },
+  { id: "status", label: "Status", alignRight: false },
+  { id: "" },
+];
+
+const TABLE_HEAD_AMB = [
+  { id: "s/n", label: "S/N", alignRight: false },
+  { id: "title", label: "Title", alignRight: false },
+  { id: "incidentViewModel.incidentCategory", label: "Incident Category", alignRight: false },
+  { id: "incidentViewModel.patientViewModel.firstName", label: "Patient Name", alignRight: false },
+  { id: "incidentViewModel.incidentDate", label: "Incident Date", alignRight: false },
+  { id: "distanceCovered", label: "Distance Covered", alignRight: false },
+  { id: "totalPrice", label: "Total Price", alignRight: false },
+  { id: "dateAdded", label: "Date Added", alignRight: false },
   { id: "status", label: "Status", alignRight: false },
   { id: "" },
 ];
@@ -67,30 +81,37 @@ const Claims: FC = () => {
     setValue(newValue);
   };
   const fetchAllData = async () => {
-    setLoading(true)
-    let obj ={
-      id:userProfile?.ambulanceId
-    }
-    let obj2 ={
-      id:userProfile?.etcId
-    }
+    setLoading(true);
+    let obj = {
+      id: 1
+    };
+    let obj2 = {
+      id: userProfile?.etcId
+    };
+  
     try {
-      const [ambRes, etcRes] = await Promise.all([
-        axiosInstance.post(`Claims/getByAssignedAmbulance`,obj),
-        axiosInstance.post(`Claims/getByAssignedETC`,obj2),
-      ]);
-      setAmbulanceClaims(ambRes?.data?.data)
-      setETCClaims(etcRes?.data?.data)
+      const ambRes = await axiosInstance.post(`Claims/getByAssignedAmbulance`, obj);
+      console.log(ambRes?.data?.data);
+      setAmbulanceClaims(ambRes?.data?.data);
     } catch (error) {
-      console.log(error);
-     
-    } finally {
-      setLoading(false);
+      console.log("Error fetching ambulance claims:", error);
     }
+  
+    try {
+      const etcRes = await axiosInstance.post(`Claims/getByAssignedETC`, obj2);
+      console.log(etcRes?.data?.data);
+      setETCClaims(etcRes?.data?.data);
+    } catch (error) {
+      console.log("Error fetching ETC claims:", error);
+    }
+  
+    setLoading(false);
   };
+  
   useEffect(() => {
     fetchAllData();
   }, []);
+  
 
   return (
     <>
@@ -110,7 +131,7 @@ const Claims: FC = () => {
       </Tabs>
     </Box>
     <TabPanel value={value} index={0}>
-    <CustomTable page_title='Ambulance' loading={loading} table_Head={TABLE_HEAD} dataList={ambulanceClaims} fetchAllData={fetchAllData} type="ambulance" />
+    <CustomClaimAmbTable page_title='Ambulance' loading={loading} table_Head={TABLE_HEAD_AMB} dataList={ambulanceClaims} fetchAllData={fetchAllData} type="ambulance" />
 
     </TabPanel>
     <TabPanel value={value} index={1}>
