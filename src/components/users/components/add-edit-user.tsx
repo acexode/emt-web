@@ -22,7 +22,7 @@ import { MIconButton } from "../../@material-extend";
 import closeFill from "@iconify/icons-eva/close-fill";
 import { Icon } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
-import { userTypesArray } from "../../../constants";
+import { errorMessages, userTypesArray } from "../../../constants";
 import { useAuthUserContext } from "../../../context/authUser.context";
 
 const states = [
@@ -246,7 +246,8 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
             fetchAllUsers()
           } catch (error: any) {
             console.log(error)
-            enqueueSnackbar(error?.response?.data?.title, {
+            const errorMessage = errorMessages[error?.response?.status]
+            enqueueSnackbar(errorMessage, {
                 variant: "error",
                 action: (key) => (
                   <MIconButton size="small" onClick={() => closeSnackbar(key)}>

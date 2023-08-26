@@ -28,7 +28,7 @@ import HeaderBreadcrumbs from "../HeaderBreadcrumbs";
 import TableListHead from "../table/tableListHead";
 import ListToolbar from "../table/tableListToolbar";
 import { ITransferSheets } from "../../types/transfer_form";
-import { formatDateTime } from "../../utility";
+import { formatDateTime, formatter } from "../../utility";
 import MoreMenu from "../table/TableMoreMenu";
 // import MoreMenu from "../table/TableMoreMenu";
 // import { AddEditUser } from "./components/add-edit-user";
@@ -299,28 +299,35 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                               align="left"
                               
                             >
-                               {row?.incidentViewModel?.runsheetViewModel?.routeFrom || "Nil"
+                               {row?.routeFrom || "Nil"
                               }
                             </TableCell>
                             <TableCell
                               align="left"
                               
                             >
-                               {row?.incidentViewModel?.runsheetViewModel?.routeTo || "Nil"
+                               {row?.routeTo || "Nil"
+                              }
+                            </TableCell>
+                            <TableCell
+                              align="left"
+                              style={{width:"100px"}}
+                            >
+                               {formatDateTime(row?.takeOffTime) || "Nil"
                               }
                             </TableCell>
                             <TableCell
                               align="left"
                               
                             >
-                               {formatDateTime(row?.incidentViewModel?.runsheetViewModel?.takeOffTime) || "Nil"
+                               {formatDateTime(row?.arrivalTime) || "Nil"
                               }
                             </TableCell>
                             <TableCell
                               align="left"
                               
                             >
-                               {formatDateTime(row?.incidentViewModel?.runsheetViewModel?.arrivalTime) || "Nil"
+                               {row?.totalMinutesToHospital || "Nil"
                               }
                             </TableCell>
                             <TableCell
@@ -328,6 +335,13 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                               
                             >
                                {row?.incidentViewModel?.traiageCategory || "Nil"
+                              }
+                            </TableCell>
+                            <TableCell
+                              align="left"
+                              
+                            >
+                               {formatter.format(row?.price) || "Nil"
                               }
                             </TableCell>
                             <TableCell

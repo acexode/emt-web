@@ -66,35 +66,40 @@ export function fData(number: any) {
 export const numberToWords = (num: number) => {
   const units = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
   const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
-  
-  const convertChunk = (number: number) => {
-    if (number < 20) {
-      return units[number];
-    } else {
-      return tens[Math.floor(number / 10)] + ' ' + units[number % 10];
-    }
-  };
-
-  const convertNumber = (number: number, scale: number):any => {
-    if (number === 0) {
-      return '';
-    } else if (number < 100) {
-      return convertChunk(number);
-    } else if (number < 1000) {
-      return units[Math.floor(number / 100)] + ' Hundred ' + convertChunk(number % 100);
-    } else {
-      return convertNumber(Math.floor(number / 1000), scale + 1) + ' ' + scaleNames[scale] + ' ' + convertNumber(number % 1000, 0);
-    }
-  };
-
   const scaleNames = ['', 'Thousand', 'Million', 'Billion', 'Trillion'];
-  
+
   if (num === 0) {
     return 'Zero';
+  }
+
+  let result = '';
+  let scale = 0;
+
+  while (num > 0) {
+    const chunk = num % 1000;
+    if (chunk !== 0) {
+      if (result.length > 0) {
+        result = convertChunk(chunk) + ' ' + scaleNames[scale] + ' ' + result;
+      } else {
+        result = convertChunk(chunk);
+      }
+    }
+
+    num = Math.floor(num / 1000);
+    scale++;
+  }
+
+  return result;
+};
+
+const convertChunk = (number: number) => {
+  if (number < 20) {
+    return units[number];
   } else {
-    return convertNumber(num, 0);
+    return tens[Math.floor(number / 10)] + ' ' + units[number % 10];
   }
 };
+
 // "One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven"
 
 

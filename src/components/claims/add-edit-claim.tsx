@@ -25,13 +25,14 @@ import {
 import {RemoveCircleOutline} from "@mui/icons-material"
   import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { MIconButton } from "../../@material-extend";
 import closeFill from "@iconify/icons-eva/close-fill";
-import { Icon } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import axiosInstance from "../../services/api_service";
 import Scrollbar from "../Scrollbar";
 import { useAuthUserContext } from "../../context/authUser.context";
+import { errorMessages } from "../../constants";
+import { MIconButton } from "../@material-extend";
+import { Icon } from "@iconify/react";
 
 
 
@@ -46,7 +47,7 @@ const headLabel = [
  "S/N", "Medical Intervention",  "Unit Cost", "Dose","Quantity","Amount",""
 ]
   const schema = yup.object().shape({
-    patientId: yup.string().required("*Patient Name is required"),
+    patientId: yup.string(),
   });
  
 
@@ -59,7 +60,8 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
         formState: { errors },
         setValue,
         control,
-        watch
+        watch,
+        getValues
       } = useForm({
         mode: "onTouched",
         criteriaMode: "firstError",
@@ -69,20 +71,22 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
         delayError: undefined,
         resolver: yupResolver(schema),
         defaultValues: {
-          items: [{ medicalIntervention: '', dose: '', price: '', quantity: '' }],
+          incidentDrugs: [{ medicalIntervention: '', dose: '', price: '', quantity: '',unitCost:'' }],
         },
       });
       const [loading,setLoading] = useState(false)
       const { enqueueSnackbar, closeSnackbar } = useSnackbar();
       const [options,setOptions] = useState<any>([])
       const [patients,setPatients] = useState<any>([])
+      const [patientData,setPatientData] = useState<any>()
       const {
         userState: { userProfile },
       } = useAuthUserContext();
    
+      const watchQuantity = watch()
       const { fields, append, remove } = useFieldArray({
         control,
-        name: 'items',
+        name: 'incidentDrugs',
       });
       useEffect(()=>{
         axiosInstance.get("ServicesAndFees/get").then(res =>{
@@ -119,11 +123,12 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
     },[])
       const calculateAmount = (unitCost:number, quantity:number) => {
         if (unitCost && quantity) {
-          return (unitCost * quantity).toFixed(2);
+          return (parseInt(unitCost) * parseInt(quantity)).toFixed(2);
         }
         return '';
       };
       useEffect(() => {
+        
         const updateTotalAmount = () => {
           let totalAmount = fields?.reduce((sum, field) => sum + calculateAmount(field.unitCost, field.quantity), 0);
           setValue('totalAmount', parseFloat(totalAmount)?.toFixed(2));
@@ -147,58 +152,70 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
             ...data
           };
           console.log({newData})
-        //   delete newData?.id
-        //   setLoading(true)
-        //   let text = edit ? "Claim Updated" : "Claim Added";
-        //   try {
-        //     let res;
-        //     if (edit) {
-        //       res = await axiosInstance.put(
-        //         `/users/${formData?.id}/update`,
-        //         newData
-        //       );
-        //     } else {
-        //       res = await axiosInstance.post(`/users/create`, newData);
-        //     }
-        //     enqueueSnackbar(`${text}`, {
-        //         variant: "success",
-        //         action: (key) => (
-        //           <MIconButton size="small" onClick={() => closeSnackbar(key)}>
-        //             <Icon icon={closeFill} />
-        //           </MIconButton>
-        //         ),
-        //       });
-        //     reset();
-        //     handleToggle();
-        //     fetchAllData()
-        //   } catch (error: any) {
-        //     enqueueSnackbar("Error!", {
-        //         variant: "error",
-        //         action: (key) => (
-        //           <MIconButton size="small" onClick={() => closeSnackbar(key)}>
-        //             <Icon icon={closeFill} />
-        //           </MIconButton>
-        //         ),
-        //       });
-        //   } finally{
-        //     setLoading(false)
-        //   }
+          delete newData?.totalAmount
+          setLoading(true)
+          let text = edit ? "Claim Updated" : "Claim Added";
+          try {
+            let res;
+            if (edit) {
+              res = await axiosInstance.put(
+                `Claims/update`,
+                newData
+              );
+            } else {
+              res = await axiosInstance.post(`Claims/add`, newData);
+            }
+            enqueueSnackbar(`${text}`, {
+                variant: "success",
+                action: (key) => (
+                  <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+                    <Icon icon={closeFill} />
+                  </MIconButton>
+                ),
+              });
+            reset();
+            // handleToggle();
+            fetchAllData()
+          } catch (error) {
+              const errorMessage =errorMessages[error?.response?.status]
+            enqueueSnackbar(errorMessage, {
+                variant: "error",
+                action: (key) => (
+                  <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+                    <Icon icon={closeFill} />
+                  </MIconButton>
+                ),
+              });
+          } finally{
+            setLoading(false)
+          }
     }
   
     const handleAutocompleteChange = (index:number, intervention:any) => {
-      console.log({intervention});
       //  // Update the corresponding fields in the form data
-     setValue(`items[${index}].medicalIntervention`, intervention?.intervention || '');
-     setValue(`items[${index}].serviceFeeId`, intervention?.id || '');
-    //  setValue(`items[${index}].dose`, intervention?.code || '');
-     setValue(`items[${index}].unitCost`, intervention?.price || '');
+     setValue(`incidentDrugs[${index}].medicalIntervention`, intervention?.intervention || '');
+     setValue(`incidentDrugs[${index}].serviceFeeId`, intervention?.id || '');
+    //  setValue(`incidentDrugs[${index}].dose`, intervention?.code || '');
+     setValue(`incidentDrugs[${index}].unitCost`, intervention?.price || '');
+     setValue(`incidentDrugs[${index}].patientId`, patientData?.patientId || '');
+     setValue(`incidentDrugs[${index}].emergencyTreatmentCenterId`, patientData?.emergencyTreatmentCenterId || '');
+     setValue(`incidentDrugs[${index}].incidentId`, patientData?.incidentId || '');
     
      };
 
+     const handleSetPrice=(val:any,index:number) =>{
+       let boom = getValues(`incidentDrugs[${index}].unitCost`)
+       let price = calculateAmount(boom,val)
+        setValue(`incidentDrugs[${index}].price`, parseInt(price)|| '');
+     }
      const handlePatientName = (e:any,val:any) =>{
-      setValue("patientId",val?.patientId)
-      setValue("incidentId",val?.incident_id)
-      setValue("emergencyTreatmentCenterId",val?.emergencyTreatmentCenterId)
+      let obj = {
+        patientId : val?.patientId,
+     incidentId: val?.incident_id,
+     emergencyTreatmentCenterId: val?.emergencyTreatmentCenterId,
+      }
+      setPatientData(obj)
+
      }
   
     return (
@@ -280,9 +297,9 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
                         type="number"
                         inputProps={{ step: '0.01' }}
                         disabled
-                        {...register(`items[${index}].unitCost`, { required: 'Unit Cost is required', pattern: /^\d+(\.\d{1,2})?$/ })}
-                        error={!!errors.items?.[index]?.unitCost}
-                        helperText={errors.items?.[index]?.unitCost?.message}
+                        {...register(`incidentDrugs[${index}].unitCost`, { required: 'Unit Cost is required', pattern: /^\d+(\.\d{1,2})?$/ })}
+                        error={!!errors.incidentDrugs?.[index]?.unitCost}
+                        helperText={errors.incidentDrugs?.[index]?.unitCost?.message}
                       />
                               </TableCell>
                               <TableCell
@@ -290,9 +307,9 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
                             style={{ width: '60rem' }}
                             >
                                <TextField
-                        {...register(`items[${index}].dose`, { required: 'Dose is required' })}
-                        error={!!errors.items?.[index]?.dose}
-                        helperText={errors.items?.[index]?.dose?.message}
+                        {...register(`incidentDrugs[${index}].dose`, { required: 'Dose is required' })}
+                        error={!!errors.incidentDrugs?.[index]?.dose}
+                        helperText={errors.incidentDrugs?.[index]?.dose?.message}
                       />
                               </TableCell>
                             <TableCell
@@ -302,9 +319,10 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
                             >
                                <TextField
                         type="number"
-                        {...register(`items[${index}].quantity`, { required: 'Quantity is required', pattern: /^\d+$/ })}
-                        error={!!errors.items?.[index]?.quantity}
-                        helperText={errors.items?.[index]?.quantity?.message}
+                        {...register(`incidentDrugs[${index}].quantity`, { required: 'Quantity is required', pattern: /^\d+$/ })}
+                        error={!!errors.incidentDrugs?.[index]?.quantity}
+                        helperText={errors.incidentDrugs?.[index]?.quantity?.message}
+                        onChange={(e) => handleSetPrice(e.target.value,index)}
                       />
                               </TableCell>
                             <TableCell
@@ -312,9 +330,10 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
                             style={{ width: '80rem' }}
                             >
                                <TextField
-                        value={calculateAmount(field.unitCost, field.quantity)}
-                        disabled
-                      />
+                                disabled
+                                {...register(`incidentDrugs[${index}].price`)}
+                        
+                                  />
                               </TableCell>
                             <TableCell
                             align="left"
@@ -332,7 +351,7 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
               </TableContainer>
             </Scrollbar>
 
-      <Button type="button" onClick={() => append({ medicalIntervention: '', dose: '', unitCost: '', quantity: '' })}>
+      <Button type="button" onClick={() => append({ medicalIntervention: '', dose: '', unitCost: '', quantity: '',price:'' })}>
         Add More
       </Button>
       <Grid item xs={12} sm={12} mt={4} lg={12}>

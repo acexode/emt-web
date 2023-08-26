@@ -368,21 +368,7 @@ import AlertDialog from "./components/confirmDialog";
                 
                     </Grid>
             </Card>
-          {/* <Card sx={{ p: 3, pb: 4, mb: 2 }}>
-                <Grid container spacing={2}>
-                <Grid item sm={12}>
-                <ListItem>
-                    <ListItemText primary={<Typography>
-                    Serial NO: FCT360/
-                    </Typography>} 
-                    secondary={
-                    <Typography sx={{color:"#7b939c"}} >AD9178932</Typography>
-                    } />
-                </ListItem>
-                </Grid>
-            
-                </Grid>
-            </Card> */}
+          
             <Button
                 size="medium"
                 type="submit"

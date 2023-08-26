@@ -34,6 +34,7 @@ import { AddEditClaims } from "./add-edit-claim";
 import { Icon } from "@iconify/react";
 import { useAuthUserContext } from "../../context/authUser.context";
 import { userType } from "../../constants";
+import { formatter } from "../../utility";
 // import tokenService from "../../services/tokenService";
 // import { userType } from "../../constants";
 // ----------------------------------------------------------------------
@@ -232,6 +233,11 @@ const CustomClaimTable: FC<ITable> = ({ dataList, page_title, table_Head,loading
                             </TableCell>
                             <TableCell
                               align="left"
+                            >
+                            <Skeleton variant="rectangular" width={100} height={30} /> 
+                            </TableCell>
+                            <TableCell
+                              align="left"
                               
                             >
                              <Skeleton variant="rectangular" width={100} height={30} /> 
@@ -288,7 +294,7 @@ const CustomClaimTable: FC<ITable> = ({ dataList, page_title, table_Head,loading
                               align="left"
                              
                             >
-                              { row?.incidentViewModel?.ambulanceViewModel?.name || "NIL" 
+                              { row?.serviceProvider || "NIL" 
                               }
                            
                             </TableCell>
@@ -296,21 +302,28 @@ const CustomClaimTable: FC<ITable> = ({ dataList, page_title, table_Head,loading
                               align="left"
                              
                             >
-                               {row?.incidentViewModel?.incidentCategory || "Nil"
+                               {row?.incidentCategory || "Nil"
                               }
                             </TableCell>
                             <TableCell
                               align="left"
                               
                             >
-                               {row?.patientViewModel?.firstName || "Nil"
+                               {row?.patientName || "Nil"
                               }
                             </TableCell>
                             <TableCell
                               align="left"
                               
                             >
-                               {row?.incidentViewModel?.incidentDate || "Nil"
+                               {row?.incidentDate || "Nil"
+                              }
+                            </TableCell>
+                            <TableCell
+                              align="left"
+                              
+                            >
+                               {formatter.format(row?.totalAmount)
                               }
                             </TableCell>
                             <TableCell align="left">
