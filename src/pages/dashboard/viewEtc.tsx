@@ -1,3 +1,5 @@
+
+// @ts-nocheck
 import {
     Container,
     Grid,
@@ -28,6 +30,7 @@ import axiosInstance from "../../services/api_service";
 import { MIconButton } from "../../components/@material-extend";
 import closeFill from "@iconify/icons-eva/close-fill";
 import { Icon } from "@iconify/react";
+import { errorMessages } from "../../constants";
 
   const ViewETC: FC = () => {
     const { themeStretch } = useSettings();
@@ -60,14 +63,7 @@ import { Icon } from "@iconify/react";
         const onHandleSubmit = async (status:any) => {
           let newVal = {
             "id": row?.id,
-            "title": row?.title,
-            "incidentId": row?.incidentId,
-            "runSheetId": row?.runSheetId,
-            "incidentFeeId": row?.incidentFeeId,
-            "ambulanceId": row?.ambulanceId,
-            "hospitalId": row?.hospitalId,
-            "status": status,
-            "totalPrice": row?.totalPrice
+            "claimStatusType": status,
           }
           let t = status === "Approved" ? "Approving Claim" : "Rejecting Claim"
               handleClickOpen();
@@ -79,8 +75,8 @@ import { Icon } from "@iconify/react";
           setLoading(true)
           try {
             let res;
-            res = await axiosInstance.put(
-              `Claims/update`,
+            res = await axiosInstance.post(
+              `Claims/acceptOrRejectClaim`,
               confirmationPayload
             );
             navigate(PATH_DASHBOARD.claims.root);
@@ -94,7 +90,8 @@ import { Icon } from "@iconify/react";
             });
           } catch (error) {
             console.log(error);
-            enqueueSnackbar("Error updating claim!", {
+            const errorMessage = errorMessages[error?.response?.status]
+            enqueueSnackbar(errorMessage, {
                 variant: "error",
                 action: (key) => (
                   <MIconButton size="small" onClick={() => closeSnackbar(key)}>

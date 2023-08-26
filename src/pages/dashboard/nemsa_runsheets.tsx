@@ -2,7 +2,7 @@ import { FC, useEffect, useState,lazy } from "react";
 import { useAuthUserContext } from "../../context/authUser.context";
 import axiosInstance from "../../services/api_service";
 
-const CustomTable = lazy(() => import("../../components/runsheets/runSheets"))
+const CustomTable = lazy(() => import("../../components/runsheets/nemsas_runsheets"))
 
 
 const TABLE_HEAD = [

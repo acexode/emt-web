@@ -1,7 +1,6 @@
 import { filter } from "lodash";
 // import { Icon } from "@iconify/react";
 import { useState, SetStateAction, FC } from "react";
-// import plusFill from "@iconify/icons-eva/plus-fill";
 // material
 import {
   Card,
@@ -13,26 +12,31 @@ import {
   Container,
   TableContainer,
   TablePagination,
-  Skeleton
+  Skeleton,
+  Button,
+  // Button,
 } from "@mui/material";
+import plusFill from "@iconify/icons-eva/plus-fill";
 
 // routes
 import { PATH_DASHBOARD } from "../../routes/paths";
 // hooks
 import useSettings from "../../hooks/useSettings";
 // components
-import Page from "../Page";
-import Scrollbar from "../Scrollbar";
-import SearchNotFound from "../SearchNotFound";
-import HeaderBreadcrumbs from "../HeaderBreadcrumbs";
+import Page from "../../components/Page";
+import Scrollbar from "../../components/Scrollbar";
+import SearchNotFound from "../../components/SearchNotFound";
+import HeaderBreadcrumbs from "../../components/HeaderBreadcrumbs";
 import TableListHead from "../table/tableListHead";
 import ListToolbar from "../table/tableListToolbar";
-import { ITransferSheets } from "../../types/transfer_form";
-import { formatDateTime } from "../../utility";
 import MoreMenu from "../table/TableMoreMenu";
-// import MoreMenu from "../table/TableMoreMenu";
-// import { AddEditUser } from "./components/add-edit-user";
-// import axiosInstance from "../../services/api_service";
+import { AddEditClaims } from "./add-edit-claim";
+import { Icon } from "@iconify/react";
+import { useAuthUserContext } from "../../context/authUser.context";
+import { userType } from "../../constants";
+import { formatDate2, formatter } from "../../utility";
+// import tokenService from "../../services/tokenService";
+// import { userType } from "../../constants";
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
@@ -63,7 +67,7 @@ function applySortFilter(
   query: string
 ) {
 
-  const stabilizedThis = array?.map((el: any, index: any) => [el, index]);
+  const stabilizedThis = array.map((el: any, index: any) => [el, index]);
   stabilizedThis.sort((a: number[], b: number[]) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
@@ -72,10 +76,10 @@ function applySortFilter(
   if (query) {
     return filter(
       array,
-      (_user) => _user?.incidentViewModel?.patientViewModel?.lastName?.toLowerCase().includes(query.toLowerCase()) || 
-      _user?.incidentViewModel?.emergencyTreatmentCenterViewModel?.name?.toLowerCase().includes(query.toLowerCase()) || 
-      _user?.incidentViewModel?.ambulanceViewModel?.name?.toLowerCase().includes(query.toLowerCase()) || 
-      _user?.incidentViewModel?.traiageCategory?.toLowerCase().includes(query.toLowerCase()) 
+      (_user) => _user?.title?.toLowerCase().includes(query.toLowerCase())  ||
+      _user?.ncidentViewModel?.incidentCategory?.toLowerCase().includes(query.toLowerCase()) ||
+      _user?.incidentViewModel?.patientViewModel?.firstName?.toLowerCase().includes(query.toLowerCase()) ||
+      _user?.status?.toLowerCase().includes(query.toLowerCase())
     );
   }
   return stabilizedThis.map((el: any[]) => el[0]);
@@ -85,33 +89,37 @@ interface ITable {
   table_Head: any;
   dataList: any;
   page_title: string;
-  loading?:boolean,
+  loading?:boolean;
   fetchAllData:any;
   type?:string
 }
 
-const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetchAllData }) => {
+const CustomClaimAmbTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetchAllData,type }) => {
   const { themeStretch } = useSettings();
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
   const [selected, setSelected] = useState<any>([]);
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
-  const [rowsPerPage, setRowsPerPage] = useState(25);
-  // const [modal, setModal] = useState(false);
-  // const [edit, setEdit] = useState(false);
-  // const [formData, setFormData] = useState(null);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [modal, setModal] = useState(false);
+  const [edit, setEdit] = useState(false);
+  const [formData, setFormData] = useState(null);
+  const {
+    userState: { userProfile },
+  } = useAuthUserContext();
 
-  // const toggle = () => {
-  //   setModal(!modal);
-  //   setFormData(null);
-  //   setEdit(false);
-  // };
-  // const handleUpdate = (row:any) => {
-  //   setModal(!modal);
-  //   setFormData(row);
-  //   setEdit(true);
-  // };
+
+  const toggle = () => {
+    setModal(!modal);
+    setFormData(null);
+    setEdit(false);
+  };
+  const handleUpdate = (row:any) => {
+    setModal(!modal);
+    setFormData(row);
+    setEdit(true);
+  }; 
 
   const handleRequestSort = (_event: any, property: SetStateAction<string>) => {
     const isAsc = orderBy === property && order === "asc";
@@ -155,7 +163,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
   );
 
   const isUserNotFound = filteredUsers.length === 0 && !loading;
-  let dummyData = [...Array(10)]
+  let dummyData = [...Array(5)]
 
   return (
     <>
@@ -165,10 +173,18 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
             heading={`${page_title}`}
             links={[
               { name: "Dashboard", href: PATH_DASHBOARD.root },
-              { name: `${page_title}`, href:PATH_DASHBOARD.settings.userManagement },
+              { name: `${page_title}`, href:PATH_DASHBOARD.claims.root },
               { name: "List" },
             ]}
-          
+            action={ userProfile?.userRole === userType.etc_user ?
+              <Button
+                variant="contained"
+                onClick={toggle}
+                startIcon={<Icon icon={plusFill} />}
+              >
+                New Claim
+              </Button> : null
+            }
           />
 
           <Card>
@@ -219,6 +235,11 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                             </TableCell>
                             <TableCell
                               align="left"
+                            >
+                            <Skeleton variant="rectangular" width={100} height={30} /> 
+                            </TableCell>
+                            <TableCell
+                              align="left"
                               
                             >
                              <Skeleton variant="rectangular" width={100} height={30} /> 
@@ -229,11 +250,12 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                             >
                             <Skeleton variant="rectangular" width={100} height={30} /> 
                             </TableCell>
-                           
-                            <TableCell align="left">
-                            <Skeleton variant="rectangular" width={100} height={30} /> 
-                              </TableCell>
-                           
+                            <TableCell
+                              align="left"
+                            
+                            >
+                             <Skeleton variant="rectangular" width={100} height={30} /> 
+                            </TableCell>
                             <TableCell align="left">
                             <Skeleton variant="rectangular" width={100} height={30} /> 
                               </TableCell>
@@ -248,22 +270,25 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                         page * rowsPerPage,
                         page * rowsPerPage + rowsPerPage
                       )
-                      .map((row: ITransferSheets, index: number) => {
-                       
+                      .map((row: any, index: number) => {
+                        const isItemSelected =
+                          selected.indexOf(row?.year) !== -1;
+
                         return (
                           <TableRow
                             hover
                             key={index}
                             tabIndex={-1}
                             role="checkbox"
-                      
+                            selected={isItemSelected}
+                            aria-checked={isItemSelected}
                           >
                           
-                            <TableCell
+                          <TableCell
                               align="left"
                              
                             >
-                              { index + 1
+                              { index +1
                               }
                            
                             </TableCell>
@@ -271,7 +296,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                               align="left"
                              
                             >
-                              { row?.incidentViewModel?.patientViewModel?.firstName ?  `${row?.incidentViewModel?.patientViewModel?.firstName} ${row?.incidentViewModel?.patientViewModel?.lastName}` : "Nil"
+                              { row?.title || "NIL" 
                               }
                            
                             </TableCell>
@@ -279,42 +304,50 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                               align="left"
                              
                             >
-                              { row?.incidentViewModel?.emergencyTreatmentCenterViewModel?.name || "Nil"
-                              }
-                           
-                            </TableCell>
-                            <TableCell
-                              align="left"
-                             
-                            >
-                               {row?.incidentViewModel?.ambulanceViewModel?.name || "Nil"
-                              }
-                            </TableCell>
-                           
-                            <TableCell
-                              align="left"
-                              
-                            >
-                               {formatDateTime(row?.arrivalTime) || "Nil"
+                               {row?.incidentViewModel?.incidentCategory || "Nil"
                               }
                             </TableCell>
                             <TableCell
                               align="left"
                               
                             >
-                               {row?.incidentViewModel?.traiageCategory || "Nil"
+                               {row?.incidentViewModel?.patientViewModel?.firstName ? `${row?.incidentViewModel?.patientViewModel?.firstName} ${row?.incidentViewModel?.patientViewModel?.lastName}`  : "Nil"
                               }
                             </TableCell>
                             <TableCell
                               align="left"
                               
                             >
-                               {row?.approve ? "Approved" : "Not Approved" || "Nil"
+                               {row?.incidentViewModel?.incidentDate || "Nil"
                               }
                             </TableCell>
-                           
+                            <TableCell
+                              align="left"
+                              
+                            >
+                               {row?.distanceCovered 
+                              }
+                            </TableCell>
+                            <TableCell
+                              align="left"
+                              
+                            >
+                               {formatter.format(row?.totalPrice)
+                              }
+                            </TableCell>
+                            <TableCell align="left">
+                          
+                              { formatDate2(row?.dateAdded) || "Nil"}
+                             
+                              </TableCell>
+                            <TableCell align="left">
+                          
+                              { row?.status || "Nil"}
+                             
+                              </TableCell>
+
                             <TableCell align="right">
-                                <MoreMenu row={row} fetchAllData={fetchAllData} type="runsheets" />
+                                <MoreMenu handleUpdate={handleUpdate} row={row} fetchAllData={fetchAllData} type={type} />
                             </TableCell>
                           </TableRow>
                         );
@@ -351,8 +384,9 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
           </Card>
         </Container>
       </Page>
+      <AddEditClaims toggle={toggle} modal={modal} formData={formData} edit={edit} fetchAllData={fetchAllData}  />
     </>
   );
 };
 
-export default CustomTable;
+export default CustomClaimAmbTable;
