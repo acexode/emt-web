@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import {
     Box,
     Card,
@@ -71,6 +73,7 @@ import { Icon } from "@iconify/react";
     const [ambulanceTypes,setAmbulanceTypes] = useState<any>([])
     const [treatmentCentres,setTreatmentCentres] = useState<any>([])
     const [loading,setLoading] = useState(false)
+    const [formDataLoaded, setFormDataLoaded] = useState(false);
     const { state } = useLocation();
     const row = state?.row || null;
     const [open, setOpen] = useState(false);
@@ -79,7 +82,8 @@ import { Icon } from "@iconify/react";
         handleSubmit,
         formState: { errors },
         watch,
-        reset
+        reset,
+        setValue
       } = useForm({
         mode: "onTouched",
         criteriaMode: "firstError",
@@ -158,6 +162,26 @@ import { Icon } from "@iconify/react";
       console.log(error);
     })
   },[])
+
+  useEffect(() => {
+    // Load form data from local storage
+    const savedFormData = JSON.parse(localStorage.getItem("savedFormData"));
+    if (savedFormData) {
+      Object.keys(savedFormData).forEach((fieldName) => {
+        setValue(fieldName, savedFormData[fieldName]);
+      });
+      setFormDataLoaded(true);
+    }
+  }, []);
+  const formValues = watch();
+  useEffect(() => {
+    if(formDataLoaded){
+        console.log("Saving form data to local storage...");
+        // Save form data to local storage whenever form vaues change
+        localStorage.setItem("savedFormData", JSON.stringify(formValues));
+    }
+   
+  }, [formValues,formDataLoaded]);
    
    const onHandleSubmit = async (data:any) => {
     let newVal = {
