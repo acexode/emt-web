@@ -22,6 +22,7 @@ import { MIconButton } from "../../@material-extend";
 import closeFill from "@iconify/icons-eva/close-fill";
 import { Icon } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
+import { errorMessages } from "../../../constants";
 
 const status = [
   "Discharged",
@@ -108,8 +109,10 @@ export  const AddEditPatient:FC<IAddEditPatient> = ({edit,formData,modal,toggle,
             reset();
             handleToggle();
             fetchAllUsers()
-          } catch (error: any) {
-            enqueueSnackbar("Error!", {
+          } catch (error) {
+            console.log(error);
+            const errorMessage = errorMessages[error?.response?.status]
+            enqueueSnackbar(errorMessage, {
                 variant: "error",
                 action: (key) => (
                   <MIconButton size="small" onClick={() => closeSnackbar(key)}>

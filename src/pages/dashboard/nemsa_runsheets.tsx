@@ -14,33 +14,13 @@ const TABLE_HEAD = [
   { id: "routeTo", label: "Route To", alignRight: false },
   { id: "takeOffTime", label: "Take Off Time", alignRight: false },
   { id: "arrivalTime", label: "Arrival Time", alignRight: false },
+  { id: "totalMinutesToHospital", label: "Total Time (mins)", alignRight: false },
   { id: "traiageCategory", label: "Triage Category", alignRight: false },
+  { id: "price", label: "Price", alignRight: false },
   { id: "approve", label: "Status", alignRight: false },
   { id: "" },
 ];
 
-// const data = [
-//     {
-//         incident_code:"IN23402",
-//         date:"20-07-2023",
-//         run_time:"190mins",
-//         ambulance_name: "R & R Ambulance Service"
-//     },
-//     {
-//         incident_code:"IN23411",
-//         date:"20-03-2023",
-//         run_time:"180mins",
-//         ambulance_name: "Hibalance Ambulance Service"
-//     },
-//     {
-//         incident_code:"IN23987",
-//         date:"20-07-2023",
-//         run_time:"100mins",
-//         ambulance_name: "PneumaRS Ambulance Service"
-//     },
-
-// ]
- 
 const NemsasRunSheets: FC = () => {
   const [ambulanceRunSheets, setAmbulanceRunsheets] = useState([]);
   const [loading,setLoading] = useState(false)

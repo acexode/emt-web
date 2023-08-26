@@ -20,8 +20,8 @@ import {
   import Page from "../../components/Page";
   import { PATH_DASHBOARD } from "../../routes/paths";
   import useSettings from "../../hooks/useSettings";
-import { formatDate2, formatter, numberToWords } from "../../utility";
-import { IClaims } from "../../types/claims";
+import { formatDate2, formatter } from "../../utility";
+// import { IClaims } from "../../types/claims";
 import AlertDialog from "./components/confirmDialog";
 import { useSnackbar } from "notistack";
 import axiosInstance from "../../services/api_service";
@@ -31,7 +31,7 @@ import { Icon } from "@iconify/react";
 
   const ViewETC: FC = () => {
     const { themeStretch } = useSettings();
-    const [content, SetContent] = useState<IClaims>();
+    const [content, SetContent] = useState<any>();
     const [loading,setLoading] = useState(false)
     const [open, setOpen] = useState(false);
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -49,52 +49,7 @@ import { Icon } from "@iconify/react";
         state: { row},
       } = useLocation();
         useEffect(()=>{
-          // const objectData = {
-          //   facility_name:"Gwarimpa General Hospital",
-          //   facility_code:"A890823",
-          //   facility_shia_code:"KG73276",
-          //   incident_code:"H651521",
-          //   patient_name:"John Doe",
-          //   patient_code:"PA57873",
-          //   patient_address:"21 Ajakuta Estate, Abuja",
-          //   sex:"Male",
-          //   age:"30 years",
-          //   nhia:"NHIA32736",
-          //   dob:"20 August, 1993",
-          //   billsId: [
-          //     {
-          //       medicalIntervention: "Specialist Initial Consultation",
-          //       serviceCode:"NHIS-010-001",
-          //       quantity:"1",
-          //       unitCost: "2000",
-          //       amount:"200"
-          //     },
-          //     {
-          //       medicalIntervention: "Partial Amputation of the pinna",
-          //       serviceCode:"NHIS-022-016",
-          //       quantity:"1",
-          //       unitCost: "30000",
-          //       amount:"3000"
-          //     },
-          //     {
-          //       medicalIntervention: "Nursing Care (per day)",
-          //       serviceCode:"NHIS-010-003",
-          //       quantity:"13",
-          //       unitCost: "1000",
-          //       amount:"13000"
-          //     },
-          //     {
-          //       medicalIntervention: "Hospital Bed Occupancy",
-          //       serviceCode:"NHIS-010-005",
-          //       quantity:"12",
-          //       unitCost: "1000",
-          //       amount:"1200"
-          //     },
-          //   ],
-          //   totalAmount:"57000",
-          //   amountInWords:"Fifty Seven Thousand Naira",
-          //   serialNo:"SE39489"
-          // }
+     
             SetContent(row)
         },[row])
   
@@ -152,6 +107,7 @@ import { Icon } from "@iconify/react";
             setLoading(false)
           }
         }
+
     return (
       <Page title={`View ETC Claim | EMT`}>
         <Container maxWidth={themeStretch ? false : "lg"}>
@@ -189,7 +145,7 @@ import { Icon } from "@iconify/react";
                         Facility Name
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.incidentViewModel?.emergencyTreatmentCenterViewModel?.name || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.serviceProvider || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -236,7 +192,7 @@ import { Icon } from "@iconify/react";
                          First Name
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.incidentViewModel?.patientViewModel?.firstName || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.patient?.firstName || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -246,11 +202,11 @@ import { Icon } from "@iconify/react";
                          Last Name
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.incidentViewModel?.patientViewModel?.lastName || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.patient?.lastName || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
-                    <Grid item sm={6}>
+                    {/* <Grid item sm={6}>
                     <ListItem>
                       <ListItemText primary={<Typography>
                         Patient Code
@@ -259,34 +215,34 @@ import { Icon } from "@iconify/react";
                         <Typography sx={{color:"#7b939c"}} >{"Not Available"}</Typography>
                       } />
                     </ListItem>
-                    </Grid>
+                    </Grid> */}
                     <Grid item sm={6}>
                     <ListItem>
                       <ListItemText primary={<Typography>
                         Patient Address
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{ "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{ content?.patient?.address || "Nil"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
-                    <Grid item sm={3}>
+                    <Grid item sm={6}>
                     <ListItem>
                       <ListItemText primary={<Typography>
                         Sex
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.incidentViewModel?.sex || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.patient?.sex === 0 ? "Female" : "Male" || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
-                    <Grid item sm={3}>
+                    <Grid item sm={6}>
                     <ListItem>
                       <ListItemText primary={<Typography>
                         Date of birth
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{formatDate2(content?.incidentViewModel?.patientViewModel?.doB) || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{formatDate2(content?.patient?.doB) || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -296,7 +252,7 @@ import { Icon } from "@iconify/react";
                         Patient NHIA/SHIA NO
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{ "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{ content?.patient?.nhia || "Nil"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -312,14 +268,14 @@ import { Icon } from "@iconify/react";
                     <TableRow>
                         <TableCell>S/N</TableCell>
                         <TableCell align="right">Medical Intervention</TableCell>
-                        <TableCell align="right">Service Code</TableCell>
+                        <TableCell align="right">Dose</TableCell>
                         <TableCell align="right">Quantity</TableCell>
-                        <TableCell align="right">Unit Cost</TableCell>
-                        <TableCell align="right">Amount</TableCell>
+                        <TableCell align="right">Price</TableCell>
+                        {/* <TableCell align="right">Amount</TableCell> */}
                     </TableRow>
                     </TableHead>
                     <TableBody>
-                      {/* {content?.billsId?.map((bills:any,index:any) =>(
+                      {content?.details?.map((bills:any,index:any) =>(
                         <TableRow
                         key={index}
                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -327,13 +283,13 @@ import { Icon } from "@iconify/react";
                         <TableCell component="th" scope="row">
                             {index + 1}
                         </TableCell>
-                        <TableCell align="right">{bills?.medicalIntervention}</TableCell>
-                        <TableCell align="right">{bills?.serviceCode}</TableCell>
+                        <TableCell align="right">{bills?.medicalIntervention || "Nil"}</TableCell>
+                        <TableCell align="right">{bills?.dose}</TableCell>
                         <TableCell align="right">{bills?.quantity}</TableCell>
-                        <TableCell align="right">{formatter.format(bills?.unitCost)}</TableCell>
-                        <TableCell align="right">{bills?.amount}</TableCell>
+                        <TableCell align="right">{formatter.format(bills?.price)}</TableCell>
+                        {/* <TableCell align="right">{formatter.format(bills?.price * bills?.quantity)}</TableCell> */}
                         </TableRow>
-                      ))} */}
+                      ))}
                      
                         <TableRow
                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -343,22 +299,22 @@ import { Icon } from "@iconify/react";
                         </TableCell>
                         <TableCell align="right"></TableCell>
                         <TableCell align="right"></TableCell>
-                        <TableCell align="right"></TableCell>
+                        {/* <TableCell align="right"></TableCell> */}
                         <TableCell align="right">Total</TableCell>
-                        <TableCell align="right">{formatter.format(content?.totalPrice ?? 0)}</TableCell>
+                        <TableCell align="right">{formatter.format(content?.totalAmount)}</TableCell>
                     </TableRow>
                 </TableBody>
                     </Table>
-                    <Grid item sm={12}>
+                    {/* <Grid item sm={12}>
                     <ListItem>
                       <ListItemText primary={<Typography>
                        Total Amount in Words
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{numberToWords(content?.totalPrice ?? 0) + " Naira only" || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{ numberToWords(content?.totalAmount) + " Naira only" || "Not Available"}</Typography>
                       } />
                     </ListItem>
-                    </Grid>
+                    </Grid> */}
                  </Grid>
             </Card>
 

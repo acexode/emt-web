@@ -15,8 +15,9 @@ const TABLE_HEAD = [
   { id: "s/n", label: "S/N", alignRight: false },
   { id: "serviceProvider", label: "Service Provider", alignRight: false },
   { id: "incidentCategory", label: "Incident Category", alignRight: false },
-  { id: "patient_name", label: "Patient Name", alignRight: false },
-  { id: "date", label: "Incident Date", alignRight: false },
+  { id: "patientName", label: "Patient Name", alignRight: false },
+  { id: "incidentDate", label: "Incident Date", alignRight: false },
+  { id: "totalAmount", label: "Total Amount", alignRight: false },
   { id: "status", label: "Status", alignRight: false },
   { id: "" },
 ];
@@ -78,7 +79,6 @@ const Claims: FC = () => {
         axiosInstance.post(`Claims/getByAssignedAmbulance`,obj),
         axiosInstance.post(`Claims/getByAssignedETC`,obj2),
       ]);
-    
       setAmbulanceClaims(ambRes?.data?.data)
       setETCClaims(etcRes?.data?.data)
     } catch (error) {

@@ -12,6 +12,7 @@ export interface ITransferSheets {
     approve: boolean
     medicUserId: string
     hospiceUserId: string
+    price: number
     totalMinutesToHospital: number
     dateAdded: string
     incidentViewModel: IncidentViewModel

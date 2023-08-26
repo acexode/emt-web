@@ -12,7 +12,8 @@ export const userTypesArray = [ "SuperAdministrator", "AmbulanceUserCreate", "Am
 export const errorMessages = {
     403 :  "User does not have permission.",
     401: "Unauthorized user.",
-    400: "No data found",
+    400: "We're sorry, but something went wrong with your request. Please make sure all the required information is correctly filled out and try again.",
+    404: "Data not found",
     500: "Oops! Something went wrong on our end. Our team has been notified about this issue, and we're working to fix it as quickly as possible. We apologize for any inconvenience this may have caused. Please try again later.",
 
 }
