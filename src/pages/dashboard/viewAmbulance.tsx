@@ -1,4 +1,3 @@
-// @ts-nocheck
 
 import {
     Container,
@@ -30,7 +29,6 @@ import { useSnackbar } from "notistack";
 import closeFill from "@iconify/icons-eva/close-fill";
 import { Icon } from "@iconify/react";
 import AlertDialog from "./components/confirmDialog";
-import { errorMessages } from "../../constants";
   
   const ViewAmbulance: FC = () => {
     const { themeStretch } = useSettings();
@@ -47,6 +45,7 @@ import { errorMessages } from "../../constants";
     };
     const handleClose = () => {
       setOpen(false);
+      setLoading(false)
     };
     const {
         state: { row},
@@ -86,10 +85,9 @@ import { errorMessages } from "../../constants";
                 </MIconButton>
               ),
             });
-          } catch (error) {
+          } catch (error:any) {
             console.log(error);
-            const errorMessage = errorMessages[error?.response?.status]
-            enqueueSnackbar(errorMessage, {
+            enqueueSnackbar(error?.response?.data?.message, {
                 variant: "error",
                 action: (key) => (
                   <MIconButton size="small" onClick={() => closeSnackbar(key)}>
@@ -103,7 +101,6 @@ import { errorMessages } from "../../constants";
           }
         }
 
-        console.log({content});
     return (
       <Page title={`View Ambulance Claim | NEMSAS`}>
         <Container maxWidth={themeStretch ? false : "lg"}>
@@ -133,6 +130,33 @@ import { errorMessages } from "../../constants";
             </Button>
               </Grid>
          </Grid>
+          <Card sx={{ p: 3, pb: 10, mb: 2 }}>
+                <Box sx={{mb:2}}>Claims Details</Box>
+                    <Grid container spacing={2}>
+                    <Grid item sm={6}>
+                    <ListItem>
+                      <ListItemText primary={<Typography>
+                        Title
+                      </Typography>} 
+                      secondary={
+                        <Typography sx={{color:"#7b939c"}} >{content?.title || "Not Available"}</Typography>
+                      } />
+                    </ListItem>
+                    </Grid>
+                    <Grid item sm={6}>
+                    <ListItem>
+                      <ListItemText primary={<Typography>
+                        Status
+                      </Typography>} 
+                      secondary={
+                        <Typography sx={{color:"#7b939c"}} >{content?.status || "Not Available"}</Typography>
+                      } />
+                    </ListItem>
+                    </Grid>
+                   
+                  
+                    </Grid>
+            </Card>
           <Card sx={{ p: 3, pb: 10, mb: 2 }}>
                 <Box sx={{mb:2}}>Provider Details</Box>
                     <Grid container spacing={2}>
@@ -523,7 +547,7 @@ import { errorMessages } from "../../constants";
                 Reject
             </Button>
         </Container>
-        <AlertDialog open={open} handleClose={handleClose} loading={loading} handleSubmit={handleClaims} title={title} />
+        <AlertDialog  open={open} handleClose={handleClose} loading={loading} handleSubmit={handleClaims} title={title} />
 
       </Page>
     );

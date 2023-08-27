@@ -192,6 +192,10 @@ import { Icon } from "@iconify/react";
         description:"",
         ambulanceName:""
     }
+    delete newVal?.emergencyTreatmentCenterViewModel
+    delete newVal?.ambulanceViewModel
+    delete newVal?.patientViewModel
+    delete newVal?.runsheetViewModel
     if(latitude === null && longitude === null){
         enqueueSnackbar("Latitude and Longitude is required!", {
             variant: "error",

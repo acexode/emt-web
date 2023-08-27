@@ -99,7 +99,6 @@ const Claims: FC = () => {
   
     try {
       const etcRes = await axiosInstance.post(`Claims/getByAssignedETC`, obj2);
-      console.log(etcRes?.data?.data);
       setETCClaims(etcRes?.data?.data);
     } catch (error) {
       console.log("Error fetching ETC claims:", error);

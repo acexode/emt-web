@@ -1,5 +1,3 @@
-
-// @ts-nocheck
 import {
     Container,
     Grid,
@@ -30,7 +28,7 @@ import axiosInstance from "../../services/api_service";
 import { MIconButton } from "../../components/@material-extend";
 import closeFill from "@iconify/icons-eva/close-fill";
 import { Icon } from "@iconify/react";
-import { errorMessages } from "../../constants";
+// import { errorMessages } from "../../constants";
 
   const ViewETC: FC = () => {
     const { themeStretch } = useSettings();
@@ -47,6 +45,7 @@ import { errorMessages } from "../../constants";
     };
     const handleClose = () => {
       setOpen(false);
+      setLoading(false)
     };
     const {
         state: { row},
@@ -88,10 +87,9 @@ import { errorMessages } from "../../constants";
                 </MIconButton>
               ),
             });
-          } catch (error) {
+          } catch (error:any) {
             console.log(error);
-            const errorMessage = errorMessages[error?.response?.status]
-            enqueueSnackbar(errorMessage, {
+            enqueueSnackbar(error?.response?.data?.message, {
                 variant: "error",
                 action: (key) => (
                   <MIconButton size="small" onClick={() => closeSnackbar(key)}>
