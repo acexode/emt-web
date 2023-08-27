@@ -22,7 +22,7 @@ import {
   import { PATH_DASHBOARD } from "../../routes/paths";
   import useSettings from "../../hooks/useSettings";
 import { RemoveCircleOutline } from "@mui/icons-material";
-import { formatDate2 } from "../../utility";
+import { formatDate2, formatDateTime } from "../../utility";
 import axiosInstance from "../../services/api_service";
 import {  useSnackbar } from "notistack";
 import { MIconButton } from "../../components/@material-extend";
@@ -331,7 +331,7 @@ const TABLE_HEAD2 = [
                     Arrival Time
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{loadingData ? <Skeleton variant="rectangular" width={100} height={30} />  : content?.extraDetails?.arrivalTime || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{loadingData ? <Skeleton variant="rectangular" width={100} height={30} />  : formatDateTime(content?.runsheet?.arrivalTime) || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>

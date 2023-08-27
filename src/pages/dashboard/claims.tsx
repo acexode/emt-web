@@ -91,7 +91,6 @@ const Claims: FC = () => {
   
     try {
       const ambRes = await axiosInstance.post(`Claims/getByAssignedAmbulance`, obj);
-      console.log(ambRes?.data?.data);
       setAmbulanceClaims(ambRes?.data?.data);
     } catch (error) {
       console.log("Error fetching ambulance claims:", error);

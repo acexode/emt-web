@@ -131,6 +131,24 @@ import { Icon } from "@iconify/react";
             </Button>
               </Grid>
          </Grid>
+         <Card sx={{ p: 3, pb: 10, mb: 2 }}>
+                <Box sx={{mb:2}}>Claims Details</Box>
+                    <Grid container spacing={2}>
+                   
+                    <Grid item sm={6}>
+                    <ListItem>
+                      <ListItemText primary={<Typography>
+                        Status
+                      </Typography>} 
+                      secondary={
+                        <Typography sx={{color:"#7b939c"}} >{content?.status || "Not Available"}</Typography>
+                      } />
+                    </ListItem>
+                    </Grid>
+                   
+                  
+                    </Grid>
+            </Card>
           <Card sx={{ p: 3, pb: 10, mb: 2 }}>
                 <Box sx={{mb:2}}>Facility Details</Box>
                     <Grid container spacing={2}>

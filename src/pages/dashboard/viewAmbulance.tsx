@@ -100,7 +100,6 @@ import AlertDialog from "./components/confirmDialog";
             setLoading(false)
           }
         }
-
     return (
       <Page title={`View Ambulance Claim | NEMSAS`}>
         <Container maxWidth={themeStretch ? false : "lg"}>
