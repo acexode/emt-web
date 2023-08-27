@@ -28,6 +28,8 @@ import axiosInstance from "../../services/api_service";
 import { MIconButton } from "../../components/@material-extend";
 import closeFill from "@iconify/icons-eva/close-fill";
 import { Icon } from "@iconify/react";
+import { useAuthUserContext } from "../../context/authUser.context";
+import { userType } from "../../constants";
 // import { errorMessages } from "../../constants";
 
   const ViewETC: FC = () => {
@@ -39,6 +41,9 @@ import { Icon } from "@iconify/react";
     const [confirmationPayload, setConfirmationPayload] = useState<any>(null);
     const [title,setTitle] = useState("")
     let navigate = useNavigate();
+    const {
+      userState: { userProfile },
+    } = useAuthUserContext();
 
     const handleClickOpen = () => {
       setOpen(true);
@@ -131,6 +136,24 @@ import { Icon } from "@iconify/react";
             </Button>
               </Grid>
          </Grid>
+         <Card sx={{ p: 3, pb: 10, mb: 2 }}>
+                <Box sx={{mb:2}}>Claims Details</Box>
+                    <Grid container spacing={2}>
+                   
+                    <Grid item sm={6}>
+                    <ListItem>
+                      <ListItemText primary={<Typography>
+                        Status
+                      </Typography>} 
+                      secondary={
+                        <Typography sx={{color:"#7b939c"}} >{content?.status || "Not Available"}</Typography>
+                      } />
+                    </ListItem>
+                    </Grid>
+                   
+                  
+                    </Grid>
+            </Card>
           <Card sx={{ p: 3, pb: 10, mb: 2 }}>
                 <Box sx={{mb:2}}>Facility Details</Box>
                     <Grid container spacing={2}>
@@ -441,6 +464,7 @@ import { Icon } from "@iconify/react";
             
                 </Grid>
             </Card> */}
+           {userType.etc_user !== userProfile?.userRole && <>
             <Button
                 size="medium"
                 type="submit"
@@ -461,6 +485,7 @@ import { Icon } from "@iconify/react";
             >
                 Reject
             </Button>
+           </> }
         </Container>
         <AlertDialog open={open} handleClose={handleClose} loading={loading} handleSubmit={handleClaims} title={title} />
 

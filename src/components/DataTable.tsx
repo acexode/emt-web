@@ -184,7 +184,7 @@ const CustomUsableTable2: FC<ITable> = ({ dataList, table_Head,loading }) => {
                               align="left"
                              
                             >
-                               {row?.canSpeakcanSpeak ? "Yes" : "No" 
+                               {row?.canSpeak ? "Yes" : "No" 
                               }
                             </TableCell>
                             <TableCell

@@ -17,7 +17,7 @@ const TABLE_HEAD = [
   { id: "totalMinutesToHospital", label: "Total Time (mins)", alignRight: false },
   { id: "traiageCategory", label: "Triage Category", alignRight: false },
   { id: "price", label: "Price", alignRight: false },
-  { id: "approve", label: "Status", alignRight: false },
+  // { id: "approve", label: "Status", alignRight: false },
   { id: "" },
 ];
 
@@ -36,6 +36,7 @@ const NemsasRunSheets: FC = () => {
     axiosInstance
       .post(`Runsheets/getByAssignedAmbulance`,val)
       .then((res) => {
+    
         setAmbulanceRunsheets(res?.data?.data);
       })
       .catch((error) => {

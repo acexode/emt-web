@@ -344,13 +344,13 @@ const CustomTableNemsas: FC<ITable> = ({ dataList, page_title, table_Head,loadin
                                {formatter.format(row?.price) || "Nil"
                               }
                             </TableCell>
-                            <TableCell
+                            {/* <TableCell
                               align="left"
                               
                             >
                                {row?.approve ? "Approved" : "Rejected" || "Nil"
                               }
-                            </TableCell>
+                            </TableCell> */}
                            
                             <TableCell align="right">
                                 <MoreMenu row={row} fetchAllData={fetchAllData} type="runsheets" />
