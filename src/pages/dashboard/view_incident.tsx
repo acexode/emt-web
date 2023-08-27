@@ -145,16 +145,7 @@ import { formatDate2 } from "../../utility";
                       } />
                     </ListItem>
                     </Grid>
-                    <Grid item sm={4}>
-                    <ListItem>
-                      <ListItemText primary={<Typography>
-                       Gender
-                      </Typography>} 
-                      secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.sex || "Not Available"}</Typography>
-                      } />
-                    </ListItem>
-                    </Grid>
+                   
                     <Grid item sm={4}>
                     <ListItem>
                       <ListItemText primary={<Typography>
