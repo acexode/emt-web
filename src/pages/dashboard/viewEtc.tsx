@@ -28,6 +28,8 @@ import axiosInstance from "../../services/api_service";
 import { MIconButton } from "../../components/@material-extend";
 import closeFill from "@iconify/icons-eva/close-fill";
 import { Icon } from "@iconify/react";
+import { useAuthUserContext } from "../../context/authUser.context";
+import { userType } from "../../constants";
 // import { errorMessages } from "../../constants";
 
   const ViewETC: FC = () => {
@@ -39,6 +41,9 @@ import { Icon } from "@iconify/react";
     const [confirmationPayload, setConfirmationPayload] = useState<any>(null);
     const [title,setTitle] = useState("")
     let navigate = useNavigate();
+    const {
+      userState: { userProfile },
+    } = useAuthUserContext();
 
     const handleClickOpen = () => {
       setOpen(true);
@@ -459,6 +464,7 @@ import { Icon } from "@iconify/react";
             
                 </Grid>
             </Card> */}
+           {userType.etc_user !== userProfile?.userRole && <>
             <Button
                 size="medium"
                 type="submit"
@@ -479,6 +485,7 @@ import { Icon } from "@iconify/react";
             >
                 Reject
             </Button>
+           </> }
         </Container>
         <AlertDialog open={open} handleClose={handleClose} loading={loading} handleSubmit={handleClaims} title={title} />
 

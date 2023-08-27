@@ -86,7 +86,7 @@ const Claims: FC = () => {
       id: 1
     };
     let obj2 = {
-      id: userProfile?.etcId
+      id: 1
     };
   
     try {
