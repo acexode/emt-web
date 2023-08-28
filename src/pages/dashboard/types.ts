@@ -41,6 +41,8 @@ export interface IIncident {
     description: string
     recommendation: string
     traiageCategory: string
+    // nhiAorSHIA: string
+    triageCategory: string
     sex: string
     incidentLocation: string
     districtWard: string
@@ -100,6 +102,7 @@ export interface IIncident {
     name: string
     code: string
     location: string
+    nhiAorSHIA: string
     ambulanceTypeId: number
     wardId: number
     ambulanceId: number

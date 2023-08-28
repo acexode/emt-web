@@ -11,7 +11,14 @@ import {
     Button,
     TextField,
     Autocomplete,
-    Skeleton
+    Skeleton,
+    Table,
+    TableBody,
+    TableCell,
+    TableRow,
+    TableContainer,
+    TableHead,
+    IconButton
 
   } from "@mui/material";
   import { FC, useEffect, useState } from "react";
@@ -35,13 +42,16 @@ import CustomUsableTable from "../../components/DataGrid";
 import CustomUsableTable2 from "../../components/DataTable";
 import { IPatients } from "../../types/patient";
 import { errorMessages } from "../../constants";
+import Scrollbar from "../../components/Scrollbar";
   
 const TABLE_HEAD = [
   { id: "sn", label: "S/N", alignRight: false },
-  { id: "medicalIntervention", label: "Medical Intervention", alignRight: false },
+  { id: "drug.description", label: "Medical Intervention", alignRight: false },
+  { id: "drug.code", label: "Code", alignRight: false },
   { id: "quantity", label: "Quantity", alignRight: false },
   { id: "dose", label: "Dose", alignRight: false },
-  { id: "price", label: "Price", alignRight: false },
+  // { id: "drug.price", label: "Unit Cost", alignRight: false },
+  { id: "price", label: "Total Amount", alignRight: false },
   { id: "dateAdded", label: "Date Added", alignRight: false },
   { id: "" },
 ];
@@ -61,7 +71,9 @@ const TABLE_HEAD2 = [
   { id: "timeTaken", label: "Time Taken", alignRight: false,width:"400" },
   { id: "" },
 ];
-
+const headLabel = [
+  "S/N", "Medical Intervention",  "Unit Cost", "Dose","Quantity","Amount",""
+ ]
 
   const ViewPatient: FC = () => {
     const { themeStretch } = useSettings();
@@ -76,6 +88,7 @@ const TABLE_HEAD2 = [
       setValue,
       control,
       reset,
+      getValues
     } = useForm({
       mode: "onTouched",
       criteriaMode: "firstError",
@@ -84,7 +97,7 @@ const TABLE_HEAD2 = [
       shouldUseNativeValidation: false,
       delayError: undefined,
       defaultValues: {
-        incidentDrugs: [{ serviceFeeId:'', medicalIntervention: '', quantity: '', dose:'',price:'', remark:'',incident_Id:'',ambulanceId:'',emergencyTreatmentCenterId:'',patientId:'' }],
+        incidentDrugs: [{ serviceFeeId:'',unitCost:'', medicalIntervention: '', quantity: '', dose:'',price:'', remark:'',incidentId:'',ambulanceId:'',emergencyTreatmentCenterId:'',patientId:'' }],
       },
     });
     const {
@@ -101,17 +114,7 @@ const TABLE_HEAD2 = [
       }
       return '';
     };
-    // useEffect(() => {
-    //   const updateTotalAmount = () => {
-    //     let totalAmount = fields?.reduce(
-    //       (sum, field) => sum + parseFloat(field.amount || '0'),
-    //       0
-    //     );
-    //     setValue('totalAmount', totalAmount.toFixed(2));
-    //   };
-    
-    //   updateTotalAmount();
-    // }, [fields, setValue]);
+
   
         const fetchUser = () =>{
           setLoadingData(true)
@@ -132,11 +135,10 @@ const TABLE_HEAD2 = [
           }
         }, [row?.id]);
         const onSubmit = async(data:any) =>{
-          // console.log({data})
           let newData = {
               ...data
             };
-            delete newData?.totalAmount
+            // delete newData?.totalAmount
             setLoading(true)
             let text ="Medical intervention Added";
             try {
@@ -170,6 +172,11 @@ const TABLE_HEAD2 = [
           window.print();
         }
       
+        const handleSetPrice=(val:any,index:number) =>{
+          let boom = getValues(`incidentDrugs[${index}].unitCost`)
+          let price = calculateAmount(boom,val)
+           setValue(`incidentDrugs[${index}].price`, parseInt(price)|| '');
+        }
         const handleAutocompleteChange = (index:number, intervention:string) => {
          const selectedIntervention = options.find(
           (int:any) => int.intervention === intervention
@@ -177,16 +184,18 @@ const TABLE_HEAD2 = [
         // Update the corresponding fields in the form data
         setValue(`incidentDrugs[${index}].serviceFeeId`, selectedIntervention?.id || '');
         setValue(`incidentDrugs[${index}].medicalIntervention`, selectedIntervention?.intervention || '');
-        setValue(`incidentDrugs[${index}].incident_Id`, content?.incident_Id || '');
-        setValue(`incidentDrugs[${index}].ambulanceId`, content?.ambulance_Id || '');
-        setValue(`incidentDrugs[${index}].emergencyTreatmentCenterId`, content?.etC_Id || '');
-        setValue(`incidentDrugs[${index}].patientId`, content?.id || '');
+        setValue(`incidentDrugs[${index}].incidentId`, row?.incident_Id);
+        setValue(`incidentDrugs[${index}].ambulanceId`, row?.ambulance_Id );
+        setValue(`incidentDrugs[${index}].emergencyTreatmentCenterId`, row?.etC_Id );
+        setValue(`incidentDrugs[${index}].patientId`, row?.id || '');
         // setValue(`incidentDrugs[${index}].serviceCode`, selectedIntervention?.code || '');
         setValue(
-          `incidentDrugs[${index}].price`,
+          `incidentDrugs[${index}].unitCost`,
           selectedIntervention?.price?.toString() || ''
         );
         };
+
+        // console.log({content});
           return (
       <Page title={`View Patient Record | EMT`}>
         <Container maxWidth={themeStretch ? false : "lg"}>
@@ -388,94 +397,112 @@ const TABLE_HEAD2 = [
             <Card sx={{ p: 3, pb: 10, mb: 2 }}>
               <Box sx={{mb:2}}>ETC Treatment</Box>
               <form onSubmit={handleSubmit(onSubmit)}>
-   
-              {fields.map((field, index) => (
-                <Grid key={field.id} mb={2} container spacing={2}>
-              <Grid item sm={12}>
-              <Box>{index+1}).</Box>
-              </Grid>
-              <Grid item xs={12} sm={12} lg={12}>
-              <label>Select Medical Intervention</label>
-              <br />
-               
-                  <Autocomplete
-              options={options}
-              getOptionLabel={(option) => option.intervention}
-              onChange={(e) => handleAutocompleteChange(index,e.target.textContent)}
-             
-              renderInput={(params) => <TextField {...params}  />}
-            />
-              </Grid>
-              {/* <Grid item xs={6} sm={2} lg={2}>
-              <label>Service Code</label>
-              <TextField
-              disabled
-                {...register(`incidentDrugs[${index}].serviceCode`, { required: 'Service Code is required' })}
-                error={!!errors.incidentDrugs?.[index]?.serviceCode}
-                helperText={errors.incidentDrugs?.[index]?.serviceCode?.message}
-              />
-              </Grid> */}
-             
-              <Grid item xs={6} sm={2} lg={2}>
-              <label>Unit Cost</label>
-              <TextField
-                type="number"
-                disabled
-                inputProps={{ step: '0.01' }}
-                {...register(`incidentDrugs[${index}].price`, { required: 'Unit Cost is required', pattern: /^\d+(\.\d{1,2})?$/ })}
-                error={!!errors.incidentDrugs?.[index]?.price}
-                helperText={errors.incidentDrugs?.[index]?.price?.message}
-              />
-              </Grid>
-              <Grid item xs={6} sm={2} lg={2}>
-              <label>Dose</label>
-              <TextField
-              type="text"
-                {...register(`incidentDrugs[${index}].dose`, { required: 'Dose is required' })}
-                error={!!errors.incidentDrugs?.[index]?.dose}
-                helperText={errors.incidentDrugs?.[index]?.dose?.message}
-              />
-              </Grid>
-              <Grid item xs={6} sm={2} lg={2}>
-              <label>Quantity</label>
-              <TextField
-                type="number"
-                {...register(`incidentDrugs[${index}].quantity`, { required: 'Quantity is required', pattern: /^\d+$/ })}
-                error={!!errors.incidentDrugs?.[index]?.quantity}
-                helperText={errors.incidentDrugs?.[index]?.quantity?.message}
-              />
-              </Grid>
-            
-              <Grid item xs={6} sm={3} lg={2}>
-              <label>Remark</label>
-              <TextField
-              type="text"
-              multiline
-                {...register(`incidentDrugs[${index}].remark`)}
-                // error={!!errors.incidentDrugs?.[index]?.remark}
-                // helperText={errors.incidentDrugs?.[index]?.remark?.message}
-              />
-              </Grid>
-              <Grid item xs={6} sm={2} lg={2} mr={4}>
-              <label>Amount</label>
-              <TextField
-                value={calculateAmount(field.price, field.quantity)}
-                disabled
-              />
-              </Grid>
-              <Button size="small" sx={{background:"grey", height:"40px", mt:6, '&:hover': {
-              // Define the hover styles here
-              backgroundColor: 'lightgray',
-            
-            },}} type="button" onClick={() => remove(index)}>
-                <RemoveCircleOutline />
-              </Button>
-              </Grid>
-          ))}
+              <Scrollbar>
+              <TableContainer>
+                  <Table>
+                  <TableHead>
+                    <TableRow>
+                  
+                      {headLabel.map((headCell:string,index:number) => (
+                        <TableCell
+                          key={index}
+                          width={400}
+                        >
+                      {headCell}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                    <TableBody>
+                    {fields.map((field, index) => (
+                       
+                 <TableRow>
 
-      <Button type="button" onClick={() => append({ serviceFeeId:'', medicalIntervention: '', quantity: '', dose:'',price:'', remark:'',incident_Id:'',ambulanceId:'',emergencyTreatmentCenterId:'',patientId:'' })}>
+                
+                        <TableCell
+                           align="left"
+                          >
+                            <Box>{index+1}</Box>
+                          </TableCell>
+                     
+               
+                      <TableCell
+                            style={{ width: '200rem' }}
+                            >
+                                 <Autocomplete
+                                  options={options}
+                                  getOptionLabel={(option) => option.intervention}
+                                  onChange={(e) => handleAutocompleteChange(index,e.target.textContent)}
+                                
+                                  renderInput={(params) => <TextField {...params}  />}
+                                />
+                            </TableCell>
+                           
+                            <TableCell
+                            align="right"
+                            style={{ width: '60rem' }}
+                            >
+                             <TextField
+                              type="number"
+                              disabled
+                              inputProps={{ step: '0.01' }}
+                              {...register(`incidentDrugs[${index}].unitCost`, { required: 'Unit Cost is required', pattern: /^\d+(\.\d{1,2})?$/ })}
+                              error={!!errors.incidentDrugs?.[index]?.unitCost}
+                              helperText={errors.incidentDrugs?.[index]?.unitCost?.message}
+                            />
+                              </TableCell>
+                              <TableCell
+                            align="right"
+                            style={{ width: '60rem' }}
+                            >
+                               <TextField
+                        {...register(`incidentDrugs[${index}].dose`, { required: 'Dose is required' })}
+                        error={!!errors.incidentDrugs?.[index]?.dose}
+                        helperText={errors.incidentDrugs?.[index]?.dose?.message}
+                      />
+                              </TableCell>
+                            <TableCell
+                            align="right"
+                            style={{ width: '60rem' }}
+
+                            >
+                               <TextField
+                        type="number"
+                        {...register(`incidentDrugs[${index}].quantity`, { required: 'Quantity is required', valueAsNumber:true, pattern: /^\d+$/ })}
+                        error={!!errors.incidentDrugs?.[index]?.quantity}
+                        helperText={errors.incidentDrugs?.[index]?.quantity?.message}
+                        onChange={(e) => handleSetPrice(e.target.value,index)}
+                      />
+                              </TableCell>
+                            <TableCell
+                            align="right"
+                            style={{ width: '80rem' }}
+                            >
+                               <TextField
+                                disabled
+                                {...register(`incidentDrugs[${index}].price`)}
+                        
+                                  />
+                              </TableCell>
+                            <TableCell
+                            align="left"
+                            >
+                              <IconButton size="small" onClick={() => remove(index)}>
+                        <RemoveCircleOutline />
+                      </IconButton>
+                              </TableCell>
+                      </TableRow>
+                   
+                  ))}
+                      
+                    </TableBody>
+                  </Table>
+              </TableContainer>
+            </Scrollbar>
+            <Button type="button" onClick={() => append({serviceFeeId:'',unitCost:'', medicalIntervention: '', quantity: '', dose:'',price:'', remark:'',incidentId:'',ambulanceId:'',emergencyTreatmentCenterId:'',patientId:'' })}>
         Add More
       </Button>
+        
      
      <Grid mt={5}>
      <LoadingButton
@@ -489,14 +516,7 @@ const TABLE_HEAD2 = [
           >
               Add New Treatment
           </LoadingButton>
-          {/* <Button
-              size="medium"
-              type="submit"
-              variant="contained"
-      
-          >
-              Discharge Patient
-          </Button> */}
+        
      </Grid>
                </form>
            </Card>

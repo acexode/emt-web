@@ -22,51 +22,6 @@ import TableListHead from "./table/tableListHead";
 // import ListToolbar from "./table/tableListToolbar";
 import { formatDate2, formatter } from "../utility";
 
-// ----------------------------------------------------------------------
-
-// ----------------------------------------------------------------------
-
-// function descendingComparator(
-//   a: { [x: string]: number },
-//   b: { [x: string]: number },
-//   orderBy: string | number
-// ) {
-//   if (b[orderBy] < a[orderBy]) {
-//     return -1;
-//   }
-//   if (b[orderBy] > a[orderBy]) {
-//     return 1;
-//   }
-//   return 0;
-// }
-
-// function getComparator(order: string, orderBy: string) {
-//   return order === "desc"
-//     ? (a: any, b: any) => descendingComparator(a, b, orderBy)
-//     : (a: any, b: any) => -descendingComparator(a, b, orderBy);
-// }
-
-// function applySortFilter(
-//   array: any[],
-//   comparator: { (a: any, b: any): number; (arg0: any, arg1: any): any },
-//   query: string
-// ) {
-
-//   const stabilizedThis = array?.map((el: any, index: any) => [el, index]);
-//   stabilizedThis.sort((a: number[], b: number[]) => {
-//     const order = comparator(a[0], b[0]);
-//     if (order !== 0) return order;
-//     return a[1] - b[1];
-//   });
-//   if (query) {
-//     return filter(
-//       array,
-//       (_user) => _user?.drugName?.toLowerCase().includes(query.toLowerCase()) 
-     
-//     );
-//   }
-//   return stabilizedThis.map((el: any[]) => el[0]);
-// }
 
 interface ITable {
   table_Head: any;
@@ -110,22 +65,8 @@ const CustomUsableTable: FC<ITable> = ({ dataList, table_Head,loading }) => {
     setPage(0);
   };
 
-  // const handleFilterByName = (event: {
-  //   target: { value: SetStateAction<string> };
-  // }) => {
-  //   setFilterName(event.target.value);
-  // };
-
-
-
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - dataList?.length) : 0;
-
-  // const filteredUsers = applySortFilter(
-  //   dataList,
-  //   getComparator(order, orderBy),
-  //   filterName
-  // );
 
   const isUserNotFound = dataList?.length === 0 && !loading;
 
@@ -134,11 +75,7 @@ const CustomUsableTable: FC<ITable> = ({ dataList, table_Head,loading }) => {
       
           <Card sx={{ p: 3,mb:2}}>
           <Box sx={{mb:2}}>ETC Treatment</Box>
-            {/* <ListToolbar
-              numSelected={selected.length}
-              filterName={filterName}
-              onFilterName={handleFilterByName}
-            /> */}
+          
 
             <Scrollbar>
               <TableContainer sx={{ minWidth: 800 }}>
@@ -185,7 +122,15 @@ const CustomUsableTable: FC<ITable> = ({ dataList, table_Head,loading }) => {
                               align="left"
                              
                             >
-                              { row?.drugName || "Nil"
+                              { row?.drug?.description || "Nil"
+                              }
+                           
+                            </TableCell>
+                            <TableCell
+                              align="left"
+                             
+                            >
+                              { row?.drug?.code || "Nil"
                               }
                            
                             </TableCell>
@@ -206,9 +151,14 @@ const CustomUsableTable: FC<ITable> = ({ dataList, table_Head,loading }) => {
                            
                   
                            
+                            {/* <TableCell align="left">
+                          
+                              { formatter.format(row?.drug?.price ?? 0)}
+                             
+                              </TableCell> */}
                             <TableCell align="left">
                           
-                              { formatter.format(row?.price)}
+                              { formatter.format(row?.price ?? 0)}
                              
                               </TableCell>
                             <TableCell align="left">
