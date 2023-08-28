@@ -412,7 +412,7 @@ import { formatDate2 } from "../../utility";
                 
                     </Grid>
             </Card>
-          <Card sx={{ p: 3, pb: 10, mb: 2 }}>
+          {/* <Card sx={{ p: 3, pb: 10, mb: 2 }}>
             <Grid container spacing={2}>
               <Grid item sm={6}>
                 <ListItem>
@@ -425,7 +425,7 @@ import { formatDate2 } from "../../utility";
                 </ListItem>
               </Grid>
             </Grid>
-            </Card>
+          </Card> */}
             <Card sx={{ p: 3, pb: 10, mb: 2 }}>
                 <Box sx={{mb:2}}>Ambulance Location</Box>
                   <Grid container spacing={2}>

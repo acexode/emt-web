@@ -241,6 +241,11 @@ const CustomClaimAmbTable: FC<ITable> = ({ dataList, page_title, table_Head,load
                             </TableCell>
                             <TableCell
                               align="left"
+                            >
+                            <Skeleton variant="rectangular" width={100} height={30} /> 
+                            </TableCell>
+                            <TableCell
+                              align="left"
                               
                             >
                              <Skeleton variant="rectangular" width={100} height={30} /> 

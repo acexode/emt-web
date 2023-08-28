@@ -176,7 +176,7 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
         let newData = {
             ...data
           };
-          console.log({newData})
+          // console.log({newData})
           delete newData?.totalAmount
           setLoading(true)
           let text = edit ? "Claim Updated" : "Claim Added";

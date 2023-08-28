@@ -143,6 +143,17 @@ import { userType } from "../../constants";
                     <Grid item sm={6}>
                     <ListItem>
                       <ListItemText primary={<Typography>
+                        Title
+                      </Typography>} 
+                      secondary={
+                        <Typography sx={{color:"#7b939c"}} >{content?.title || "Not Available"}</Typography>
+                      } />
+                    </ListItem>
+                    </Grid>
+                   
+                    <Grid item sm={6}>
+                    <ListItem>
+                      <ListItemText primary={<Typography>
                         Status
                       </Typography>} 
                       secondary={

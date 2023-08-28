@@ -7,11 +7,7 @@ import {
     Typography,
     Card,
     Box,
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
+ 
     Button
   } from "@mui/material";
   import { FC, useEffect, useState } from "react";
@@ -21,7 +17,7 @@ import {
   import Page from "../../components/Page";
   import { PATH_DASHBOARD } from "../../routes/paths";
   import useSettings from "../../hooks/useSettings";
-import { formatDate2, formatter } from "../../utility";
+import { formatDate2 } from "../../utility";
 // import { IClaims } from "../../types/claims";
 import axiosInstance from "../../services/api_service";
 import { MIconButton } from "../../components/@material-extend";
@@ -29,7 +25,18 @@ import { useSnackbar } from "notistack";
 import closeFill from "@iconify/icons-eva/close-fill";
 import { Icon } from "@iconify/react";
 import AlertDialog from "./components/confirmDialog";
-  
+import CustomAmbMiniTable from "../../components/claims/ambMiniTable";
+
+const TABLE_HEAD = [
+  { id: "s/n", label: "S/N", alignRight: false },
+  { id: "medicalIntervention", label: "Medical Intervention", alignRight: false },
+  { id: "code", label: "Code", alignRight: false },
+  { id: "dose", label: "Dose", alignRight: false },
+  { id: "quantity", label: "Quantity", alignRight: false },
+  { id: "price", label: "Price", alignRight: false },
+  { id: "" },
+];
+
   const ViewAmbulance: FC = () => {
     const { themeStretch } = useSettings();
     const [content, SetContent] = useState<any>();
@@ -358,74 +365,8 @@ import AlertDialog from "./components/confirmDialog";
              
                     </Grid>
             </Card>
-
-          <Card sx={{ p: 3, pb: 10, mb: 2 }}>
-            <Box sx={{mb:2}}>List Of Services</Box>
-                <Grid container spacing={2}>
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                    <TableRow>
-                        <TableCell>S/N</TableCell>
-                        <TableCell align="right">Incident Date</TableCell>
-                        <TableCell align="right">Incident Code</TableCell>
-                        <TableCell align="right">Patient Code</TableCell>
-                        <TableCell align="right">Patient Name</TableCell>
-                        <TableCell align="right">NHIA/SHIA</TableCell>
-                        <TableCell align="right">Service Type</TableCell>
-                        <TableCell align="right">Distance</TableCell>
-                        <TableCell align="right">Rate</TableCell>
-                    </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {/* {content?.listOfServices?.map((services: any,index:any) =>(
-                        <TableRow
-                        key={index}
-                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                        <TableCell component="th" scope="row">
-                            {index + 1}
-                        </TableCell>
-                        <TableCell align="right">{services?.incidentDate}</TableCell>
-                        <TableCell align="right">{services?.incidentCode}</TableCell>
-                        <TableCell align="right">{services?.patientCode}</TableCell>
-                        <TableCell align="right">{services?.patientName}</TableCell>
-                        <TableCell align="right">{services?.nhia}</TableCell>
-                        <TableCell align="right">{services?.serviceType}</TableCell>
-                        <TableCell align="right">{services?.distance}</TableCell>
-                        <TableCell align="right">{services?.rate} Per Km</TableCell>
-                        </TableRow>
-                      ))} */}
-                        
-                        <TableRow
-                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                        <TableCell component="th" scope="row">
-                            
-                        </TableCell>
-                        <TableCell align="right"></TableCell>
-                        <TableCell align="right"></TableCell>
-                        <TableCell align="right"></TableCell>
-                        <TableCell align="right"></TableCell>
-                        <TableCell align="right"></TableCell>
-                        <TableCell align="right"></TableCell>
-                        <TableCell align="right">Total Cost</TableCell>
-                        <TableCell align="right">{formatter.format(content?.totalPrice ?? 0)}</TableCell>
-                    </TableRow>
-                </TableBody>
-                    </Table>
-                    {/* <Grid item sm={12}>
-                    <ListItem>
-                      <ListItemText primary={<Typography>
-                       Total Amount in Words
-                      </Typography>} 
-                      secondary={
-                        <Typography sx={{color:"#7b939c"}} >{numberToWords(content?.totalPrice ?? 0)+ " Naira only" || "Not Available"}</Typography>
-                      } />
-                    </ListItem>
-                    </Grid> */}
-                 </Grid>
-            </Card>
-
+            <CustomAmbMiniTable table_Head={TABLE_HEAD} dataList={content?.drugsList} totalAmount={content?.totalAmount} />
+        
 
           <Card className="showVerificationCards" sx={{ p: 3, pb: 10, mb: 2 }}>
                 <Box sx={{mb:2}}>EASP Verification</Box>
