@@ -105,6 +105,7 @@ import { Icon } from "@iconify/react";
     };
     const handleClose = () => {
       setOpen(false);
+      setLoading(false)
     };
     useEffect(()=>{
         if(row){
@@ -649,7 +650,7 @@ import { Icon } from "@iconify/react";
                             <MenuItem value={"Urgent"}>
                                     Urgent
                                 </MenuItem>
-                            <MenuItem value={"Non-Emergent"}>
+                            <MenuItem value={"NonEmergent"}>
                                     Non-Emergent
                                 </MenuItem>
                         </TextField>
