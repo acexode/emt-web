@@ -36,7 +36,7 @@ const NemsasRunSheets: FC = () => {
     axiosInstance
       .post(`Runsheets/getByAssignedAmbulance`,val)
       .then((res) => {
-    
+    // console.log(res?.data);
         setAmbulanceRunsheets(res?.data?.data);
       })
       .catch((error) => {

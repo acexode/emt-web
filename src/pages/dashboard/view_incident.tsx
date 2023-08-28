@@ -162,7 +162,7 @@ import { formatDate2 } from "../../utility";
                        Incident Code
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.incidentCode || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.serialNo || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>

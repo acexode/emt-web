@@ -34,7 +34,7 @@ import { AddEditClaims } from "./add-edit-claim";
 import { Icon } from "@iconify/react";
 import { useAuthUserContext } from "../../context/authUser.context";
 import { userType } from "../../constants";
-import { formatDate2, formatter } from "../../utility";
+import {  formatter } from "../../utility";
 // import tokenService from "../../services/tokenService";
 // import { userType } from "../../constants";
 // ----------------------------------------------------------------------
@@ -233,16 +233,7 @@ const CustomClaimAmbTable: FC<ITable> = ({ dataList, page_title, table_Head,load
                             >
                             <Skeleton variant="rectangular" width={100} height={30} /> 
                             </TableCell>
-                            <TableCell
-                              align="left"
-                            >
-                            <Skeleton variant="rectangular" width={100} height={30} /> 
-                            </TableCell>
-                            <TableCell
-                              align="left"
-                            >
-                            <Skeleton variant="rectangular" width={100} height={30} /> 
-                            </TableCell>
+                           
                             <TableCell
                               align="left"
                             >
@@ -302,33 +293,26 @@ const CustomClaimAmbTable: FC<ITable> = ({ dataList, page_title, table_Head,load
                               }
                            
                             </TableCell>
-                            <TableCell
-                              align="left"
-                             
-                            >
-                              { row?.title || "NIL" 
-                              }
                            
-                            </TableCell>
                             <TableCell
                               align="left"
                              
                             >
-                               {row?.incidentViewModel?.incidentCategory || "Nil"
+                               {row?.incidentCategory || "Nil"
                               }
                             </TableCell>
                             <TableCell
                               align="left"
                               
                             >
-                               {row?.incidentViewModel?.patientViewModel?.firstName ? `${row?.incidentViewModel?.patientViewModel?.firstName} ${row?.incidentViewModel?.patientViewModel?.lastName}`  : "Nil"
+                               {row?.patientName   || "Nil"
                               }
                             </TableCell>
                             <TableCell
                               align="left"
                               
                             >
-                               {row?.incidentViewModel?.incidentDate || "Nil"
+                               {row?.incidentDate || "Nil"
                               }
                             </TableCell>
                             <TableCell
@@ -342,14 +326,18 @@ const CustomClaimAmbTable: FC<ITable> = ({ dataList, page_title, table_Head,load
                               align="left"
                               
                             >
-                               {formatter.format(row?.totalPrice)
+                               {row?.nhia || "Nil" 
                               }
                             </TableCell>
-                            <TableCell align="left">
+                            
+                            <TableCell
+                              align="left"
+                              
+                            >
+                               {formatter.format(row?.totalAmount)
+                              }
+                            </TableCell>
                           
-                              { formatDate2(row?.dateAdded) || "Nil"}
-                             
-                              </TableCell>
                             <TableCell align="left">
                           
                               { row?.status || "Nil"}
