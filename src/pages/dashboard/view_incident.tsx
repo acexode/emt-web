@@ -16,7 +16,7 @@ import {
 import { useLocation } from "react-router-dom";
 import { Incident } from "./types";
 import AmbulanceMap from "../../components/_dashboard/general-app/map"
-import { formatDate2 } from "../../utility";
+import { formatDate2, formatDateTime } from "../../utility";
   
   const ViewIncident: FC = () => {
     const { themeStretch } = useSettings();
@@ -242,7 +242,7 @@ import { formatDate2 } from "../../utility";
                      Triage Category
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.traiageCategory || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.triageCategory || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -317,7 +317,47 @@ import { formatDate2 } from "../../utility";
                        Ambulance
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.ambulanceViewModel?.ambulanceTypeId || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.ambulanceViewModel?.ambulanceTypeViewModel?.name || "Not Available"}</Typography>
+                      } />
+                    </ListItem>
+                    </Grid>
+                    <Grid item sm={6}>
+                    <ListItem>
+                      <ListItemText primary={<Typography>
+                       Location
+                      </Typography>} 
+                      secondary={
+                        <Typography sx={{color:"#7b939c"}} >{content?.ambulanceViewModel?.location || "Not Available"}</Typography>
+                      } />
+                    </ListItem>
+                    </Grid>
+                    <Grid item sm={6}>
+                    <ListItem>
+                      <ListItemText primary={<Typography>
+                       NHIA / SHIA
+                      </Typography>} 
+                      secondary={
+                        <Typography sx={{color:"#7b939c"}} >{content?.ambulanceViewModel?.nhiAorSHIA || "Not Available"}</Typography>
+                      } />
+                    </ListItem>
+                    </Grid>
+                    <Grid item sm={6}>
+                    <ListItem>
+                      <ListItemText primary={<Typography>
+                      Ambulance Start
+                      </Typography>} 
+                      secondary={
+                        <Typography sx={{color:"#7b939c"}} >{formatDateTime(content?.ambulanceStart) || "Not Available"}</Typography>
+                      } />
+                    </ListItem>
+                    </Grid>
+                    <Grid item sm={6}>
+                    <ListItem>
+                      <ListItemText primary={<Typography>
+                      Ambulance Stop
+                      </Typography>} 
+                      secondary={
+                        <Typography sx={{color:"#7b939c"}} >{formatDateTime(content?.ambulanceStop) || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -326,13 +366,43 @@ import { formatDate2 } from "../../utility";
           <Card sx={{ p: 3, pb: 10, mb: 2 }}>
                 <Box sx={{mb:2}}>Treatment Center Details</Box>
                     <Grid container spacing={2}>
-                    <Grid item sm={12}>
+                    <Grid item sm={6}>
                     <ListItem>
                       <ListItemText primary={<Typography>
                        Treatment Center
                       </Typography>} 
                       secondary={
                         <Typography sx={{color:"#7b939c"}} >{content?.emergencyTreatmentCenterViewModel?.name || "Not Available"}</Typography>
+                      } />
+                    </ListItem>
+                    </Grid>
+                    <Grid item sm={6}>
+                    <ListItem>
+                      <ListItemText primary={<Typography>
+                       Location
+                      </Typography>} 
+                      secondary={
+                        <Typography sx={{color:"#7b939c"}} >{content?.emergencyTreatmentCenterViewModel?.location || "Not Available"}</Typography>
+                      } />
+                    </ListItem>
+                    </Grid>
+                    <Grid item sm={6}>
+                    <ListItem>
+                      <ListItemText primary={<Typography>
+                       Landmark
+                      </Typography>} 
+                      secondary={
+                        <Typography sx={{color:"#7b939c"}} >{content?.emergencyTreatmentCenterViewModel?.landmark || "Not Available"}</Typography>
+                      } />
+                    </ListItem>
+                    </Grid>
+                    <Grid item sm={6}>
+                    <ListItem>
+                      <ListItemText primary={<Typography>
+                       Address
+                      </Typography>} 
+                      secondary={
+                        <Typography sx={{color:"#7b939c"}} >{content?.emergencyTreatmentCenterViewModel?.address1 || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
