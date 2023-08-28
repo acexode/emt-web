@@ -22,7 +22,7 @@ import {
   import { PATH_DASHBOARD } from "../../routes/paths";
   import useSettings from "../../hooks/useSettings";
 import { formatDate2, formatter } from "../../utility";
-import { IClaims } from "../../types/claims";
+// import { IClaims } from "../../types/claims";
 import axiosInstance from "../../services/api_service";
 import { MIconButton } from "../../components/@material-extend";
 import { useSnackbar } from "notistack";
@@ -32,7 +32,7 @@ import AlertDialog from "./components/confirmDialog";
   
   const ViewAmbulance: FC = () => {
     const { themeStretch } = useSettings();
-    const [content, SetContent] = useState<IClaims>();
+    const [content, SetContent] = useState<any>();
     const [loading,setLoading] = useState(false)
     const [open, setOpen] = useState(false);
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -73,7 +73,7 @@ import AlertDialog from "./components/confirmDialog";
           try {
             let res;
             res = await axiosInstance.post(
-              `Claims/acceptOrRejectClaim`,
+              `Claims/acceptorRejectAmbulanceClaim`,
               confirmationPayload
             );
             navigate(PATH_DASHBOARD.claims.root);
@@ -100,6 +100,8 @@ import AlertDialog from "./components/confirmDialog";
             setLoading(false)
           }
         }
+
+        // console.log({content});
     return (
       <Page title={`View Ambulance Claim | NEMSAS`}>
         <Container maxWidth={themeStretch ? false : "lg"}>
@@ -132,6 +134,7 @@ import AlertDialog from "./components/confirmDialog";
           <Card sx={{ p: 3, pb: 10, mb: 2 }}>
                 <Box sx={{mb:2}}>Claims Details</Box>
                     <Grid container spacing={2}>
+                   
                     <Grid item sm={6}>
                     <ListItem>
                       <ListItemText primary={<Typography>
@@ -162,10 +165,10 @@ import AlertDialog from "./components/confirmDialog";
                     <Grid item sm={6}>
                     <ListItem>
                       <ListItemText primary={<Typography>
-                        Provider ID
+                        Provider Name
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.incidentViewModel?.ambulanceViewModel?.code || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.serviceProvider || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -175,20 +178,20 @@ import AlertDialog from "./components/confirmDialog";
                         Provider NHIA/SHIA ID
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.incidentViewModel?.ambulanceViewModel?.nhiAorSHIA || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.nhia || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
-                    <Grid item sm={6}>
+                    {/* <Grid item sm={6}>
                     <ListItem>
                       <ListItemText primary={<Typography>
                         location
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.incidentViewModel?.ambulanceViewModel?.location || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.location || "Not Available"}</Typography>
                       } />
                     </ListItem>
-                    </Grid>
+                    </Grid> */}
                     {/* <Grid item sm={6}>
                     <ListItem>
                       <ListItemText primary={<Typography>
@@ -199,7 +202,7 @@ import AlertDialog from "./components/confirmDialog";
                       } />
                     </ListItem>
                     </Grid> */}
-                    <Grid item sm={6}>
+                    {/* <Grid item sm={6}>
                     <ListItem>
                       <ListItemText primary={<Typography>
                        Provider Name
@@ -208,7 +211,7 @@ import AlertDialog from "./components/confirmDialog";
                         <Typography sx={{color:"#7b939c"}} >{content?.incidentViewModel?.ambulanceViewModel?.name || "Not Available"}</Typography>
                       } />
                     </ListItem>
-                    </Grid>
+                    </Grid> */}
                     </Grid>
             </Card>
           <Card sx={{ p: 3, pb: 10, mb: 2 }}>
@@ -220,7 +223,17 @@ import AlertDialog from "./components/confirmDialog";
                          Category
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.incidentViewModel?.incidentCategory || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.incidentCategory || "Not Available"}</Typography>
+                      } />
+                    </ListItem>
+                    </Grid>
+                    <Grid item sm={6}>
+                    <ListItem>
+                      <ListItemText primary={<Typography>
+                        Code
+                      </Typography>} 
+                      secondary={
+                        <Typography sx={{color:"#7b939c"}} >{content?.incidentViewModel?.serialNo || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -230,7 +243,7 @@ import AlertDialog from "./components/confirmDialog";
                         Date
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.incidentViewModel?.incidentDate || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.incidentDate || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -240,7 +253,7 @@ import AlertDialog from "./components/confirmDialog";
                         location
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.incidentViewModel?.incidentLocation || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.location || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -286,7 +299,7 @@ import AlertDialog from "./components/confirmDialog";
                          First Name
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.incidentViewModel?.patientViewModel?.firstName || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.patient?.firstName || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -296,7 +309,7 @@ import AlertDialog from "./components/confirmDialog";
                          Last Name
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.incidentViewModel?.patientViewModel?.lastName|| "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.patient?.lastName|| "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -307,7 +320,7 @@ import AlertDialog from "./components/confirmDialog";
                         Patient Address
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{ content?.incidentViewModel?.patientViewModel?.address || "Nil"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{ content?.patient?.address || "Nil"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -317,7 +330,7 @@ import AlertDialog from "./components/confirmDialog";
                         Sex
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.incidentViewModel?.patientViewModel?.sex === 0 ? "Female" : "Male" || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.patient?.sex === 0 ? "Female" : "Male" || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -327,7 +340,7 @@ import AlertDialog from "./components/confirmDialog";
                         Date of birth
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{formatDate2(content?.incidentViewModel?.patientViewModel?.doB) || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{formatDate2(content?.patient?.doB) || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -337,7 +350,7 @@ import AlertDialog from "./components/confirmDialog";
                         Patient NHIA/SHIA NO
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{ content?.incidentViewModel?.patientViewModel?.nhia || "Nil"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{ content?.patient?.nhia || "Nil"}</Typography>
                       } />
                     </ListItem>
                     </Grid>

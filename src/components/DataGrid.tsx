@@ -193,14 +193,14 @@ const CustomUsableTable: FC<ITable> = ({ dataList, table_Head,loading }) => {
                               align="left"
                              
                             >
-                               {row?.quantity || "Nil"
+                               {row?.quantity
                               }
                             </TableCell>
                             <TableCell
                               align="left"
                              
                             >
-                               {row?.dose || "Nil"
+                               {row?.dose 
                               }
                             </TableCell>
                            
@@ -208,7 +208,7 @@ const CustomUsableTable: FC<ITable> = ({ dataList, table_Head,loading }) => {
                            
                             <TableCell align="left">
                           
-                              { formatter.format(row?.price) || "Nil"}
+                              { formatter.format(row?.price)}
                              
                               </TableCell>
                             <TableCell align="left">

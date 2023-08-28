@@ -189,7 +189,6 @@ import { Icon } from "@iconify/react";
         longitude,
         latitude,
         treatmentCenter:"",
-        description:"",
         ambulanceName:""
     }
     delete newVal?.emergencyTreatmentCenterViewModel

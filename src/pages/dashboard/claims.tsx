@@ -25,13 +25,12 @@ const TABLE_HEAD = [
 
 const TABLE_HEAD_AMB = [
   { id: "s/n", label: "S/N", alignRight: false },
-  { id: "title", label: "Title", alignRight: false },
-  { id: "incidentViewModel.incidentCategory", label: "Incident Category", alignRight: false },
-  { id: "incidentViewModel.patientViewModel.firstName", label: "Patient Name", alignRight: false },
-  { id: "incidentViewModel.incidentDate", label: "Incident Date", alignRight: false },
-  { id: "distanceCovered", label: "Distance Covered", alignRight: false },
-  { id: "totalPrice", label: "Total Price", alignRight: false },
-  { id: "dateAdded", label: "Date Added", alignRight: false },
+  { id: "incidentCategory", label: "Incident Category", alignRight: false },
+  { id: "patientName", label: "Patient Name", alignRight: false },
+  { id: "incidentDate", label: "Incident Date", alignRight: false },
+  { id: "distanceCovered", label: "Discovered", alignRight: false },
+  { id: "nhia", label: "NHIA", alignRight: false },
+  { id: "totalAmount", label: "Total Price", alignRight: false },
   { id: "status", label: "Status", alignRight: false },
   { id: "" },
 ];
@@ -92,6 +91,7 @@ const Claims: FC = () => {
     try {
       const ambRes = await axiosInstance.post(`Claims/getByAssignedAmbulance`, obj);
       setAmbulanceClaims(ambRes?.data?.data);
+      console.log(ambRes?.data);
     } catch (error) {
       console.log("Error fetching ambulance claims:", error);
     }
