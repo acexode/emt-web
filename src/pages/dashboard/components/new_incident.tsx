@@ -26,6 +26,7 @@ import axiosInstance from "../../../services/api_service";
 import MapSelector from "./map";
 import AlertDialog from "./confirmDialog";
 import { Icon } from "@iconify/react";
+import MapWithSearchAndDraw from "../../../components/testMap";
 
   const schema = yup.object().shape({
     incidentDate: yup.string().required("*Incident Date is required"),
@@ -248,6 +249,10 @@ import { Icon } from "@iconify/react";
       } finally{
         setLoading(false)
       }
+    }
+    const defaultMapLocations = {
+        x: longitude,
+        y: latitude
     }
     return (
       <Page title="Incident Form: Create new incident | EMT">
@@ -918,7 +923,7 @@ import { Icon } from "@iconify/react";
                      
                     </Grid>
               </Card> */}
-              <Card sx={{ p: 3, pb: 10, mb: 5 }}>
+              {/* <Card sx={{ p: 3, pb: 10, mb: 5 }}>
                 <Box sx={{mb:2}}>Map Location</Box>
                     <Grid container spacing={2}>
                 
@@ -937,7 +942,23 @@ import { Icon } from "@iconify/react";
                 
                      
                     </Grid>
+              </Card> */}
+              <Card sx={{ p: 3, pb: 10, mb: 5 }}>
+                <Box sx={{mb:2}}>Map Location</Box>
+                    <Grid container spacing={2}>
+                    <Grid item sm={12}>
+                    <FormLabel >
+                        Select a Location on the Map
+                        </FormLabel>
+                    <MapWithSearchAndDraw
+                    setSelectedLatitude={setSelectedLatitude} 
+                    setSelectedLongitude={setSelectedLongitude}
+                    defaultMapLocations={defaultMapLocations}
+                    />
+                    </Grid>
+                    </Grid>
               </Card>
+             
               </>
               }
               

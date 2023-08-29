@@ -65,3 +65,11 @@
 .map-container {
   height: 400px;
 }
+.sr-only {
+  display: none;
+}
+
+.leaflet-container {
+  height: 600px;
+  width: 100%;
+}
