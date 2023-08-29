@@ -1,5 +1,9 @@
+// @ts-nocheck
+
 import { FC, useEffect, useState,lazy } from "react";
 import axiosInstance from "../../services/api_service";
+import { BASE_URL } from "../../services/baseurl";
+import signalRService from "../../services/SignalRService";
 
 const CustomTable = lazy(() => import("../../components/incidents/table"))
 
@@ -21,6 +25,19 @@ const TABLE_HEAD = [
 const Incidents: FC = () => {
   const [incidents, setIncidents] = useState([]);
   const [loading,setLoading] = useState(false)
+
+  useEffect(() => {
+    signalRService.startConnection(`${BASE_URL}/pulser`); // Replace with actual hub URL
+    
+    // Add event listeners to receive updates from the hub
+    signalRService.connection.on('ReceiveMessage', (message) => {
+      console.log('Received message:', message);
+    });
+
+    return () => {
+      signalRService.closeConnection();
+    };
+  }, []);
 
   const fetchIncidents = () =>{
     setLoading(true)

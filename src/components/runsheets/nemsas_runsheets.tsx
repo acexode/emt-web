@@ -153,7 +153,9 @@ const CustomTableNemsas: FC<ITable> = ({ dataList, page_title, table_Head,loadin
 
   const isUserNotFound = filteredUsers.length === 0 && !loading;
   let dummyData = [...Array(10)]
+  const startIndex = page * rowsPerPage;
 
+  
   return (
     <>
       <Page title={`${page_title}: List | NEMSAS`}>
@@ -250,8 +252,7 @@ const CustomTableNemsas: FC<ITable> = ({ dataList, page_title, table_Head,loadin
                   <TableBody>
                     {filteredUsers
                       .slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage
+                        startIndex, startIndex + rowsPerPage
                       )
                       .map((row: ITransferSheets, index: number) => {
                        
@@ -268,8 +269,7 @@ const CustomTableNemsas: FC<ITable> = ({ dataList, page_title, table_Head,loadin
                               align="left"
                              
                             >
-                              { index + 1
-                              }
+                             {startIndex + index + 1}
                            
                             </TableCell>
                             <TableCell

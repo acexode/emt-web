@@ -241,13 +241,13 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
                   </MIconButton>
                 ),
               });
-            // reset();
-            // handleToggle();
+            reset();
+            handleToggle();
             fetchAllUsers()
           } catch (error: any) {
             console.log(error)
-            const errorMessage = errorMessages[error?.response?.status]
-            enqueueSnackbar(errorMessage, {
+            // const errorMessage = errorMessages[error?.response?.status]
+            enqueueSnackbar(error?.response?.data?.message, {
                 variant: "error",
                 action: (key) => (
                   <MIconButton size="small" onClick={() => closeSnackbar(key)}>

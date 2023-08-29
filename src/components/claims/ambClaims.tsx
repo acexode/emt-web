@@ -164,6 +164,8 @@ const CustomClaimAmbTable: FC<ITable> = ({ dataList, page_title, table_Head,load
 
   const isUserNotFound = filteredUsers.length === 0 && !loading;
   let dummyData = [...Array(5)]
+  const startIndex = page * rowsPerPage;
+
 
   return (
     <>
@@ -273,8 +275,7 @@ const CustomClaimAmbTable: FC<ITable> = ({ dataList, page_title, table_Head,load
                   <TableBody>
                     {filteredUsers
                       .slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage
+                        startIndex, startIndex + rowsPerPage
                       )
                       .map((row: any, index: number) => {
                         const isItemSelected =
@@ -294,9 +295,7 @@ const CustomClaimAmbTable: FC<ITable> = ({ dataList, page_title, table_Head,load
                               align="left"
                              
                             >
-                              { index +1
-                              }
-                           
+                              {startIndex + index + 1}
                             </TableCell>
                            
                             <TableCell

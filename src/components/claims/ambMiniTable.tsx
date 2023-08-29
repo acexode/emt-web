@@ -64,6 +64,7 @@ const CustomAmbMiniTable: FC<ITable> = ({ dataList, table_Head,loading,totalAmou
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - dataList?.length) : 0;
 
   const isUserNotFound = dataList?.length === 0 && !loading;
+  const startIndex = page * rowsPerPage;
 
   return (
     <>
@@ -88,8 +89,7 @@ const CustomAmbMiniTable: FC<ITable> = ({ dataList, table_Head,loading,totalAmou
                   <TableBody>
                     {dataList
                       ?.slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage
+                        startIndex, startIndex + rowsPerPage
                       )
                       .map((row: any, index: number) => {
                         const isItemSelected =
@@ -109,8 +109,7 @@ const CustomAmbMiniTable: FC<ITable> = ({ dataList, table_Head,loading,totalAmou
                               align="left"
                              
                             >
-                              { index + 1
-                              }
+                              {startIndex + index + 1}
                            
                             </TableCell>
                             <TableCell

@@ -153,6 +153,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
 
   const isUserNotFound = filteredUsers.length === 0 && !loading;
   let dummyData = [...Array(10)]
+  const startIndex = page * rowsPerPage;
 
   return (
     <>
@@ -245,8 +246,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                   <TableBody>
                     {filteredUsers
                       .slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage
+                        startIndex, startIndex + rowsPerPage
                       )
                       .map((row: any, index: number) => {
                         const isItemSelected =
@@ -266,8 +266,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                               align="left"
                              
                             >
-                              { index + 1
-                              }
+                              {startIndex + index + 1}
                            
                             </TableCell>
                          
