@@ -80,7 +80,7 @@ const TABLE_HEAD = [
           try {
             let res;
             res = await axiosInstance.post(
-              `Claims/acceptorRejectAmbulanceClaim`,
+              `Claims/acceptOrRejectClaim`,
               confirmationPayload
             );
             navigate(PATH_DASHBOARD.claims.root);

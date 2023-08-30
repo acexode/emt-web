@@ -14,6 +14,7 @@ function path(root: string, sublink: string) {
     register: path(ROOTS_AUTH, '/register'),
     registerUnprotected: path(ROOTS_AUTH, '/register-unprotected'),
     resetPassword: path(ROOTS_AUTH, '/reset-password'),
+    forgotPassword: path(ROOTS_AUTH, '/forgot-password'),
     verify: path(ROOTS_AUTH, '/verify')
   };
 

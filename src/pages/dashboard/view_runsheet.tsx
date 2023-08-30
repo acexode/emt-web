@@ -40,7 +40,7 @@ import { Icon } from "@iconify/react";
 
   const ViewRunSheet: FC = () => {
     const { themeStretch } = useSettings();
-    const [ambulances,setAmbulances] = useState<any>([])
+    const [_ambulances,setAmbulances] = useState<any>([])
     const [treatmentCentres,setTreatmentCentres] = useState<any>([])
     const [loading,setLoading] = useState(false)
     const [open, setOpen] = useState(false);
@@ -86,7 +86,6 @@ import { Icon } from "@iconify/react";
       const [selectedTime, setSelectedTime] = useState(defaultTime);
       const [users,setUsers] = useState([])
 
-      
       useEffect(() => {
         setSelectedDate(defaultDate.toISOString().split('T')[0]);
         setSelectedTime(defaultTime);
@@ -160,7 +159,6 @@ import { Icon } from "@iconify/react";
         setConfirmationPayload(newVal);
           
       };
-       
         const handleIncidents = async() =>{
           setLoading(true)
           try {
@@ -230,24 +228,23 @@ import { Icon } from "@iconify/react";
                         <TextField
                             variant="outlined"
                             fullWidth
-                            select
                             type="text"
                             disabled
                             // {...register('ambulanceId')}
-                            defaultValue={data?.incidentViewModel?.ambulanceViewModel?.id}
+                            defaultValue={data?.incidentViewModel?.ambulanceViewModel?.name}
                             // helperText={errors?.ambulanceId?.message?.toString()}
                             FormHelperTextProps={{
                             className:"helperTextColor"
                             }}
                         >
-                            <MenuItem value={""}>
+                            {/* <MenuItem value={""}>
                                 None
-                            </MenuItem>
-                           {ambulances?.map((amb:any, index:number) =>(
+                            </MenuItem> */}
+                           {/* {ambulances?.map((amb:any, index:number) =>(
                             <MenuItem value={amb?.value} key={index}>
                                 {amb?.label}
                             </MenuItem>
-                           ))}                 
+                           ))}                  */}
                         </TextField>
                     </Grid>
                     <Grid item sm={6}>

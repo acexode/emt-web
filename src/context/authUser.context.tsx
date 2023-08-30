@@ -87,11 +87,38 @@ const AuthUserProvider = ({ children }: Props) => {
       return error;
     }
   };
+  const handleForgotPassword = async (data: any) => {
+    try {
+      const res = await axios.post(`${BASE_URL}/Account/forgotPassword`, data);
+      enqueueSnackbar("Forgot Password link sent", {
+        variant: "success",
+        action: (key) => (
+          <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+            <Icon icon={closeFill} />
+          </MIconButton>
+        ),
+      });
+      // window.location.href = "/auth/login";
+      return res
+    } catch (error: any) {
+      console.log(error);
+      enqueueSnackbar("Request Failed", {
+        variant: "error",
+        action: (key) => (
+          <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+            <Icon icon={closeFill} />
+          </MIconButton>
+        ),
+      });
+      return error;
+    }
+  };
 
   const value = {
     userState,
     handleSignOut,
     handleSignInUser,
+    handleForgotPassword
   };
 
   return (

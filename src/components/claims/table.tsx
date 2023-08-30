@@ -76,7 +76,10 @@ function applySortFilter(
   if (query) {
     return filter(
       array,
-      (_user) => _user?.category?.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      (_user) => _user?.serviceProvider?.toLowerCase().includes(query.toLowerCase())  ||
+      _user?.incidentCategory?.toLowerCase().includes(query.toLowerCase()) ||
+      _user?.patientName?.toLowerCase().includes(query.toLowerCase()) ||
+      _user?.status?.toLowerCase().includes(query.toLowerCase())
     );
   }
   return stabilizedThis.map((el: any[]) => el[0]);
