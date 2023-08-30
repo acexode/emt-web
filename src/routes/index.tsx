@@ -49,6 +49,12 @@ export default function Router() {
           path: "register",
           element: <GuestGuard>{/* <Register /> */}</GuestGuard>,
         },
+        {
+          path: "forgot-password",
+          element: <GuestGuard>
+            <ForgotPassword />
+          </GuestGuard>,
+        },
         { path: "login-unprotected", element: <Login /> },
       ],
     },
@@ -121,6 +127,7 @@ export default function Router() {
 }
 
 const Login = Loadable(lazy(() => import("../pages/authentication/login")));
+const ForgotPassword = Loadable(lazy(() => import("../pages/authentication/forgotPassword")));
 const GeneralApp = Loadable(
   lazy(() => import("../pages/dashboard/general_app"))
 );

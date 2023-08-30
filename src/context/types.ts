@@ -4,6 +4,7 @@ export interface IAuthContext {
     userState: any;
     handleSignOut: () => void;
     handleSignInUser?: any;
+    handleForgotPassword?: any;
 }
 
 export interface Props {
