@@ -73,3 +73,13 @@
   height: 600px;
   width: 100%;
 }
+
+.nonEmergentBg {
+  background: hsl(55, 100%, 27%);
+  color: #f0f0f0;
+}
+
+.emergentBg {
+  background: hsl(0, 100%, 27%);
+  color: #f0f0f0;
+}

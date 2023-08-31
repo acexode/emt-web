@@ -18,7 +18,9 @@ import {
     TableRow,
     TableContainer,
     TableHead,
-    IconButton
+    IconButton,
+    Chip
+
 
   } from "@mui/material";
   import { FC, useEffect, useState } from "react";
@@ -195,7 +197,7 @@ const headLabel = [
         );
         };
 
-        // console.log({content});
+        console.log({content});
           return (
       <Page title={`View Patient Record | EMT`}>
         <Container maxWidth={themeStretch ? false : "lg"}>
@@ -340,7 +342,7 @@ const headLabel = [
                     Arrival Time
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{loadingData ? <Skeleton variant="rectangular" width={100} height={30} />  : formatDateTime(content?.runsheet?.arrivalTime) || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{loadingData ? <Skeleton variant="rectangular" width={100} height={30} />  : content?.extraDetails?.arrivalTime ? formatDateTime(content?.extraDetails?.arrivalTime) : "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -385,7 +387,7 @@ const headLabel = [
                         Triage Category
                         </Typography>} 
                         secondary={
-                            <Typography sx={{color:"#7b939c"}} >{loadingData ? <Skeleton variant="rectangular" width={100} height={30} />  : content?.extraDetails?.triageCategory || "Not Available"}</Typography>
+                            <Typography sx={{color:"#7b939c"}} >{loadingData ? <Skeleton variant="rectangular" width={100} height={30} />  :  content?.extraDetails?.triageCategory ?  <Chip label={content?.extraDetails?.triageCategory} className={`${content?.extraDetails?.triageCategory === "Emergent" ? "emergentBg": "nonEmergentBg"}`} />  : "Not Available"}</Typography>
                         } />
                         </ListItem>
                         </Grid>
