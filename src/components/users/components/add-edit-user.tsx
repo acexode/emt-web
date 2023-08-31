@@ -247,7 +247,7 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
           } catch (error: any) {
             console.log(error)
             // const errorMessage = errorMessages[error?.response?.status]
-            enqueueSnackbar(error?.response?.data?.message, {
+            enqueueSnackbar(error?.response?.data?.data, {
                 variant: "error",
                 action: (key) => (
                   <MIconButton size="small" onClick={() => closeSnackbar(key)}>
