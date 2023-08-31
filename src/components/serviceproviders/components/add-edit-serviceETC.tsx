@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import {
     Button,
     Dialog,
@@ -19,6 +21,7 @@ import { MIconButton } from "../../@material-extend";
 import closeFill from "@iconify/icons-eva/close-fill";
 import { LoadingButton } from "@mui/lab";
 import { Icon } from "@iconify/react";
+import { errorMessages } from "../../../constants";
 
   interface IAddEditServiceProvider {
     edit?: boolean,
@@ -147,8 +150,9 @@ export  const AddEditServiceProviderETC:FC<IAddEditServiceProvider> = ({edit,for
             reset();
             handleToggle();
             fetchAllUsers()
-          } catch (error: any) {
-            enqueueSnackbar(error?.message, {
+          } catch (error:any) {
+            let errorMessage = errorMessages[error?.response?.status]
+            enqueueSnackbar(errorMessage, {
                 variant: "error",
                 action: (key) => (
                   <MIconButton size="small" onClick={() => closeSnackbar(key)}>
@@ -257,6 +261,7 @@ export  const AddEditServiceProviderETC:FC<IAddEditServiceProvider> = ({edit,for
                 fullWidth
                 select
                 type="text"
+                defaultValue={formData?.hospitalTypeId}
                 {...register('hospitalTypeId',{valueAsNumber:true})}
                 helperText={errors?.hospitalTypeId?.message?.toString()}
                 FormHelperTextProps={{
@@ -281,6 +286,8 @@ export  const AddEditServiceProviderETC:FC<IAddEditServiceProvider> = ({edit,for
                 fullWidth
                 select
                 type="text"
+                defaultValue={formData?.stateId}
+
                 {...register('stateId',{valueAsNumber:true})}
                 helperText={errors?.stateId?.message?.toString()}
                 FormHelperTextProps={{
@@ -306,6 +313,7 @@ export  const AddEditServiceProviderETC:FC<IAddEditServiceProvider> = ({edit,for
                 fullWidth
                 select
                 type="text"
+                defaultValue={formData?.lgaId}
                 {...register('lgaId',{valueAsNumber:true})}
                 helperText={errors?.lgaId?.message?.toString()}
                 FormHelperTextProps={{

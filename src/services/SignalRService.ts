@@ -12,7 +12,9 @@ const signalRService = {
     }
 
     signalRService.connection = new signalR.HubConnectionBuilder()
-      .withUrl(hubUrl)
+      .withUrl(hubUrl,{
+        withCredentials: true
+      })
       .build();
 
     signalRService.connection.start()
