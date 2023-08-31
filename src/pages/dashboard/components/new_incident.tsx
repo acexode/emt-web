@@ -652,9 +652,9 @@ import MapWithSearchAndDraw from "../../../components/testMap";
                             <MenuItem value={"Emergent"}>
                                     Emergent
                                 </MenuItem>
-                            <MenuItem value={"Urgent"}>
+                            {/* <MenuItem value={"Urgent"}>
                                     Urgent
-                                </MenuItem>
+                                </MenuItem> */}
                             <MenuItem value={"NonEmergent"}>
                                     Non-Emergent
                                 </MenuItem>
@@ -690,56 +690,56 @@ import MapWithSearchAndDraw from "../../../components/testMap";
              {!watchIsCaseSolvedWithAmbulance && <> <Card sx={{ p: 3, pb: 10, mb: 5 }}>
                 <Box sx={{mb:2}}>Ambulance Dispatch Information</Box>
                     <Grid container spacing={2}>
-                    <Grid item sm={6}>
-                        <FormLabel >
-                        Ambulance
-                        </FormLabel>
-                        <TextField
-                            variant="outlined"
-                            fullWidth
-                            select
-                            type="text"
-                            {...register('ambulanceId')}
-                            defaultValue={row?.ambulanceViewModel?.id}
-                            helperText={errors?.ambulanceId?.message?.toString()}
-                            FormHelperTextProps={{
-                            className:"helperTextColor"
-                            }}
-                        >
-                            <MenuItem value={""}>
-                                None
-                            </MenuItem>
-                           {ambulances?.map((amb:any, index:number) =>(
-                            <MenuItem value={amb?.value} key={index}>
-                                {amb?.label}
-                            </MenuItem>
-                           ))}                 
-                        </TextField>
-                    </Grid>
-                    <Grid item sm={6}>
-                        <FormLabel >
-                       Ambulance Type
-                        </FormLabel>
-                        <TextField
-                            variant="outlined"
-                            fullWidth
-                            select
-                            type="text"
-                            multiline
-                            defaultValue={row?.ambulanceViewModel?.ambulanceTypeId}
-                            {...register('ambulanceType')}
-                            helperText={errors?.ambulanceType?.message?.toString()}
-                            FormHelperTextProps={{
-                            className:"helperTextColor"
-                            }}
-                        >
-                            {ambulanceTypes.map((type:any,index:any) => (
-                                <MenuItem key={index} value={type?.value}>
-                                    {type?.label}
+                        <Grid item sm={6}>
+                            <FormLabel >
+                        Ambulance Type
+                            </FormLabel>
+                            <TextField
+                                variant="outlined"
+                                fullWidth
+                                select
+                                type="text"
+                                multiline
+                                defaultValue={row?.ambulanceViewModel?.ambulanceTypeId}
+                                {...register('ambulanceType')}
+                                helperText={errors?.ambulanceType?.message?.toString()}
+                                FormHelperTextProps={{
+                                className:"helperTextColor"
+                                }}
+                            >
+                                {ambulanceTypes.map((type:any,index:any) => (
+                                    <MenuItem key={index} value={type?.value}>
+                                        {type?.label}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        </Grid>
+                        <Grid item sm={6}>
+                            <FormLabel >
+                            Ambulance
+                            </FormLabel>
+                            <TextField
+                                variant="outlined"
+                                fullWidth
+                                select
+                                type="text"
+                                {...register('ambulanceId')}
+                                defaultValue={row?.ambulanceViewModel?.id}
+                                helperText={errors?.ambulanceId?.message?.toString()}
+                                FormHelperTextProps={{
+                                className:"helperTextColor"
+                                }}
+                            >
+                                <MenuItem value={""}>
+                                    None
                                 </MenuItem>
-                            ))}
-                        </TextField>
-                    </Grid>
+                            {ambulances?.map((amb:any, index:number) =>(
+                                <MenuItem value={amb?.value} key={index}>
+                                    {amb?.label}
+                                </MenuItem>
+                            ))}                 
+                            </TextField>
+                        </Grid>
                     </Grid>
               </Card>
               <Card sx={{ p: 3, pb: 10, mb: 5 }}>

@@ -7,6 +7,7 @@ import {
     Card,
     Box,
     Button,
+    Chip
   } from "@mui/material";
   import { FC, useEffect, useState } from "react";
   import HeaderBreadcrumbs from "../../components/HeaderBreadcrumbs";
@@ -242,7 +243,7 @@ import { formatDate2, formatDateTime } from "../../utility";
                      Triage Category
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.triageCategory || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{ content?.triageCategory ?  <Chip label={content?.triageCategory} className={`${content?.triageCategory === "Emergent" ? "emergentBg": "nonEmergentBg"}`} />  : "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
