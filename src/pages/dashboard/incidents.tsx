@@ -27,7 +27,7 @@ const Incidents: FC = () => {
   const [loading,setLoading] = useState(false)
 
   useEffect(() => {
-    signalRService.startConnection(`${BASE_URL}/pulser`); // Replace with actual hub URL
+    signalRService.startConnection(`http://localhost:5173/pulser`); // Replace with actual hub URL
     
     // Add event listeners to receive updates from the hub
     signalRService.connection.on('ReceiveMessage', (message) => {

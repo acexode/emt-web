@@ -236,6 +236,7 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
                 fullWidth
                 select
                 type="text"
+                defaultValue={formData?.ambulanceTypeId}
                 {...register('ambulanceTypeId')}
                 // helperText={errors?.ambulanceTypeId?.message?.toString()}
                 FormHelperTextProps={{
@@ -260,6 +261,7 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
                   fullWidth
                   select
                   type="text"
+                  defaultValue={formData?.stateId}
                   {...register('stateId',{valueAsNumber:true,})}
                 
               >
@@ -282,6 +284,8 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
                   fullWidth
                   select
                   type="text"
+                  defaultValue={formData?.lgaId}
+
                   {...register('lgaId',{valueAsNumber:true})}
                 
               >
@@ -305,6 +309,7 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
                 select
                 type="text"
                 multiline
+                defaultValue={formData?.wardId}
                 {...register('wardId',{valueAsNumber:true})}
                 // helperText={errors?.wardId?.message?.toString()}
                 FormHelperTextProps={{
