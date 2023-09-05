@@ -82,7 +82,7 @@ const Claims: FC = () => {
   const fetchAllData = async () => {
     setLoading(true);
     let obj = {
-      id: 1
+      id: userProfile?.ambulanceId
     };
     let obj2 = {
       id: 1
