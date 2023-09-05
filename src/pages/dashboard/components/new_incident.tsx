@@ -8,6 +8,7 @@ import {
     TextField,
     MenuItem,
     FormLabel,
+    Chip
   } from "@mui/material";
   import HeaderBreadcrumbs from "../../../components/HeaderBreadcrumbs";
   import Page from "../../../components/Page";
@@ -650,13 +651,14 @@ import MapWithSearchAndDraw from "../../../components/testMap";
                             }}
                         >
                             <MenuItem value={"Emergent"}>
-                                    Emergent
+                            <Chip label="Emergent" className={"emergentBg"} />    
                                 </MenuItem>
                             {/* <MenuItem value={"Urgent"}>
                                     Urgent
                                 </MenuItem> */}
                             <MenuItem value={"NonEmergent"}>
-                                    Non-Emergent
+                                   
+                                    <Chip label=" Non-Emergent" className={"nonEmergentBg"} />   
                                 </MenuItem>
                         </TextField>
                     </Grid>
