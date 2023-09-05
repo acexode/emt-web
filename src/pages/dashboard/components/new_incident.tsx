@@ -100,6 +100,7 @@ import MapWithSearchAndDraw from "../../../components/testMap";
     const [latitude, setSelectedLatitude] = useState(row?.latitude ||  null);
     const [longitude, setSelectedLongitude] = useState(row?.longitude || null );
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+    const watchAmbulancetypeSelected = watch("ambulanceType")
 
     let navigate = useNavigate();
     const handleClickOpen = () => {
@@ -118,21 +119,26 @@ import MapWithSearchAndDraw from "../../../components/testMap";
     },[row])
   
   useEffect(()=>{
-    axiosInstance
-    .get(`Ambulances/get`)
-    .then((res) => {
-        const obj = res?.data?.data?.map((dt: { name: any; id:number}) =>{
-            return {
-                label: dt?.name,
-                value: dt?.id
-            }
+    if(watchAmbulancetypeSelected){
+        axiosInstance
+        .post(`Ambulances/getbyAmbulanceType`,{
+            id:watchAmbulancetypeSelected
         })
-        setAmbulances(obj)
-    })
-    .catch((error) => {
-      console.log(error);
-    })
-  },[])
+        .then((res) => {
+            const obj = res?.data?.data?.map((dt: { name: any; id:number}) =>{
+                return {
+                    label: dt?.name,
+                    value: dt?.id
+                }
+            })
+            setAmbulances(obj)
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+    }
+
+  },[watchAmbulancetypeSelected])
   useEffect(()=>{
     axiosInstance
     .get(`AmbulanceTypes/get`)
