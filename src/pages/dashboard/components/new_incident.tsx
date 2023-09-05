@@ -45,7 +45,7 @@ import MapWithSearchAndDraw from "../../../components/testMap";
     areaCouncil: yup.string().required("*Area Council is required"),
     zipCode: yup.string(),
     incidentCategory: yup.string(),
-    canResolveWithoutAmbulance: yup.string().required("* This is required"),
+    canResolveWithoutAmbulance: yup.string(),
     ambulanceId: yup.string(),
     ambulanceType: yup.string(),
     emergencyTreatmentCenterId: yup.string(),
@@ -668,7 +668,7 @@ import MapWithSearchAndDraw from "../../../components/testMap";
                                 </MenuItem>
                         </TextField>
                     </Grid>
-                    <Grid item sm={6}>
+                    {/* <Grid item sm={6}>
                         <FormLabel >
                         Was the case resolved without Ambulance dispatch?
                         </FormLabel>
@@ -691,11 +691,13 @@ import MapWithSearchAndDraw from "../../../components/testMap";
                                     No
                                 </MenuItem>
                         </TextField>
-                    </Grid>
+                    </Grid> */}
                     
                     </Grid>
               </Card>
-             {!watchIsCaseSolvedWithAmbulance && <> <Card sx={{ p: 3, pb: 10, mb: 5 }}>
+           
+              <> 
+             <Card sx={{ p: 3, pb: 10, mb: 5 }}>
                 <Box sx={{mb:2}}>Ambulance Dispatch Information</Box>
                     <Grid container spacing={2}>
                         <Grid item sm={6}>
@@ -968,7 +970,7 @@ import MapWithSearchAndDraw from "../../../components/testMap";
               </Card>
              
               </>
-              }
+            
               
               <LoadingButton
                 size="large"
