@@ -7,9 +7,9 @@ const CustomTable = lazy(() => import("../../components/runsheets/nemsas_runshee
 
 const TABLE_HEAD = [
   { id: "s/n", label: "S/N", alignRight: false },
-  { id: "patientName", label: "Patient", alignRight: false },
-  { id: "name", label: "Facility", alignRight: false },
-  { id: "amb_name", label: "Ambulance", alignRight: false },
+  { id: "patientViewModel.lastName", label: "Patient", alignRight: false },
+  { id: "emergencyTreatmentCenterViewModel.name", label: "Facility", alignRight: false },
+  { id: "ambulanceViewModel.name", label: "Ambulance", alignRight: false },
   { id: "routeFrom", label: "Route From", alignRight: false },
   { id: "routeTo", label: "Route To", alignRight: false },
   { id: "takeOffTime", label: "Take Off Time", alignRight: false },
@@ -30,6 +30,7 @@ const NemsasRunSheets: FC = () => {
 
   const fetchAllData = () =>{
     let val = {
+      // id: 14
       id: userProfile?.ambulanceId
     }
     setLoading(true)

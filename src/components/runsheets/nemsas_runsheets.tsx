@@ -27,7 +27,7 @@ import SearchNotFound from "../SearchNotFound";
 import HeaderBreadcrumbs from "../HeaderBreadcrumbs";
 import TableListHead from "../table/tableListHead";
 import ListToolbar from "../table/tableListToolbar";
-import { ITransferSheets } from "../../types/transfer_form";
+// import { ITransferSheets } from "../../types/transfer_form";
 import { formatDateTime, formatter } from "../../utility";
 import MoreMenu from "../table/TableMoreMenu";
 // import MoreMenu from "../table/TableMoreMenu";
@@ -254,7 +254,7 @@ const CustomTableNemsas: FC<ITable> = ({ dataList, page_title, table_Head,loadin
                       .slice(
                         startIndex, startIndex + rowsPerPage
                       )
-                      .map((row: ITransferSheets, index: number) => {
+                      .map((row: any, index: number) => {
                        
                         return (
                           <TableRow
@@ -276,7 +276,7 @@ const CustomTableNemsas: FC<ITable> = ({ dataList, page_title, table_Head,loadin
                               align="left"
                              
                             >
-                              { row?.incidentViewModel?.patientViewModel?.firstName ?  `${row?.incidentViewModel?.patientViewModel?.firstName} ${row?.incidentViewModel?.patientViewModel?.lastName}` : "Nil"
+                              { row?.patientViewModel?.firstName ?  `${row?.patientViewModel?.firstName} ${row?.patientViewModel?.lastName}` : "Nil"
                               }
                            
                             </TableCell>
@@ -284,7 +284,7 @@ const CustomTableNemsas: FC<ITable> = ({ dataList, page_title, table_Head,loadin
                               align="left"
                              
                             >
-                              { row?.incidentViewModel?.emergencyTreatmentCenterViewModel?.name || "Nil"
+                              { row?.emergencyTreatmentCenterViewModel?.name || "Nil"
                               }
                            
                             </TableCell>
@@ -292,7 +292,7 @@ const CustomTableNemsas: FC<ITable> = ({ dataList, page_title, table_Head,loadin
                               align="left"
                              
                             >
-                               {row?.incidentViewModel?.ambulanceViewModel?.name || "Nil"
+                               {row?.ambulanceViewModel?.name || "Nil"
                               }
                             </TableCell>
                             <TableCell
