@@ -1,6 +1,6 @@
 import { filter } from "lodash";
 import { Icon } from "@iconify/react";
-import { useState, SetStateAction, FC } from "react";
+import { useState, SetStateAction, FC, useEffect } from "react";
 import plusFill from "@iconify/icons-eva/plus-fill";
 // material
 import {
@@ -30,6 +30,7 @@ import TableListHead from "../table/tableListHead";
 import ListToolbar from "../table/tableListToolbar";
 import MoreMenu from "../table/TableMoreMenu";
 import { AddEditUser } from "./components/add-edit-user";
+import axiosInstance from "../../services/api_service";
 // import axiosInstance from "../../services/api_service";
 // ----------------------------------------------------------------------
 
@@ -101,6 +102,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
   const [modal, setModal] = useState(false);
   const [edit, setEdit] = useState(false);
   const [formData, setFormData] = useState(null);
+  const [organisations,setOrganisations] = useState<any>([])
 
   const toggle = () => {
     setModal(!modal);
@@ -158,6 +160,19 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
   let dummyData = [...Array(10)]
   const startIndex = page * rowsPerPage;
 
+  useEffect(()=>{
+    axiosInstance.get('Account/listOrganisations').then(res =>{
+      let obj = res?.data?.data?.map((dt: { name: any; }) =>{
+        return {
+          label: dt?.name,
+          value: dt?.name
+        }
+      })
+      setOrganisations(obj)
+    }).catch(error =>{
+      console.log(error);
+    })
+ },[])
 
   return (
     <>
@@ -323,7 +338,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                         
                             <TableCell align="left">
                           
-                           {row?.phone || "Nil"}
+                           {row?.phoneNumber || "Nil"}
                              
                               </TableCell>
 
@@ -365,7 +380,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
           </Card>
         </Container>
       </Page>
-      <AddEditUser toggle={toggle}  modal={modal} formData={formData} edit={edit} fetchAllUsers={fetchAllUsers}  />
+      <AddEditUser toggle={toggle}  modal={modal} formData={formData} edit={edit} fetchAllUsers={fetchAllUsers} organisations={organisations} />
     </>
   );
 };

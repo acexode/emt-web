@@ -71,6 +71,7 @@ const states = [
     formData?:any;
     fetchAllUsers?:any;
     locations?:any
+    organisations?:any
   }
 
   const schema = yup.object().shape({
@@ -83,22 +84,21 @@ const states = [
     confirmPassword: yup
     .string()
     .oneOf([yup.ref("password"), null], "Passwords must match")
-    .min(8)
-    .required("Confirm Password is required"), 
+    .min(8), 
     phoneNumber: yup.string(),
     userType: yup.string(),
     sex: yup.number(),
     // organisationName: yup.string(),
     // supervisorUserId: yup.string(),
-    stateId: yup.number(),
-    lgaId: yup.number(),
-    wardId: yup.number()
+    // stateId: yup.number(),
+    // lgaId: yup.number(),
+    // wardId: yup.number()
     
 
   });
 
 
-export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchAllUsers}) =>{
+export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchAllUsers,organisations}) =>{
     const {
         register,
         handleSubmit,
@@ -119,30 +119,19 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
       const [locationsLoading,setLocationsLoading] = useState(false)
       const { enqueueSnackbar, closeSnackbar } = useSnackbar();
       const [locations,setLocations] = useState([])
-      const [organisations,setOrganisations] = useState<any>([])
+      // const [organisations,setOrganisations] = useState<any>([])
       const [users,setUsers] = useState<any>([])
       const [orgVal,setOrgVal] = useState("")
       const [supervisorUserId,setSupervisorUserId] = useState("")
       const [wards,setWards] = useState<any>([])
       const [states,setStates] = useState<any>([])
       const [lgas,setLgas] = useState<any>([])
+      const [defaultOrg,setDefaultOrg] = useState(null)
       const {
         userState: { userProfile },
       } = useAuthUserContext();
 
-     useEffect(()=>{
-        axiosInstance.get('Account/listOrganisations').then(res =>{
-          let obj = res?.data?.data?.map((dt) =>{
-            return {
-              label: dt?.name,
-              value: dt?.name
-            }
-          })
-          setOrganisations(obj)
-        }).catch(error =>{
-          console.log(error);
-        })
-     },[])
+   
      useEffect(()=>{
       axiosInstance.get('Wards/get').then(res =>{
         const obj = res?.data?.data?.map((dt: { name: any; id:number}) =>{
@@ -204,10 +193,22 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
       useEffect(()=>{
           if(edit){
             reset(formData)
+          
           }else{
             reset()
           }
       },[edit])
+
+      useEffect(()=>{
+          if(formData){
+              let newVal = {
+                label: formData?.organisationName,
+                value: formData?.organisationName
+              }
+              setDefaultOrg(newVal)
+          } 
+      },[formData])
+    
 
     const handleToggle =() => toggle()
 
@@ -364,6 +365,7 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
                 select
                  type="text"
                 {...register("sex")}
+                defaultValue={formData?.sex}
                 helperText={errors?.sex?.message?.toString()}
                 FormHelperTextProps={{
                 className:"helperTextColor"
@@ -383,6 +385,7 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
               </TextField>
                
             </Grid>
+           {!edit && <>
             <Grid item xs={12} sm={4} lg={4}>
                 <label>Password</label>
                 <TextField
@@ -413,6 +416,7 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
                 />
                 
             </Grid>
+           </>}
             <Grid item xs={12} sm={4} lg={4}>
                 <label>Phone Number</label>
                 <TextField
@@ -438,6 +442,7 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
                 select
                  type="text"
                 {...register("userType")}
+                defaultValue={formData?.userType}
                 helperText={errors?.userType?.message?.toString()}
                 FormHelperTextProps={{
                 className:"helperTextColor"
@@ -462,6 +467,8 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
               options={organisations}
               getOptionLabel={(option) => option.label}
               onChange={handleAutocompleteChange}
+              defaultValue={defaultOrg}
+
               helperText={errors?.organisationName?.message?.toString()}
               FormHelperTextProps={{
               className:"helperTextColor"
@@ -488,6 +495,8 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
                   variant="outlined"
                   fullWidth
                   select
+                  defaultValue={formData?.state_Id}
+
                   type="text"
                   {...register('stateId',{valueAsNumber:true})}
                 
@@ -510,6 +519,7 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
                   variant="outlined"
                   fullWidth
                   select
+                  defaultValue={formData?.lga_Id}
                   type="text"
                   {...register('lgaId',{valueAsNumber:true})}
                 
@@ -533,6 +543,7 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
                 fullWidth
                 select
                 type="text"
+                defaultValue={formData?.ward_Id || null}
                 multiline
                 {...register('wardId')}
                 // helperText={errors?.wardId?.message?.toString()}

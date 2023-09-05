@@ -4,6 +4,7 @@ import  { useState, useEffect, FC } from 'react';
 import { MapContainer, TileLayer, Marker, Polyline , Popup} from 'react-leaflet';
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import SearchControl from './SearchControl';
+import NigeriaGeoSearchProvider from './CustomGeoSearch';
 
 interface IMapSelector {
     setSelectedLongitude:any;
@@ -49,7 +50,7 @@ const prov = new OpenStreetMapProvider();
             </Marker>}
             {polylinePoints.length > 0 && <Polyline positions={polylinePoints} color="blue" />}
             <SearchControl
-            provider={prov}
+            provider={new NigeriaGeoSearchProvider()}
             showMarker={true}
             showPopup={false}
             popupFormat={({ query, result }:any) => {
