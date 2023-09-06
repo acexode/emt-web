@@ -119,7 +119,8 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
       const [locationsLoading,setLocationsLoading] = useState(false)
       const { enqueueSnackbar, closeSnackbar } = useSnackbar();
       const [locations,setLocations] = useState([])
-      // const [organisations,setOrganisations] = useState<any>([])
+      const [ambulanceServices, setAmbulanceServices] = useState([]);
+      const [etcServices, setETCServices] = useState([]);
       const [users,setUsers] = useState<any>([])
       const [orgVal,setOrgVal] = useState("")
       const [supervisorUserId,setSupervisorUserId] = useState("")
@@ -130,6 +131,39 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
       const {
         userState: { userProfile },
       } = useAuthUserContext();
+      const watchUserType = watch("realUserType")
+      const watchState = watch("stateId")
+
+      useEffect(()=>{
+        try {
+           Promise.all([
+            axiosInstance.get(`Ambulances/get`),
+            axiosInstance.get(`EmergencyCenters/get`),
+          ]).then(([ambRes, etcRes]) =>{
+            const dataAmb = ambRes?.data?.data?.map((dt) =>{
+              return {
+                label: dt?.name,
+                value: dt?.id
+              }
+            })
+            const dataEtc = etcRes?.data?.data?.map((dt) =>{
+              return {
+                label: dt?.name,
+                value: dt?.id
+              }
+            })
+            setAmbulanceServices(dataAmb)
+            setETCServices(dataEtc)
+            
+          }).catch(error =>{
+            console.log(error)
+          })
+          
+        } catch (error) {
+          console.log(error);
+         
+        } 
+      },[])
 
    
      useEffect(()=>{
@@ -159,7 +193,9 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
       })
   },[])
   useEffect(()=>{
-      axiosInstance.get('Lgas/get').then(res =>{
+    if(watchState){
+      axiosInstance.post('Lgas/getByStateId',{id:watchState}).then(res =>{
+      
         const obj = res?.data?.data?.map((dt: { name: any; id:number}) =>{
           return {
               label: dt?.name,
@@ -170,13 +206,16 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
       }).catch(error =>{
         console.log(error)
       })
-  },[])
+    }
+  
+  },[watchState])
      useEffect(()=>{
      if(orgVal?.length > 0){
       let val ={
         value: orgVal
       }
       axiosInstance.post('Account/getUsersByOrganisationName',val).then(res =>{
+        console.log(res?.data)
         let obj = res?.data?.data?.map((dt)=>{
           return {
             label: `${dt?.firstName} ${dt?.lastName}`,
@@ -193,7 +232,7 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
       useEffect(()=>{
           if(edit){
             reset(formData)
-          
+         
           }else{
             reset()
           }
@@ -215,12 +254,11 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
     const onSubmit = async(data:any) =>{
         let newData = {
             ...data,
-            ambulanceId: userProfile?.ambulanceId,
-            etcId: userProfile?.etcId,
             organisationName: orgVal,
-            supervisorUserId:supervisorUserId
+            supervisorUserId:supervisorUserId,
+            wardId: data?.wardId ? data?.wardId : null
           };
-          // console.log(data, newData);
+          // console.log(newData);
           // delete newData?.id
           setLoading(true)
           let text = edit ? "User Updated" : "User Added";
@@ -261,13 +299,21 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
           }
     }
     const handleAutocompleteChange = (event, value) => {
-      setOrgVal(value?.value)
-      setValue('organisationName', orgVal || '');
+      setOrgVal(value?.label)
+      setValue('organisationName', value?.value || '');
+      if(watchUserType === "ETC"){
+        setValue("etcId",value?.value)
+      }
+      else{
+        setValue("ambulanceId",value?.value)
+      }
     };
-    const handleUserChange = (event, value) => {
-      setSupervisorUserId(value?.value)
-      setValue('supervisorUserId', value?.value || '');
-    };
+    // const handleUserChange = (event, value) => {
+    //   setSupervisorUserId(value?.value)
+    //   setValue('supervisorUserId', value?.value || '');
+    // };
+
+
   
     return (
         <Dialog
@@ -435,7 +481,7 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
            
             
             <Grid item xs={12} sm={4} lg={4}>
-            <label>Select Type</label>
+            <label>Select User Role</label>
               <TextField
                  variant="outlined"
                 fullWidth
@@ -460,11 +506,45 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
                   {errors?.userType?.message?.toString()}
                 </p>
             </Grid>
-    
+            <Grid item xs={12} sm={4} lg={4}>
+            <label>Select User Type</label>
+              <TextField
+                 variant="outlined"
+                fullWidth
+                select
+                 type="text"
+                {...register("realUserType")}
+                defaultValue={formData?.ambulanceId ? "Ambulance" :"ETC" }
+              
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value={"ETC"}>
+                 ETC
+                </MenuItem>
+                <MenuItem value={"Ambulance"}>
+                Ambulance
+                </MenuItem>
+               
+              </TextField>
+               
+            </Grid>
             <Grid item xs={12} sm={4} lg={4}>
             <label>Select Organization</label>
+          {watchUserType === "ETC"  ? <Autocomplete
+              options={etcServices}
+              getOptionLabel={(option) => option.label}
+              onChange={handleAutocompleteChange}
+              defaultValue={defaultOrg}
+              helperText={errors?.organisationName?.message?.toString()}
+              FormHelperTextProps={{
+              className:"helperTextColor"
+          }}
+               renderInput={(params) => <TextField {...params} />}
+            /> : 
             <Autocomplete
-              options={organisations}
+              options={ambulanceServices}
               getOptionLabel={(option) => option.label}
               onChange={handleAutocompleteChange}
               defaultValue={defaultOrg}
@@ -474,17 +554,35 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
               className:"helperTextColor"
           }}
                renderInput={(params) => <TextField {...params} />}
-            />
+            /> 
+            }
             
             </Grid>
             <Grid item xs={12} sm={4} lg={4}>
             <label>Select Supervisor</label>
-            <Autocomplete
+            <TextField
+                 variant="outlined"
+                fullWidth
+                select
+                 type="text"
+                {...register("supervisorUserId")}
+                defaultValue={formData?.supervisorUserId}
+               
+               
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {users?.map((user) => (
+                  <MenuItem value={user?.value}>{user?.label}</MenuItem>
+                ))}
+              </TextField>
+            {/* <Autocomplete
               options={users}
               getOptionLabel={(option) => option.label}
               onChange={handleUserChange}
                renderInput={(params) => <TextField {...params} />}
-            />
+            /> */}
             
             </Grid>
            
