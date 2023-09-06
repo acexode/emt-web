@@ -261,6 +261,8 @@ import MapWithSearchAndDraw from "../../../components/testMap";
         x: longitude,
         y: latitude
     }
+
+    const defaultDOB = row?.patientViewModel?.doB?.split("T")[0]
     return (
       <Page title="Incident Form: Create new incident | EMT">
         <Container maxWidth={themeStretch ? false : "lg"}>
@@ -351,7 +353,7 @@ import MapWithSearchAndDraw from "../../../components/testMap";
                             fullWidth                      
                             type="date"
                             {...register('patient.doB')}
-                            defaultValue={row?.patientViewModel?.doB}
+                            defaultValue={defaultDOB}
 
                         >
                         </TextField>
@@ -650,7 +652,7 @@ import MapWithSearchAndDraw from "../../../components/testMap";
                             select
                             type="text"
                             {...register('triageCategory')}
-                            defaultValue={row?.traiageCategory}
+                            defaultValue={row?.triageCategory}
                             helperText={errors?.triageCategory?.message?.toString()}
                             FormHelperTextProps={{
                             className:"helperTextColor"

@@ -133,6 +133,7 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
       } = useAuthUserContext();
       const watchUserType = watch("realUserType")
       const watchState = watch("stateId")
+      const watchLga = watch("lgaId")
 
       useEffect(()=>{
         try {
@@ -167,18 +168,22 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
 
    
      useEffect(()=>{
-      axiosInstance.get('Wards/get').then(res =>{
-        const obj = res?.data?.data?.map((dt: { name: any; id:number}) =>{
-          return {
-              label: dt?.name,
-              value: dt?.id
-          }
-      })
-      setWards(obj)
-      }).catch(error =>{
-        console.log(error)
-      })
-  },[])
+      if(watchLga){
+        axiosInstance.post('Wards/getByLga',{id:watchLga}).then(res =>{
+          const obj = res?.data?.data?.map((dt: { name: any; id:number}) =>{
+            return {
+                label: dt?.name,
+                value: dt?.id
+            }
+        })
+        setWards(obj)
+        }).catch(error =>{
+          console.log(error)
+        })
+      }
+     
+  },[watchLga])
+
     useEffect(()=>{
       axiosInstance.get('States/get').then(res =>{
         const obj = res?.data?.data?.map((dt: { name: any; id:number}) =>{
