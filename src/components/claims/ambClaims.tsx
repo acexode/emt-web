@@ -67,8 +67,8 @@ function applySortFilter(
   query: string
 ) {
 
-  const stabilizedThis = array.map((el: any, index: any) => [el, index]);
-  stabilizedThis.sort((a: number[], b: number[]) => {
+  const stabilizedThis = array?.map((el: any, index: any) => [el, index]);
+  stabilizedThis?.sort((a: number[], b: number[]) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
     return a[1] - b[1];

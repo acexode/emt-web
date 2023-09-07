@@ -90,14 +90,14 @@ const Claims: FC = () => {
   
     try {
       const ambRes = await axiosInstance.post(`Claims/getByAssignedAmbulance`, obj);
-      setAmbulanceClaims(ambRes?.data?.data);
+      setAmbulanceClaims(ambRes?.data?.data ?? []);
     } catch (error) {
       console.log("Error fetching ambulance claims:", error);
     }
   
     try {
       const etcRes = await axiosInstance.post(`Claims/getByAssignedETC`, obj2);
-      setETCClaims(etcRes?.data?.data);
+      setETCClaims(etcRes?.data?.data ?? []);
     } catch (error) {
       console.log("Error fetching ETC claims:", error);
     }
