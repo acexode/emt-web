@@ -325,7 +325,7 @@ const CustomClaimTable: FC<ITable> = ({ dataList, page_title, table_Head,loading
                               align="left"
                               
                             >
-                               {formatter.format(row?.totalAmount)
+                               {formatter.format(row?.totalPrice)
                               }
                             </TableCell>
                             <TableCell align="left">
