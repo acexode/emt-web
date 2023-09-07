@@ -166,7 +166,6 @@ const CustomClaimAmbTable: FC<ITable> = ({ dataList, page_title, table_Head,load
   let dummyData = [...Array(5)]
   const startIndex = page * rowsPerPage;
 
-
   return (
     <>
       <Page title={`${page_title}: List | NEMSAS`}>
@@ -338,7 +337,7 @@ const CustomClaimAmbTable: FC<ITable> = ({ dataList, page_title, table_Head,load
                               align="left"
                               
                             >
-                               {formatter.format(row?.totalAmount)
+                               {formatter.format(row?.totalPrice)
                               }
                             </TableCell>
                           
