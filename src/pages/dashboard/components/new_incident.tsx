@@ -45,7 +45,7 @@ import MapWithSearchAndDraw from "../../../components/testMap";
     areaCouncil: yup.string().required("*Area Council is required"),
     zipCode: yup.string(),
     incidentCategory: yup.string(),
-    canResolveWithoutAmbulance: yup.string(),
+    // canResolveWithoutAmbulance: yup.string(),
     ambulanceId: yup.string(),
     ambulanceType: yup.string(),
     emergencyTreatmentCenterId: yup.string(),
@@ -117,6 +117,7 @@ import MapWithSearchAndDraw from "../../../components/testMap";
           reset()
         }
     },[row])
+    console.log({errors})
   
   useEffect(()=>{
     if(watchAmbulancetypeSelected){
