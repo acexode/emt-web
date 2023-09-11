@@ -27,7 +27,7 @@ import { MHidden } from "../../components/@material-extend";
 import sidebarConfig, { sidebarETCConfig } from "./SidebarConfig";
 import { useAuthUserContext } from "../../context/authUser.context";
 import tokenService from "../../services/tokenService";
-import { userType } from "../../constants";
+// import { userType } from "../../constants";
 
 // ----------------------------------------------------------------------
 
@@ -101,7 +101,7 @@ export default function DashboardSidebar({
     userState: { userProfile },
   } = useAuthUserContext();
   useEffect(() => {
-    if(userProfile?.userRole === userType.etc_user){
+    if(userProfile?.etcId >= 1){
       setsidebar(sidebarETCConfig);
     }
     else{
@@ -190,7 +190,7 @@ export default function DashboardSidebar({
                 { userProfile?.username}
                 </Typography>
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                {userProfile?.userRole === userType.etc_user ? "ETC" : "NEMSAS"}
+                {userProfile?.etcId >= 1 ? "ETC" : "NEMSAS"}
                 </Typography>
               </Box>
             </AccountStyle>

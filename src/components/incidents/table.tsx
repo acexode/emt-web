@@ -354,7 +354,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
             
 
                             <TableCell align="right">
-                                <MoreMenu handleUpdate={handleUpdate} row={row} fetchAllData={fetchAllData} type="incident" url="Incidents/delete" />
+                                <MoreMenu handleUpdate={handleUpdate} row={row} fetchAllData={fetchAllData} type="incident" url="Incidents/delete" showEdit={row?.eventStatusType === "No Update"} />
                             </TableCell>
                           </TableRow>
                         );

@@ -99,6 +99,7 @@ import MapWithSearchAndDraw from "../../../components/testMap";
     const [confirmationPayload, setConfirmationPayload] = useState(null);
     const [latitude, setSelectedLatitude] = useState(row?.latitude ||  null);
     const [longitude, setSelectedLongitude] = useState(row?.longitude || null );
+    const [incidentTypes,setIncidentTypes] = useState([])
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const watchAmbulancetypeSelected = watch("ambulanceType")
 
@@ -117,7 +118,20 @@ import MapWithSearchAndDraw from "../../../components/testMap";
           reset()
         }
     },[row])
-    console.log({errors})
+    
+    useEffect(()=>{
+        axiosInstance.get('Incidents/getIncidentTypes').then(res =>{
+            const obj = res?.data?.data?.map((dt) =>{
+                return {
+                    label: dt?.name,
+                    value:dt?.name
+                }
+            })
+            setIncidentTypes(obj)
+        }).catch(error =>{
+            console.log(error)
+        })
+    },[])
   
   useEffect(()=>{
     if(watchAmbulancetypeSelected){
@@ -602,9 +616,9 @@ import MapWithSearchAndDraw from "../../../components/testMap";
                             className:"helperTextColor"
                             }}
                         >
-                            {category.map((cat,index) => (
-                                <MenuItem key={index} value={cat}>
-                                    {cat}
+                            {incidentTypes?.map((cat,index) => (
+                                <MenuItem key={index} value={cat?.value}>
+                                    {cat?.label}
                                 </MenuItem>
                             ))}
                         </TextField>

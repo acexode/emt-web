@@ -48,9 +48,10 @@ import Scrollbar from "../../components/Scrollbar";
   
 const TABLE_HEAD = [
   { id: "sn", label: "S/N", alignRight: false },
-  { id: "drug.description", label: "Medical Intervention", alignRight: false },
+  { id: "drug.description", label: "Item", alignRight: false },
+  { id: "drug.type", label: "Type", alignRight: false },
   { id: "drug.code", label: "Code", alignRight: false },
-  { id: "quantity", label: "Quantity", alignRight: false },
+  { id: "quantity", label: "Quantity/Frequency", alignRight: false },
   { id: "dose", label: "Dose", alignRight: false },
   // { id: "drug.price", label: "Unit Cost", alignRight: false },
   { id: "price", label: "Total Amount", alignRight: false },
@@ -62,16 +63,23 @@ const TABLE_HEAD2 = [
   { id: "bloodPressure", label: "Blood Pressure", alignRight: false },
   { id: "canSpeak", label: "Can speak?", alignRight: false },
   { id: "glucose", label: "Glucose", alignRight: false },
-  { id: "isInPain", label: "Is in pain?", alignRight: false },
+  { id: "isInPain", label: "Is In Pain?", alignRight: false },
+  { id: "isAlert", label: "Is Alert?", alignRight: false },
   // { id: "mainComplaint", label: "Complaint", alignRight: false },
   { id: "oxygen", label: "Oxygen", alignRight: false },
   { id: "pulse", label: "Pulse", alignRight: false },
   { id: "resp", label: "RESP", alignRight: false },
   { id: "sizeOfFluid", label: "Size of fluid", alignRight: false },
+  { id: "ivFluidType", label: "IV Fluid Type", alignRight: false },
+  { id: "totalIvFluidVolumeGiven", label: "Total IV fluid Volume Given", alignRight: false },
+  { id: "locationOfIvInfusion", label: "IV Location", alignRight: false },
   { id: "sp02", label: "SP02", alignRight: false },
   { id: "unResponsive", label: "Unresponsive", alignRight: false,width:"400" },
   { id: "timeTaken", label: "Time Taken", alignRight: false,width:"400" },
-  { id: "" },
+  { id: "mediicalIntervention", label: "Treatment And Dose", alignRight: false },
+  { id: "remarks", label: "Remarks", alignRight: false,width:"400" },
+  { id: "notes", label: "Notes", alignRight: false,width:"400" },
+  // { id: "" },
 ];
 const headLabel = [
   "S/N", "Medical Intervention",  "Unit Cost", "Dose","Quantity","Amount",""
@@ -90,7 +98,8 @@ const headLabel = [
       setValue,
       control,
       reset,
-      getValues
+      getValues,
+      watch
     } = useForm({
       mode: "onTouched",
       criteriaMode: "firstError",
@@ -140,7 +149,7 @@ const headLabel = [
           let newData = {
               ...data
             };
-            // delete newData?.totalAmount
+            delete newData?.totalAmount
             setLoading(true)
             let text ="Medical intervention Added";
             try {
@@ -175,9 +184,14 @@ const headLabel = [
         }
       
         const handleSetPrice=(val:any,index:number) =>{
+          let testPrice = getValues(`incidentDrugs`)
           let boom = getValues(`incidentDrugs[${index}].unitCost`)
           let price = calculateAmount(boom,val)
            setValue(`incidentDrugs[${index}].price`, parseInt(price)|| '');
+           const totalPrice = testPrice?.reduce((accumulator, currentItem) => {
+            return accumulator + currentItem.price;
+        }, 0);
+        setValue('totalAmount', totalPrice);
         }
         const handleAutocompleteChange = (index:number, intervention:string) => {
          const selectedIntervention = options.find(
@@ -197,7 +211,7 @@ const headLabel = [
         );
         };
 
-        console.log({content});
+        // console.log({content});
           return (
       <Page title={`View Patient Record | EMT`}>
         <Container maxWidth={themeStretch ? false : "lg"}>
@@ -504,7 +518,13 @@ const headLabel = [
             <Button type="button" onClick={() => append({serviceFeeId:'',unitCost:'', medicalIntervention: '', quantity: '', dose:'',price:'', remark:'',incidentId:'',ambulanceId:'',emergencyTreatmentCenterId:'',patientId:'' })}>
         Add More
       </Button>
-        
+      <Grid item xs={12} sm={12} mt={4} lg={12}>
+        <TextField
+          value={parseFloat(watch('totalAmount', 0)).toFixed(2)}
+          disabled
+          label="Total Amount"
+        />
+      </Grid>
      
      <Grid mt={5}>
      <LoadingButton

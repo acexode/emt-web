@@ -165,13 +165,14 @@ const CustomUsableTable2: FC<ITable> = ({ dataList, table_Head,loading }) => {
                           >
                           
                             <TableCell
-                              align="left"
+                              align="center"
                              
                             >
                               { index + 1
                               }
                            
                             </TableCell>
+                           
                             <TableCell
                               align="left"
                              
@@ -200,6 +201,14 @@ const CustomUsableTable2: FC<ITable> = ({ dataList, table_Head,loading }) => {
                              
                             >
                                {row?.isInPain  ? "Yes" : "No" 
+                              }
+                            </TableCell>
+                           
+                            <TableCell
+                              align="left"
+                             
+                            >
+                               {row?.isAlert  ? "Yes" : "No" 
                               }
                             </TableCell>
                            
@@ -240,6 +249,27 @@ const CustomUsableTable2: FC<ITable> = ({ dataList, table_Head,loading }) => {
                             </TableCell>
                             <TableCell
                               align="left"
+                             width={200}
+                            >
+                               {row?.ivFluidType || "Nil"
+                              }
+                            </TableCell>
+                            <TableCell
+                              align="left"
+                             width={200}
+                            >
+                               {row?.totalIvFluidVolumeGiven || "Nil"
+                              }
+                            </TableCell>
+                            <TableCell
+                              align="left"
+                             width={200}
+                            >
+                               {row?.locationOfIvInfusion || "Nil"
+                              }
+                            </TableCell>
+                            <TableCell
+                              align="left"
                              
                             >
                                {row?.sp02 || "Nil"
@@ -259,6 +289,24 @@ const CustomUsableTable2: FC<ITable> = ({ dataList, table_Head,loading }) => {
                             <TableCell align="left">
                           
                            {formatDateTime(row?.timeTaken) || "Nil"}
+                             
+                              </TableCell>
+                              <TableCell
+                              align="left"
+                             
+                            >
+                              { row?.mediicalIntervention || "Nil"
+                              }
+                           
+                            </TableCell>
+                            <TableCell align="left">
+                          
+                           {row?.remarks || "Nil"}
+                             
+                              </TableCell>
+                            <TableCell align="left">
+                          
+                           {row?.notes || "Nil"}
                              
                               </TableCell>
                         

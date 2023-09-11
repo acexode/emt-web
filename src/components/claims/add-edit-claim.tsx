@@ -44,7 +44,7 @@ import { Icon } from "@iconify/react";
     fetchAllData?:any
   }
 const headLabel = [
- "S/N", "Medical Intervention",  "Unit Cost", "Dose","Quantity","Amount",""
+ "S/N", "Item",  "Unit Cost", "Dose","Quantity","Amount",""
 ]
   const schema = yup.object().shape({
     patientId: yup.string(),
@@ -152,14 +152,14 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
         }
         return '';
       };
-      useEffect(() => {
-        
-        const updateTotalAmount = () => {
-          let totalAmount = fields?.reduce((sum, field) => sum + calculateAmount(field.unitCost, field.quantity), 0);
-          setValue('totalAmount', parseFloat(totalAmount)?.toFixed(2));
-        };
-        updateTotalAmount();
-      }, [fields, setValue]);
+      // useEffect(() => {
+      //   console.log(fields);
+      //   const updateTotalAmount = () => {
+      //     let totalAmount = fields?.reduce((sum, field) => sum + calculateAmount(field.unitCost, field.quantity), 0);
+      //     setValue('totalAmount', parseFloat(totalAmount)?.toFixed(2));
+      //   };
+      //   updateTotalAmount();
+      // }, [fields, setValue]);
    
 
       useEffect(()=>{
@@ -229,10 +229,15 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
      };
 
      const handleSetPrice=(val:any,index:number) =>{
+       let testPrice = getValues(`incidentDrugs`)
        let boom = getValues(`incidentDrugs[${index}].unitCost`)
        let price = calculateAmount(boom,val)
         setValue(`incidentDrugs[${index}].price`, parseInt(price)|| '');
-     }
+        const totalPrice = testPrice?.reduce((accumulator, currentItem) => {
+          return accumulator + currentItem.price;
+      }, 0);
+      setValue('totalAmount', totalPrice);
+           }
      const handlePatientName = (e:any,val:any) =>{
       let obj = {
         patientId : val?.patientId,
@@ -385,9 +390,6 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
           disabled
           label="Total Amount"
         />
-
-   
- 
       </Grid>
         </DialogContent>
         <DialogActions>

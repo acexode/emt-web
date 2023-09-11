@@ -130,6 +130,14 @@ const CustomUsableTable: FC<ITable> = ({ dataList, table_Head,loading }) => {
                               align="left"
                              
                             >
+                              { row?.drug?.type || "Nil"
+                              }
+                           
+                            </TableCell>
+                            <TableCell
+                              align="left"
+                             
+                            >
                               { row?.drug?.code || "Nil"
                               }
                            

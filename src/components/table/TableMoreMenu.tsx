@@ -21,9 +21,10 @@ interface IMoreMenu {
   url?:string
   param?:string
   options?:any
+  showEdit?:boolean
 };
 
- const MoreMenu:FC<IMoreMenu> = ({ handleUpdate,row,type, param="id" ,fetchAllData,url,options}) =>{
+ const MoreMenu:FC<IMoreMenu> = ({ handleUpdate,row,type, param="id" ,fetchAllData,url,options,showEdit=true}) =>{
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [modal, setModal] = useState(false);
@@ -73,7 +74,7 @@ interface IMoreMenu {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-     {(type === "ambulance" || type === "etc" || type === "patient"  || type === "incident") &&   <MenuItem
+     {(type === "ambulance" || type === "etc" || type === "patient"  || type === "incident" ) &&   <MenuItem
 
            sx={{ color: 'text.secondary' }}
            onClick={()=>handleView()}
@@ -84,7 +85,7 @@ interface IMoreMenu {
           <ListItemText primary="View" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>}
     
-        { ( type !== "etc"&& type !== "ambulance" ) && <MenuItem
+        { ( type !== "etc"&& type !== "ambulance"  && showEdit) && <MenuItem
            sx={{ color: 'text.secondary' }}
            onClick={() =>handleEdit()}
         >
@@ -93,7 +94,7 @@ interface IMoreMenu {
           </ListItemIcon>
           <ListItemText primary="Edit" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>}
-       {(type === "Services" || type === "incident" || type ==="User" ) && <MenuItem onClick={toggle}  sx={{ color: 'text.secondary' }}>
+       {(type === "Services"  || type ==="User" ) && <MenuItem onClick={toggle}  sx={{ color: 'text.secondary' }}>
           <ListItemIcon>
             <Icon icon={trash2Outline} width={24} height={24} />
           </ListItemIcon>

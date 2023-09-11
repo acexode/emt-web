@@ -1,5 +1,5 @@
-
 // @ts-nocheck
+
 import {
     Button,
     Dialog,
@@ -20,10 +20,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import axiosInstance from "../../../services/api_service";
 import { MIconButton } from "../../@material-extend";
 import closeFill from "@iconify/icons-eva/close-fill";
-import { Icon } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { errorMessages, userTypesArray } from "../../../constants";
 import { useAuthUserContext } from "../../../context/authUser.context";
+import { Icon } from "@iconify/react";
 
 const states = [
   "Abia",
@@ -89,7 +89,7 @@ const states = [
     userType: yup.string(),
     sex: yup.number(),
     // organisationName: yup.string(),
-    // supervisorUserId: yup.string(),
+    supervisorUserId: yup.string(),
     // stateId: yup.number(),
     // lgaId: yup.number(),
     // wardId: yup.number()
@@ -123,7 +123,7 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
       const [etcServices, setETCServices] = useState([]);
       const [users,setUsers] = useState<any>([])
       const [orgVal,setOrgVal] = useState("")
-      const [supervisorUserId,setSupervisorUserId] = useState("")
+      // const [supervisorUserId,setSupervisorUserId] = useState("")
       const [wards,setWards] = useState<any>([])
       const [states,setStates] = useState<any>([])
       const [lgas,setLgas] = useState<any>([])
@@ -260,7 +260,7 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
         let newData = {
             ...data,
             organisationName: orgVal,
-            supervisorUserId:supervisorUserId,
+            // supervisorUserId:supervisorUserId,
             wardId: data?.wardId ? data?.wardId : null
           };
           // console.log(newData);
@@ -314,7 +314,7 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
       }
     };
     // const handleUserChange = (event, value) => {
-    //   setSupervisorUserId(value?.value)
+      // setSupervisorUserId(value?.value)
     //   setValue('supervisorUserId', value?.value || '');
     // };
 
@@ -564,11 +564,23 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
             
             </Grid>
             <Grid item xs={12} sm={4} lg={4}>
-            <label>Select Supervisor</label>
+            <label>Enter Supervisor</label>
             <TextField
                  variant="outlined"
                 fullWidth
-                select
+                
+                 type="text"
+                {...register("supervisorUserId")}
+                defaultValue={formData?.supervisorUserId}
+               
+               
+              />
+                
+             
+            {/* <TextField
+                 variant="outlined"
+                fullWidth
+                
                  type="text"
                 {...register("supervisorUserId")}
                 defaultValue={formData?.supervisorUserId}
@@ -581,13 +593,8 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
                 {users?.map((user) => (
                   <MenuItem value={user?.value}>{user?.label}</MenuItem>
                 ))}
-              </TextField>
-            {/* <Autocomplete
-              options={users}
-              getOptionLabel={(option) => option.label}
-              onChange={handleUserChange}
-               renderInput={(params) => <TextField {...params} />}
-            /> */}
+              </TextField> */}
+           
             
             </Grid>
            
