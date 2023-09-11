@@ -29,7 +29,7 @@ import { MIconButton } from "../../components/@material-extend";
 import closeFill from "@iconify/icons-eva/close-fill";
 import { Icon } from "@iconify/react";
 import { useAuthUserContext } from "../../context/authUser.context";
-import { userType } from "../../constants";
+// import { userType } from "../../constants";
 // import { errorMessages } from "../../constants";
 
   const ViewETC: FC = () => {
@@ -475,7 +475,7 @@ import { userType } from "../../constants";
             
                 </Grid>
             </Card> */}
-           {userType.etc_user !== userProfile?.userRole && <>
+           {userProfile?.ambulanceId >=1  && <>
             <Button
                 size="medium"
                 type="submit"

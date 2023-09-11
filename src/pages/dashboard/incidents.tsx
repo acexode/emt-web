@@ -21,9 +21,8 @@ const TABLE_HEAD = [
   { id: "" },
 ];
 
- 
 const Incidents: FC = () => {
-  const [incidents, setIncidents] = useState([]);
+  const [incidents, setIncidents] = useState<any>([]);
   const [loading,setLoading] = useState(false)
 
   useEffect(() => {
@@ -32,6 +31,18 @@ const Incidents: FC = () => {
     // Add event listeners to receive updates from the hub
     signalRService.connection.on('ReceiveMessage', (message) => {
       console.log('Received message:', message);
+      const updatedIncidents = incidents?.map((incident) => {
+        if (incident?.id === message?.IncidentId) {
+            // Update the eventStatusType for the matching incident
+            return {
+                ...incident,
+                eventStatusType: message.UpdateStatus
+            };
+        } else {
+            return incident;
+        }
+      });
+      setIncidents(updatedIncidents)
     });
 
     return () => {
@@ -55,6 +66,7 @@ const Incidents: FC = () => {
   useEffect(() => {
     fetchIncidents()
   }, []);
+
   return (
     <><CustomTable page_title='Incidents' loading={loading} table_Head={TABLE_HEAD} dataList={incidents} fetchAllData={fetchIncidents} /></>
 

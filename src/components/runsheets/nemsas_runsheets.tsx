@@ -29,7 +29,7 @@ import TableListHead from "../table/tableListHead";
 import ListToolbar from "../table/tableListToolbar";
 // import { ITransferSheets } from "../../types/transfer_form";
 import { formatDateTime, formatter } from "../../utility";
-import MoreMenu from "../table/TableMoreMenu";
+// import MoreMenu from "../table/TableMoreMenu";
 // import MoreMenu from "../table/TableMoreMenu";
 // import { AddEditUser } from "./components/add-edit-user";
 // import axiosInstance from "../../services/api_service";
@@ -87,7 +87,7 @@ interface ITable {
   type?:string
 }
 
-const CustomTableNemsas: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetchAllData }) => {
+const CustomTableNemsas: FC<ITable> = ({ dataList, page_title, table_Head,loading }) => {
   const { themeStretch } = useSettings();
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
@@ -352,9 +352,9 @@ const CustomTableNemsas: FC<ITable> = ({ dataList, page_title, table_Head,loadin
                               }
                             </TableCell> */}
                            
-                            <TableCell align="right">
+                            {/* <TableCell align="right">
                                 <MoreMenu row={row} fetchAllData={fetchAllData} type="runsheets" />
-                            </TableCell>
+                            </TableCell> */}
                           </TableRow>
                         );
                       })}

@@ -70,11 +70,12 @@ export  const AddEditPatient:FC<IAddEditPatient> = ({edit,formData,modal,toggle,
       });
       const [loading,setLoading] = useState(false)
       const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  
+      const defaultDOB = formData?.doB?.split("T")[0]
 
       useEffect(()=>{
           if(edit){
             reset(formData)
+            setValue("doB",defaultDOB)
           }else{
             reset()
           }
@@ -124,8 +125,7 @@ export  const AddEditPatient:FC<IAddEditPatient> = ({edit,formData,modal,toggle,
             setLoading(false)
           }
     }
-
-  
+    
     return (
         <Dialog
         open={modal}
@@ -184,7 +184,7 @@ export  const AddEditPatient:FC<IAddEditPatient> = ({edit,formData,modal,toggle,
             <Grid item xs={12} sm={6} lg={6}>
                 <label>Date of birth</label>
                 <TextField
-                     defaultValue={formData?.doB || ''} 
+                     defaultValue={defaultDOB} 
                     variant="outlined"
                     fullWidth
                     {...register('doB')}

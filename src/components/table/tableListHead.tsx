@@ -1,6 +1,6 @@
  // material
  import { TableRow, TableCell, TableHead, TableSortLabel } from '@mui/material';
-import { FC, JSXElementConstructor, Key, ReactElement, ReactFragment, ReactPortal } from 'react';
+import { FC } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -33,7 +33,7 @@ const TableListHead:FC<IListHead> = ({
             onChange={onSelectAllClick}
           />
         </TableCell> */}
-        {headLabel.map((headCell: { id: Key | null | undefined; alignRight: any; label: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | ReactFragment | ReactPortal | null | undefined; }) => (
+        {headLabel.map((headCell:any,index:number) => (
           <TableCell
             key={headCell.id}
             align={headCell.alignRight ? 'right' : 'left'}
@@ -44,6 +44,7 @@ const TableListHead:FC<IListHead> = ({
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
+              style={{width: index === 0 ?  "20px" : "101px"}}
             >
               {headCell.label}
               {/* {orderBy === headCell.id ? (

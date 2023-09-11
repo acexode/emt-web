@@ -25,17 +25,17 @@ import { useSnackbar } from "notistack";
 import closeFill from "@iconify/icons-eva/close-fill";
 import { Icon } from "@iconify/react";
 import AlertDialog from "./components/confirmDialog";
-import CustomAmbMiniTable from "../../components/claims/ambMiniTable";
+// import CustomAmbMiniTable from "../../components/claims/ambMiniTable";
 
-const TABLE_HEAD = [
-  { id: "s/n", label: "S/N", alignRight: false },
-  { id: "medicalIntervention", label: "Medical Intervention", alignRight: false },
-  { id: "code", label: "Code", alignRight: false },
-  { id: "dose", label: "Dose", alignRight: false },
-  { id: "quantity", label: "Quantity", alignRight: false },
-  { id: "price", label: "Price", alignRight: false },
-  { id: "" },
-];
+// const TABLE_HEAD = [
+//   { id: "s/n", label: "S/N", alignRight: false },
+//   { id: "medicalIntervention", label: "Medical Intervention", alignRight: false },
+//   { id: "code", label: "Code", alignRight: false },
+//   { id: "dose", label: "Dose", alignRight: false },
+//   { id: "quantity", label: "Quantity", alignRight: false },
+//   { id: "price", label: "Price", alignRight: false },
+//   { id: "" },
+// ];
 
   const ViewAmbulance: FC = () => {
     const { themeStretch } = useSettings();
@@ -108,7 +108,7 @@ const TABLE_HEAD = [
           }
         }
 
-        // console.log({content});
+        console.log({content});
     return (
       <Page title={`View Ambulance Claim | NEMSAS`}>
         <Container maxWidth={themeStretch ? false : "lg"}>
@@ -271,7 +271,7 @@ const TABLE_HEAD = [
                        Status
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.incidentViewModel?.incidentStatusType || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.incidentViewModel?.eventStatusType || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -288,7 +288,7 @@ const TABLE_HEAD = [
                     <Grid item sm={6}>
                     <ListItem>
                       <ListItemText primary={<Typography>
-                       Distance Covered
+                       Distance Covered (km)
                       </Typography>} 
                       secondary={
                         <Typography sx={{color:"#7b939c"}} >{content?.distanceCovered}</Typography>
@@ -324,10 +324,10 @@ const TABLE_HEAD = [
                     <Grid item sm={6}>
                     <ListItem>
                       <ListItemText primary={<Typography>
-                        Patient Address
+                         Phone Number
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{ content?.patient?.address || "Nil"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{ content?.patient?.phoneNumber || "Nil"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -354,7 +354,7 @@ const TABLE_HEAD = [
                     <Grid item sm={6}>
                     <ListItem>
                       <ListItemText primary={<Typography>
-                        Patient NHIA/SHIA NO
+                         NHIA/SHIA NO
                       </Typography>} 
                       secondary={
                         <Typography sx={{color:"#7b939c"}} >{ content?.patient?.nhia || "Nil"}</Typography>
@@ -365,7 +365,7 @@ const TABLE_HEAD = [
              
                     </Grid>
             </Card>
-            <CustomAmbMiniTable table_Head={TABLE_HEAD} dataList={content?.drugsList} totalAmount={content?.totalAmount} />
+            {/* <CustomAmbMiniTable table_Head={TABLE_HEAD} dataList={content?.drugsList} totalAmount={content?.totalAmount} /> */}
         
 
           <Card className="showVerificationCards" sx={{ p: 3, pb: 10, mb: 2 }}>

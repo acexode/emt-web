@@ -33,7 +33,7 @@ import MoreMenu from "../table/TableMoreMenu";
 import { AddEditClaims } from "./add-edit-claim";
 import { Icon } from "@iconify/react";
 import { useAuthUserContext } from "../../context/authUser.context";
-import { userType } from "../../constants";
+// import { userType } from "../../constants";
 import {  formatter } from "../../utility";
 // import tokenService from "../../services/tokenService";
 // import { userType } from "../../constants";
@@ -177,7 +177,7 @@ const CustomClaimAmbTable: FC<ITable> = ({ dataList, page_title, table_Head,load
               { name: `${page_title}`, href:PATH_DASHBOARD.claims.root },
               { name: "List" },
             ]}
-            action={ userProfile?.userRole === userType.etc_user ?
+            action={ userProfile?.etcId >= 1 ?
               <Button
                 variant="contained"
                 onClick={toggle}
