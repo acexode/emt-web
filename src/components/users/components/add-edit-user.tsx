@@ -127,6 +127,7 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
       const [wards,setWards] = useState<any>([])
       const [states,setStates] = useState<any>([])
       const [lgas,setLgas] = useState<any>([])
+      const [userRoles,setUserRoles] = useState([])
       const [defaultOrg,setDefaultOrg] = useState(null)
       const {
         userState: { userProfile },
@@ -166,7 +167,21 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
         } 
       },[])
 
-   
+      useEffect(()=>{
+          axiosInstance.get(`Account/getRoles`).then(res =>{
+            const obj = res?.data?.data?.map((dt) =>{
+              return {
+                label:dt?.name,
+                value:dt?.id
+              }
+            })
+            console.log({obj});
+            setUserRoles(obj)
+          }).catch(error =>{
+            console.log(error)
+          })
+      },[])
+
      useEffect(()=>{
       if(watchLga){
         axiosInstance.post('Wards/getByLga',{id:watchLga}).then(res =>{
@@ -503,8 +518,8 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                {userTypesArray?.map((user) => (
-                  <MenuItem value={user}>{user}</MenuItem>
+                {userRoles?.map((user) => (
+                  <MenuItem value={user?.value}>{user?.label}</MenuItem>
                 ))}
               </TextField>
                 <p style={{ color: "red", fontSize: 12 }}>

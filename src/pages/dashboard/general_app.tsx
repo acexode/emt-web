@@ -4,7 +4,7 @@ import { Container} from "@mui/material";
 import Page from "../../components/Page";
 import NamsasDashboard from "./components/nemsas_dashboard";
 import ETCDashboard from "./components/etc_dashboard";
-// import { userType } from "../../constants";
+import { roles } from "../../constants";
 import { useAuthUserContext } from "../../context/authUser.context";
 
 const GeneralApp: FC = () => {
@@ -16,9 +16,7 @@ const GeneralApp: FC = () => {
   return (
     <Page title="General: App | NEMSAS">
       <Container maxWidth={themeStretch ? false : "xl"}>
-        {userProfile?.etcId >= 1 ? <ETCDashboard />  :   <NamsasDashboard /> }
-  
-   
+        {userProfile?.userRole === roles.EMERGENCYTREATMENTUSER.value ? <ETCDashboard />  :   <NamsasDashboard /> }
       </Container>
     </Page>
   );

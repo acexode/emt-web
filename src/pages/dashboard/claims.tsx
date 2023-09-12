@@ -8,6 +8,7 @@ import {Box} from '@mui/material';
 // import tokenService from "../../services/tokenService";
 // import { userType } from "../../constants";
 import { useAuthUserContext } from "../../context/authUser.context";
+import { roles } from "../../constants";
 const CustomTable = lazy(() => import("../../components/claims/table"))
 const CustomClaimAmbTable = lazy(() => import("../../components/claims/ambClaims"))
 
@@ -112,7 +113,7 @@ const Claims: FC = () => {
 
   return (
     <>
-    {userProfile?.etcId >= 1 ?      <CustomTable page_title='Emergency Treatment Centre' loading={loading} table_Head={TABLE_HEAD} dataList={etcClaims} fetchAllData={fetchAllData} type="etc" />
+    {userProfile?.userRole === roles.EMERGENCYTREATMENTUSER.value ?      <CustomTable page_title='Emergency Treatment Centre' loading={loading} table_Head={TABLE_HEAD} dataList={etcClaims} fetchAllData={fetchAllData} type="etc" />
  : 
     <Box sx={{ width: '100%' }}>
     <Box sx={{ borderBottom: 1, borderColor: 'divider' ,mx:6}}>

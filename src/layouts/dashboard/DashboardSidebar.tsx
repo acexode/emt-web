@@ -24,10 +24,11 @@ import Scrollbar from "../../components/Scrollbar";
 import NavSection from "../../components/NavSection";
 import { MHidden } from "../../components/@material-extend";
 //
-import sidebarConfig, { sidebarETCConfig } from "./SidebarConfig";
+import sidebarConfig, { sidebarAdmin, sidebarETCConfig } from "./SidebarConfig";
 import { useAuthUserContext } from "../../context/authUser.context";
 import tokenService from "../../services/tokenService";
-// import { userType } from "../../constants";
+import { roles, userType } from "../../constants";
+import { getLabelByValue } from "../../utility";
 
 // ----------------------------------------------------------------------
 
@@ -101,10 +102,12 @@ export default function DashboardSidebar({
     userState: { userProfile },
   } = useAuthUserContext();
   useEffect(() => {
-    if(userProfile?.etcId >= 1){
+    if(userProfile?.userRole  === roles.EMERGENCYTREATMENTUSER.value){
       setsidebar(sidebarETCConfig);
     }
-    else{
+    else if(userProfile?.userRole === roles.PARTNERS.value ||userProfile?.userRole === roles.SUPERADMINISTRATOR.value) {
+      setsidebar(sidebarAdmin);
+    }else{
       setsidebar(sidebarConfig);
     }
   }, [userProfile]);
@@ -190,7 +193,7 @@ export default function DashboardSidebar({
                 { userProfile?.username}
                 </Typography>
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                {userProfile?.etcId >= 1 ? "ETC" : "NEMSAS"}
+                {getLabelByValue(userProfile?.userRole)}
                 </Typography>
               </Box>
             </AccountStyle>

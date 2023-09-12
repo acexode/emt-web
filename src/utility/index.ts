@@ -2,6 +2,7 @@
 
 import { replace } from 'lodash';
 import numeral from 'numeral';
+import { roles } from '../constants';
 
 
 export const formatDate2 = (d: any) => {
@@ -132,4 +133,13 @@ export function formatDateTime(dateTimeString:any) {
   
   const formattedDateTime = new Date(dateTimeString).toLocaleString(undefined, options);
   return formattedDateTime;
+}
+
+export function getLabelByValue(value: string) {
+  // Check if the value exists in the roles object
+  if (roles[value]) {
+      return roles[value].label;
+  }
+  // Return a default label if the value doesn't exist
+  return "Unknown Role";
 }

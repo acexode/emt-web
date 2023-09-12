@@ -35,6 +35,7 @@ import { Icon } from "@iconify/react";
 import { useAuthUserContext } from "../../context/authUser.context";
 // import { userType } from "../../constants";
 import { formatter } from "../../utility";
+import { roles } from "../../constants";
 // import tokenService from "../../services/tokenService";
 // import { userType } from "../../constants";
 // ----------------------------------------------------------------------
@@ -178,7 +179,7 @@ const CustomClaimTable: FC<ITable> = ({ dataList, page_title, table_Head,loading
               { name: `${page_title}`, href:PATH_DASHBOARD.claims.root },
               { name: "List" },
             ]}
-            action={ userProfile?.etcId >= 1 ?
+            action={ userProfile?.userRole === roles.EMERGENCYTREATMENTUSER.value ?
               <Button
                 variant="contained"
                 onClick={toggle}
