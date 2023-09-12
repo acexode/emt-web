@@ -17,3 +17,38 @@ export const errorMessages = {
     500: "Oops! Something went wrong on our end. Our team has been notified about this issue, and we're working to fix it as quickly as possible. We apologize for any inconvenience this may have caused. Please try again later.",
 
 }
+
+export const roles =  {
+    PARTNERS: {
+        label:"PARTNERS",
+        value:"PARTNERS"
+    },
+    SUPERADMINISTRATOR:{
+        label:"SUPER ADMIN",
+        value:"SUPERADMINISTRATOR"
+    },
+    AMBULANCEUSER:{
+        label:"AMBULANCEUSER",
+        value:"AMBULANCE USER"
+    },
+    EMERGENCYTREATMENTUSER:{
+        label:"EMT USER",
+        value:"EMERGENCYTREATMENTUSER"
+    },
+    NEMSASADMIN:{
+        label:"NEMSAS ADMIN",
+        value:"NEMSASADMIN"
+    },
+    NEMSASUSER:{
+        label:"NEMSAS USER",
+        value:"NEMSASUSER",
+    },
+    SEMSASPIUUSER:{
+        label:"SEMSAS PIU USER",
+        value:"SEMSASPIUUSER"
+    },
+    SEMSASUSER:{
+        label:"SEMSAS USER",
+        value:"SEMSASUSER"
+    }
+}

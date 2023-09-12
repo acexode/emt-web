@@ -31,6 +31,7 @@ import ListToolbar from "../table/tableListToolbar";
 import MoreMenu from "../table/TableMoreMenu";
 import { AddEditUser } from "./components/add-edit-user";
 import axiosInstance from "../../services/api_service";
+import { formatDate2, getLabelByValue } from "../../utility";
 // import axiosInstance from "../../services/api_service";
 // ----------------------------------------------------------------------
 
@@ -74,8 +75,8 @@ function applySortFilter(
       (_user) => _user?.firstName?.toLowerCase().includes(query.toLowerCase())  ||
       _user?.lastName?.toLowerCase().includes(query.toLowerCase()) ||
       _user?.middleName?.toLowerCase().includes(query.toLowerCase()) ||
-      _user?.userType?.toLowerCase().includes(query.toLowerCase()) ||
-      _user?.state?.toLowerCase().includes(query.toLowerCase()) ||
+      // _user?.userType?.toLowerCase().includes(query.toLowerCase()) ||
+      // _user?.state?.toLowerCase().includes(query.toLowerCase()) ||
       _user?.city?.toLowerCase().includes(query.toLowerCase()) 
     );
   }
@@ -331,7 +332,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                               align="left"
                               
                             >
-                               {row?.userType || "Nil"
+                               {getLabelByValue(row?.userType) || "Nil"
                               }
                             </TableCell>
                            
@@ -339,6 +340,11 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                             <TableCell align="left">
                           
                            {row?.phoneNumber || "Nil"}
+                             
+                              </TableCell>
+                            <TableCell align="left">
+                          
+                           {formatDate2(row?.dateJoined) || "Nil"}
                              
                               </TableCell>
 

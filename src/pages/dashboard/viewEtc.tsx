@@ -29,6 +29,7 @@ import { MIconButton } from "../../components/@material-extend";
 import closeFill from "@iconify/icons-eva/close-fill";
 import { Icon } from "@iconify/react";
 import { useAuthUserContext } from "../../context/authUser.context";
+import { roles } from "../../constants";
 // import { userType } from "../../constants";
 // import { errorMessages } from "../../constants";
 
@@ -475,7 +476,7 @@ import { useAuthUserContext } from "../../context/authUser.context";
             
                 </Grid>
             </Card> */}
-           {userProfile?.ambulanceId >=1  && <>
+           {userProfile?.userRole !== roles.EMERGENCYTREATMENTUSER.value && <>
             <Button
                 size="medium"
                 type="submit"

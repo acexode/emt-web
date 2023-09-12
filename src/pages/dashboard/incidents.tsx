@@ -4,7 +4,8 @@ import { FC, useEffect, useState,lazy } from "react";
 import axiosInstance from "../../services/api_service";
 import { SIGNAL_URL } from "../../services/baseurl";
 import signalRService from "../../services/SignalRService";
-
+import {Snackbar,Button,IconButton} from "@mui/material"
+import CloseIcon from '@mui/icons-material/Close';
 const CustomTable = lazy(() => import("../../components/incidents/table"))
 
 
@@ -21,22 +22,37 @@ const TABLE_HEAD = [
   { id: "" },
 ];
 
+
 const Incidents: FC = () => {
   const [incidents, setIncidents] = useState<any>([]);
   const [loading,setLoading] = useState(false)
+  const [open, setOpen] = useState(false);
+  const [message,setMessage] = useState('')
+
+  const handleClose = (event:any, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   useEffect(() => {
     signalRService.startConnection(`${SIGNAL_URL}/pulser`); // Replace with actual hub URL
     
     // Add event listeners to receive updates from the hub
     signalRService.connection.on('ReceiveMessage', (message) => {
-      console.log('Received message:', message);
+      // console.log('Received message:', message);
+      const resMessage = JSON.parse(message)
+      let text = `${resMessage?.UpdateStatus} by ambulance ${resMessage?.AmbulanceName}`
+      setMessage(text)
+      setOpen(true)
       const updatedIncidents = incidents?.map((incident) => {
-        if (incident?.id === message?.IncidentId) {
+        if (incident?.id === resMessage?.IncidentId) {
             // Update the eventStatusType for the matching incident
             return {
                 ...incident,
-                eventStatusType: message.UpdateStatus
+                eventStatusType: resMessage.UpdateStatus
             };
         } else {
             return incident;
@@ -48,7 +64,7 @@ const Incidents: FC = () => {
     return () => {
       signalRService.closeConnection();
     };
-  }, []);
+  }, [incidents]);
 
   const fetchIncidents = () =>{
     setLoading(true)
@@ -67,8 +83,31 @@ const Incidents: FC = () => {
     fetchIncidents()
   }, []);
 
+  const action = (
+    <>
+  
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </>
+  );
+
   return (
-    <><CustomTable page_title='Incidents' loading={loading} table_Head={TABLE_HEAD} dataList={incidents} fetchAllData={fetchIncidents} /></>
+    <>
+     <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message={message}
+        action={action}
+        anchorOrigin={{ vertical:'top', horizontal:'center' }}
+      />
+    <CustomTable page_title='Incidents' loading={loading} table_Head={TABLE_HEAD} dataList={incidents} fetchAllData={fetchIncidents} /></>
 
   );
 };
