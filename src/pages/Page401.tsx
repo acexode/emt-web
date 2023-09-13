@@ -1,11 +1,11 @@
-import { Link as RouterLink } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 // material
 import { Box, Button, Typography, Container } from "@mui/material";
 // components
 import Page from "../components/Page";
 import SeverErrorIllustration from "../assets/illustration_500";
-import { PATH_DASHBOARD } from "../routes/paths";
+import { useAuthUserContext } from "../context/authUser.context";
+import { useSnackbar } from "notistack";
 
 // ----------------------------------------------------------------------
 
@@ -19,27 +19,38 @@ const RootStyle = styled(Page)(({ }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function Page500() {
+export default function Page401() {
+  const { handleSignOut  } = useAuthUserContext();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const handleLogout = async () => {
+    try {
+      handleSignOut();
+    } catch (error) {
+      console.error(error);
+      enqueueSnackbar("Unable to logout", { variant: "error" });
+    }
+  };
+
   return (
-    <RootStyle title="500 Internal Server Error | EMT">
+    <RootStyle title="401 Unauthorized User | EMT">
       <Container>
         <Box sx={{ maxWidth: 480, margin: "auto", textAlign: "center" }}>
           <Typography variant="h3" paragraph>
-            500 Internal Server Error
+            401 Unauthorized User
           </Typography>
           <Typography sx={{ color: "text.secondary" }}>
-            There was an error, please try again later.
+            You are not authorized to view the dashboard
           </Typography>
 
           <SeverErrorIllustration sx={{ height: 260, my: { xs: 5, sm: 10 } }} />
 
           <Button
-              to={PATH_DASHBOARD.root}
             size="large"
             variant="contained"
-            component={RouterLink}
+            onClick={handleLogout}
           >
-            Go to Home
+            Log out
           </Button>
         </Box>
       </Container>
