@@ -184,7 +184,7 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
 
      useEffect(()=>{
       if(watchLga){
-        axiosInstance.post('Wards/getByLga',{id:watchLga}).then(res =>{
+        axiosInstance.post('Wards/getByLgaId',{id:watchLga}).then(res =>{
           const obj = res?.data?.data?.map((dt: { name: any; id:number}) =>{
             return {
                 label: dt?.name,
