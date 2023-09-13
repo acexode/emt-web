@@ -117,6 +117,7 @@ export default function Router() {
       children: [
         { path: "500", element: <Page500 /> },
         { path: "404", element: <NotFound /> },
+        { path: "401", element: <NotAuthorized /> },
         { path: "*", element: <Navigate to="/404" replace /> },
       ],
     },
@@ -174,4 +175,5 @@ const UserManagement = Loadable(
 
 const Page500 = Loadable(lazy(() => import("../pages/Page500")));
 const NotFound = Loadable(lazy(() => import("../pages/Page404")));
+const NotAuthorized = Loadable(lazy(() => import("../pages/Page401")));
 // const Register = Loadable(lazy(() => import('../pages/authentication/Register')));
