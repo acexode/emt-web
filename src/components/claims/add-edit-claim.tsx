@@ -204,8 +204,7 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
             handleToggle();
             fetchAllData()
           } catch (error) {
-              const errorMessage =errorMessages[error?.response?.status]
-            enqueueSnackbar(errorMessage, {
+            enqueueSnackbar(error?.response?.data?.message, {
                 variant: "error",
                 action: (key) => (
                   <MIconButton size="small" onClick={() => closeSnackbar(key)}>
