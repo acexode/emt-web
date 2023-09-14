@@ -19,7 +19,9 @@ import {
     TableContainer,
     TableHead,
     IconButton,
-    Chip
+    Chip,
+    Tabs,
+    Tab
 
 
   } from "@mui/material";
@@ -84,6 +86,42 @@ const TABLE_HEAD2 = [
 const headLabel = [
   "S/N", "Medical Intervention",  "Unit Cost", "Dose","Quantity","Amount",""
  ]
+const headLabel2 = [
+  "S/N", "Drug",  "Unit Cost","Quantity","Amount",""
+ ]
+
+ interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+function a11yProps(index: number) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
 
   const ViewPatient: FC = () => {
     const { themeStretch } = useSettings();
@@ -91,6 +129,10 @@ const headLabel = [
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const [loading,setLoading] = useState(false)
     const [loadingData,setLoadingData] = useState(false)
+    const [value, setTabValue] = useState(0);
+    const [medicinesOnly,setMedicinesOnly] = useState([])
+    const [allMedicines,setAllMedicines] = useState([])
+
     const {
       register,
       handleSubmit,
@@ -118,6 +160,42 @@ const headLabel = [
       control,
       name: 'incidentDrugs',
     });
+    const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
+      setTabValue(newValue);
+      reset()
+    };
+
+    useEffect(()=>{
+      Promise.all([
+        axiosInstance.post(`ServicesAndFees/get`,{
+          value:true
+        }),
+        axiosInstance.post(`ServicesAndFees/get`,{
+          value:false
+        }),
+      ]).then(([medicineOnly, notMedicine]) =>{
+        const medOnlyObj = medicineOnly?.data?.data?.map((dt) =>{
+          return {
+            code: dt?.code,
+            id: dt?.id,
+            intervention: dt?.description,
+            price: dt?.price
+          }
+        })
+        setMedicinesOnly(medOnlyObj)
+        const notMedOnly = notMedicine?.data?.data?.map((dt) =>{
+          return {
+            code: dt?.code,
+            id: dt?.id,
+            intervention: dt?.description,
+            price: dt?.price
+          }
+        })
+        setAllMedicines(notMedOnly)
+      }).catch(error =>{
+        console.log(error)
+      })
+    },[])
 
     const calculateAmount = (unitCost: number, quantity:any) => {
       if (unitCost && quantity) {
@@ -151,7 +229,7 @@ const headLabel = [
             };
             delete newData?.totalAmount
             setLoading(true)
-            let text ="Medical intervention Added";
+            let text ="Item Added";
             try {
              let res = await axiosInstance.post(`Patients/addPatientDrugSheet`, newData);
              console.log(res);
@@ -356,7 +434,9 @@ const headLabel = [
                     Arrival Time
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{loadingData ? <Skeleton variant="rectangular" width={100} height={30} />  : content?.extraDetails?.arrivalTime ? formatDateTime(content?.extraDetails?.arrivalTime) : "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{loadingData ? <Skeleton variant="rectangular" width={100} height={30} />  : content?.runsheet
+                        ?.arrivalTime ? formatDateTime(content?.runsheet
+                        ?.arrivalTime) : "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -411,8 +491,19 @@ const headLabel = [
             <CustomUsableTable2 table_Head={TABLE_HEAD2} dataList={content?.medicalInterventions} />
             <CustomUsableTable table_Head={TABLE_HEAD} dataList={content?.drugs} />
             <Card sx={{ p: 3, pb: 10, mb: 2 }}>
-              <Box sx={{mb:2}}>ETC Treatment</Box>
-              <form onSubmit={handleSubmit(onSubmit)}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs value={value} onChange={handleChange}  TabIndicatorProps={{
+            style: {
+              backgroundColor: 'hsl(0, 100%, 27%)', // Change this to the desired color
+            },
+          }}
+           aria-label="basic tabs example">
+          <Tab label="ETC Treatment" {...a11yProps(0)} />
+          <Tab label="Drugs and Consumables" {...a11yProps(1)} />
+          </Tabs>
+          </Box>
+          <TabPanel value={value} index={0}>
+          <form onSubmit={handleSubmit(onSubmit)}>
               <Scrollbar>
               <TableContainer>
                   <Table>
@@ -446,7 +537,7 @@ const headLabel = [
                             style={{ width: '200rem' }}
                             >
                                  <Autocomplete
-                                  options={options}
+                                  options={allMedicines}
                                   getOptionLabel={(option) => option.intervention}
                                   onChange={(e) => handleAutocompleteChange(index,e.target.textContent)}
                                 
@@ -472,9 +563,8 @@ const headLabel = [
                             style={{ width: '60rem' }}
                             >
                                <TextField
-                        {...register(`incidentDrugs[${index}].dose`, { required: 'Dose is required' })}
-                        error={!!errors.incidentDrugs?.[index]?.dose}
-                        helperText={errors.incidentDrugs?.[index]?.dose?.message}
+                        {...register(`incidentDrugs[${index}].dose`)}
+                       
                       />
                               </TableCell>
                             <TableCell
@@ -541,6 +631,138 @@ const headLabel = [
         
      </Grid>
                </form>
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+              <Scrollbar>
+              <TableContainer>
+                  <Table>
+                  <TableHead>
+                    <TableRow>
+                  
+                      {headLabel2.map((headCell:string,index:number) => (
+                        <TableCell
+                          key={index}
+                          width={400}
+                        >
+                      {headCell}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                    <TableBody>
+                    {fields.map((field, index) => (
+                       
+                 <TableRow>
+
+                
+                        <TableCell
+                           align="left"
+                          >
+                            <Box>{index+1}</Box>
+                          </TableCell>
+                     
+               
+                      <TableCell
+                            style={{ width: '200rem' }}
+                            >
+                                 <Autocomplete
+                                  options={medicinesOnly}
+                                  getOptionLabel={(option) => option.intervention}
+                                  onChange={(e) => handleAutocompleteChange(index,e.target.textContent)}
+                                
+                                  renderInput={(params) => <TextField {...params}  />}
+                                />
+                            </TableCell>
+                           
+                            <TableCell
+                            align="right"
+                            style={{ width: '60rem' }}
+                            >
+                             <TextField
+                              type="number"
+                              disabled
+                              inputProps={{ step: '0.01' }}
+                              {...register(`incidentDrugs[${index}].unitCost`, { required: 'Unit Cost is required', pattern: /^\d+(\.\d{1,2})?$/ })}
+                              error={!!errors.incidentDrugs?.[index]?.unitCost}
+                              helperText={errors.incidentDrugs?.[index]?.unitCost?.message}
+                            />
+                              </TableCell>
+                              {/* <TableCell
+                            align="right"
+                            style={{ width: '60rem' }}
+                            >
+                               <TextField
+                        {...register(`incidentDrugs[${index}].dose`, { required: 'Dose is required' })}
+                        error={!!errors.incidentDrugs?.[index]?.dose}
+                        helperText={errors.incidentDrugs?.[index]?.dose?.message}
+                      />
+                              </TableCell> */}
+                            <TableCell
+                            align="right"
+                            style={{ width: '60rem' }}
+
+                            >
+                               <TextField
+                        type="number"
+                        {...register(`incidentDrugs[${index}].quantity`, { required: 'Quantity is required', valueAsNumber:true, pattern: /^\d+$/ })}
+                        error={!!errors.incidentDrugs?.[index]?.quantity}
+                        helperText={errors.incidentDrugs?.[index]?.quantity?.message}
+                        onChange={(e) => handleSetPrice(e.target.value,index)}
+                      />
+                              </TableCell>
+                            <TableCell
+                            align="right"
+                            style={{ width: '80rem' }}
+                            >
+                               <TextField
+                                disabled
+                                {...register(`incidentDrugs[${index}].price`)}
+                        
+                                  />
+                              </TableCell>
+                            <TableCell
+                            align="left"
+                            >
+                              <IconButton size="small" onClick={() => remove(index)}>
+                        <RemoveCircleOutline />
+                      </IconButton>
+                              </TableCell>
+                      </TableRow>
+                   
+                  ))}
+                      
+                    </TableBody>
+                  </Table>
+              </TableContainer>
+            </Scrollbar>
+            <Button type="button" onClick={() => append({serviceFeeId:'',unitCost:'', medicalIntervention: '', quantity: '', dose:'',price:'', remark:'',incidentId:'',ambulanceId:'',emergencyTreatmentCenterId:'',patientId:'' })}>
+        Add More
+      </Button>
+      <Grid item xs={12} sm={12} mt={4} lg={12}>
+        <TextField
+          value={parseFloat(watch('totalAmount', 0)).toFixed(2)}
+          disabled
+          label="Total Amount"
+        />
+      </Grid>
+     
+     <Grid mt={5}>
+     <LoadingButton
+              size="medium"
+              type="submit"
+              variant="contained"
+              className="btnCustom"
+              sx={{mr:2}}
+              loading={loading}
+        
+          >
+              Add New Treatment
+          </LoadingButton>
+        
+     </Grid>
+               </form>
+          </TabPanel>
            </Card>
          
               </Container>

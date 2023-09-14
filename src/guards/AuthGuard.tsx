@@ -3,6 +3,8 @@ import { Navigate, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import tokenService from "../services/tokenService"
 import Login from "../pages/authentication/login";
+import { useAuthUserContext } from "../context/authUser.context";
+import { roles } from "../constants";
 
 // ----------------------------------------------------------------------
 
@@ -15,6 +17,9 @@ export default function AuthGuard({ children }) {
     const [isAuthenticated] = useState(
         tokenService.getToken()
     );
+    const {
+        userState: { userProfile },
+      } = useAuthUserContext();
      const { pathname } = useLocation();
     const [requestedLocation, setRequestedLocation] = useState(null);
     if (!isAuthenticated) {
@@ -23,6 +28,9 @@ export default function AuthGuard({ children }) {
             setRequestedLocation(pathname);
         }
         return <Login />;
+    }
+    if(userProfile?.userRole === roles.AMBULANCEUSER.value){
+        return <Navigate to={'/401'} />;
     }
 
     if (requestedLocation && pathname !== requestedLocation) {

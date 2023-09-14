@@ -74,6 +74,7 @@ const AuthUserProvider = ({ children }: Props) => {
         ),
       });
       window.location.href = "/dashboard/app";
+    
     } catch (error: any) {
       console.log(error);
       enqueueSnackbar("Login Failed", {

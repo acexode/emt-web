@@ -71,7 +71,7 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
         delayError: undefined,
         resolver: yupResolver(schema),
         defaultValues: {
-          incidentDrugs: [{ medicalIntervention: '', dose: '', price: '', quantity: '',unitCost:'' }],
+          incidentDrugs: [{ medicalIntervention: '', dose: '', price: '', quantity: '',unitCost:'' ,isMedicine:''}],
         },
       });
       const [loading,setLoading] = useState(false)
@@ -90,12 +90,14 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
       });
       useEffect(()=>{
         axiosInstance.get("ServicesAndFees/get").then(res =>{
-          const obj = res?.data?.data?.map((dt: { code: any; description: any; price: any; id: any; })=>{
+          console.log(res?.data);
+          const obj = res?.data?.data?.map((dt: { code: any; description: any; price: any; id: any;feeCategory:any })=>{
             return {
                 code :dt?.code,
-                intervention:dt?.description,
+                intervention:`${dt?.description} - ${dt?.feeCategory?.isMedicine ? "Drug" : "Procedure"}`,
                 price: dt?.price,
-                id:dt?.id
+                id:dt?.id,
+                isMedicine: dt?.feeCategory?.isMedicine
               }
           })
           setOptions(obj)
@@ -225,6 +227,7 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
      setValue(`incidentDrugs[${index}].patientId`, patientData?.patientId || '');
      setValue(`incidentDrugs[${index}].emergencyTreatmentCenterId`, patientData?.emergencyTreatmentCenterId || '');
      setValue(`incidentDrugs[${index}].incidentId`, patientData?.incidentId || '');
+     setValue(`incidentDrugs[${index}].isMedicine`, intervention?.isMedicine || '');
     
      };
 
@@ -247,7 +250,6 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
       setPatientData(obj)
 
      }
-  
     return (
         <Dialog
         open={modal}
@@ -337,9 +339,9 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
                             style={{ width: '60rem' }}
                             >
                                <TextField
-                        {...register(`incidentDrugs[${index}].dose`, { required: 'Dose is required' })}
-                        error={!!errors.incidentDrugs?.[index]?.dose}
-                        helperText={errors.incidentDrugs?.[index]?.dose?.message}
+                        {...register(`incidentDrugs[${index}].dose`)}
+                        // disabled={`incidentDrugs[${index}].isMedicine`}
+                   
                       />
                               </TableCell>
                             <TableCell
@@ -381,7 +383,7 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
               </TableContainer>
             </Scrollbar>
 
-      <Button type="button" onClick={() => append({ medicalIntervention: '', dose: '', unitCost: '', quantity: '',price:'' })}>
+      <Button type="button" onClick={() => append({ medicalIntervention: '', dose: '', unitCost: '', quantity: '',price:'',isMedicine:'' })}>
         Add More
       </Button>
       <Grid item xs={12} sm={12} mt={4} lg={12}>

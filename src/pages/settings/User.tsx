@@ -10,6 +10,7 @@ const TABLE_HEAD = [
   { id: "email", label: "Email", alignRight: false },
   { id: "userType", label: "User Type", alignRight: false },
   { id: "phoneNumber", label: "Phone", alignRight: false },
+  { id: "Date Added", label: "Date Added", alignRight: false },
   { id: "" },
 ];
 
