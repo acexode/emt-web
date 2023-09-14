@@ -54,7 +54,7 @@ const TABLE_HEAD = [
   { id: "drug.type", label: "Type", alignRight: false },
   { id: "drug.code", label: "Code", alignRight: false },
   { id: "quantity", label: "Quantity/Frequency", alignRight: false },
-  { id: "dose", label: "Dose", alignRight: false },
+  { id: "dose", label: "Dose", alignRight: true },
   // { id: "drug.price", label: "Unit Cost", alignRight: false },
   { id: "price", label: "Total Amount", alignRight: false },
   { id: "dateAdded", label: "Date Added", alignRight: false },
@@ -84,10 +84,10 @@ const TABLE_HEAD2 = [
   // { id: "" },
 ];
 const headLabel = [
-  "S/N", "Medical Intervention",  "Unit Cost", "Dose","Quantity","Amount",""
+  "S/N", "Medical Intervention",  "Unit Cost","Quantity","Amount",""
  ]
 const headLabel2 = [
-  "S/N", "Drug",  "Unit Cost","Quantity","Amount",""
+  "S/N", "Drug",  "Unit Cost", "Dose","Quantity","Amount",""
  ]
 
  interface TabPanelProps {
@@ -150,7 +150,7 @@ function a11yProps(index: number) {
       shouldUseNativeValidation: false,
       delayError: undefined,
       defaultValues: {
-        incidentDrugs: [{ serviceFeeId:'',unitCost:'', medicalIntervention: '', quantity: '', dose:'',price:'', remark:'',incidentId:'',ambulanceId:'',emergencyTreatmentCenterId:'',patientId:'' }],
+        incidentDrugs: [{ serviceFeeId:'',unitCost:'', medicalIntervention: '', quantity: '', dose:0,price:'', remark:'',incidentId:'',ambulanceId:'',emergencyTreatmentCenterId:'',patientId:'' }],
       },
     });
     const {
@@ -166,36 +166,32 @@ function a11yProps(index: number) {
     };
 
     useEffect(()=>{
-      Promise.all([
-        axiosInstance.post(`ServicesAndFees/get`,{
-          value:true
-        }),
-        axiosInstance.post(`ServicesAndFees/get`,{
-          value:false
-        }),
-      ]).then(([medicineOnly, notMedicine]) =>{
-        const medOnlyObj = medicineOnly?.data?.data?.map((dt) =>{
+      axiosInstance.get("ServicesAndFees/get").then(res =>{
+        const isMed = res?.data?.data?.filter((dt) => dt?.feeCategory?.isMedicine).map((dt: { code: any; description: any; price: any; id: any;feeCategory:any })=>{
           return {
-            code: dt?.code,
-            id: dt?.id,
-            intervention: dt?.description,
-            price: dt?.price
-          }
+              code :dt?.code,
+              intervention:`${dt?.description}`,
+              price: dt?.price,
+              id:dt?.id,
+              isMedicine: dt?.feeCategory?.isMedicine
+            }
         })
-        setMedicinesOnly(medOnlyObj)
-        const notMedOnly = notMedicine?.data?.data?.map((dt) =>{
+        const isNotMed = res?.data?.data?.filter((dt) => dt?.feeCategory?.isMedicine === false).map((dt: { code: any; description: any; price: any; id: any;feeCategory:any })=>{
           return {
-            code: dt?.code,
-            id: dt?.id,
-            intervention: dt?.description,
-            price: dt?.price
-          }
+              code :dt?.code,
+              intervention:`${dt?.description}`,
+              price: dt?.price,
+              id:dt?.id,
+              isMedicine: dt?.feeCategory?.isMedicine
+            }
         })
-        setAllMedicines(notMedOnly)
+        setMedicinesOnly(isMed)
+        setAllMedicines(isNotMed)
       }).catch(error =>{
-        console.log(error)
+        console.log(error);
       })
-    },[])
+  },[])
+
 
     const calculateAmount = (unitCost: number, quantity:any) => {
       if (unitCost && quantity) {
@@ -245,6 +241,7 @@ function a11yProps(index: number) {
                 reset()
             } catch (error) {
               let errorMessage = errorMessages[error?.response?.status]
+              console.log(error)
               enqueueSnackbar(errorMessage, {
                   variant: "error",
                   action: (key) => (
@@ -289,7 +286,7 @@ function a11yProps(index: number) {
         );
         };
 
-        // console.log({content});
+        console.log({content});
           return (
       <Page title={`View Patient Record | EMT`}>
         <Container maxWidth={themeStretch ? false : "lg"}>
@@ -558,7 +555,7 @@ function a11yProps(index: number) {
                               helperText={errors.incidentDrugs?.[index]?.unitCost?.message}
                             />
                               </TableCell>
-                              <TableCell
+                              {/* <TableCell
                             align="right"
                             style={{ width: '60rem' }}
                             >
@@ -566,7 +563,7 @@ function a11yProps(index: number) {
                         {...register(`incidentDrugs[${index}].dose`)}
                        
                       />
-                              </TableCell>
+                              </TableCell> */}
                             <TableCell
                             align="right"
                             style={{ width: '60rem' }}
@@ -605,7 +602,7 @@ function a11yProps(index: number) {
                   </Table>
               </TableContainer>
             </Scrollbar>
-            <Button type="button" onClick={() => append({serviceFeeId:'',unitCost:'', medicalIntervention: '', quantity: '', dose:'',price:'', remark:'',incidentId:'',ambulanceId:'',emergencyTreatmentCenterId:'',patientId:'' })}>
+            <Button type="button" onClick={() => append({serviceFeeId:'',unitCost:'', medicalIntervention: '', quantity: '', dose:0,price:'', remark:'',incidentId:'',ambulanceId:'',emergencyTreatmentCenterId:'',patientId:'' })}>
         Add More
       </Button>
       <Grid item xs={12} sm={12} mt={4} lg={12}>
@@ -688,16 +685,15 @@ function a11yProps(index: number) {
                               helperText={errors.incidentDrugs?.[index]?.unitCost?.message}
                             />
                               </TableCell>
-                              {/* <TableCell
+                              <TableCell
                             align="right"
                             style={{ width: '60rem' }}
                             >
                                <TextField
-                        {...register(`incidentDrugs[${index}].dose`, { required: 'Dose is required' })}
-                        error={!!errors.incidentDrugs?.[index]?.dose}
-                        helperText={errors.incidentDrugs?.[index]?.dose?.message}
+                        {...register(`incidentDrugs[${index}].dose`)}
+                       
                       />
-                              </TableCell> */}
+                              </TableCell>
                             <TableCell
                             align="right"
                             style={{ width: '60rem' }}
