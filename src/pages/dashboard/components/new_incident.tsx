@@ -30,8 +30,8 @@ import { Icon } from "@iconify/react";
 import MapWithSearchAndDraw from "../../../components/testMap";
 
   const schema = yup.object().shape({
-    incidentDate: yup.string().required("*Incident Date is required"),
-    incidentTime: yup.string().required("*Incident Time is required"),
+    incidentDate: yup.string() ,
+    incidentTime: yup.string(),
     description: yup.string().required("*Incident Description is required"),
     callerNumber: yup.string().required("*Caller ID is required"),
     callerName: yup.string().required("*Caller Name is required"),
@@ -116,6 +116,9 @@ import MapWithSearchAndDraw from "../../../components/testMap";
           reset(row)
         }else{
           reset()
+          setValue("incidentDate",new Date().toISOString().substr(0, 10))
+          setValue("incidentTime",new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }))
+
         }
     },[row])
     
@@ -390,10 +393,10 @@ import MapWithSearchAndDraw from "../../../components/testMap";
                             }}
                         >
                             
-                            <MenuItem value={1}>
+                            <MenuItem value={"Male"}>
                             Male
                             </MenuItem>
-                            <MenuItem value={0}>
+                            <MenuItem value={"Female"}>
                             Female
                             </MenuItem>
                             
@@ -415,7 +418,9 @@ import MapWithSearchAndDraw from "../../../components/testMap";
                             fullWidth                      
                             type="date"
                             {...register('incidentDate')}
-                            defaultValue={row?.incidentDate}
+                            disabled
+                            defaultValue={row?.incidentDate || new Date().toISOString().substr(0, 10)} // Set default to current date
+                            // defaultValue={row?.incidentDate}
                             helperText={errors?.incidentDate?.message?.toString()}
                             FormHelperTextProps={{
                             className:"helperTextColor"
@@ -429,9 +434,10 @@ import MapWithSearchAndDraw from "../../../components/testMap";
                         </FormLabel>
                         <TextField
                             variant="outlined"
-                            fullWidth                      
+                            fullWidth         
+                            disabled             
                             type="time"
-                            {...register('incidentTime')}
+                            defaultValue={new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}                            {...register('incidentTime')}
                             helperText={errors?.incidentTime?.message?.toString()}
                             FormHelperTextProps={{
                             className:"helperTextColor"
