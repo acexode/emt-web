@@ -401,7 +401,7 @@ function a11yProps(index: number) {
                       Gender
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{loadingData ? <Skeleton variant="rectangular" width={100} height={30} />  : content?.sex === 0 ? "Female" : "Male" || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{loadingData ? <Skeleton variant="rectangular" width={100} height={30} />  : content?.sex || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
