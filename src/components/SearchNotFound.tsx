@@ -10,7 +10,7 @@ export default function SearchNotFound({ searchQuery = "", ...other }: any) {
         Not found
       </Typography>
       <Typography variant="body2" align="center">
-        No results found. Try adding a new assessment.
+        No results found.
       </Typography>
     </Paper>
   );
