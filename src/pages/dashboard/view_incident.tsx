@@ -348,7 +348,7 @@ import { formatDate2, formatDateTime } from "../../utility";
                       Ambulance Start
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{formatDateTime(content?.ambulanceStart) || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.ambulanceStart ? formatDateTime(content?.ambulanceStart) : "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
@@ -358,7 +358,7 @@ import { formatDate2, formatDateTime } from "../../utility";
                       Ambulance Stop
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{formatDateTime(content?.ambulanceStop) || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.ambulanceStop ? formatDateTime(content?.ambulanceStop) : "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
