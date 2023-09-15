@@ -32,6 +32,7 @@ const RunSheets: FC = () => {
     axiosInstance
       .post(`TransferForms/getByAssignedETC`,val)
       .then((res) => {
+        console.log(res?.data)
         setAmbulanceRunSheets(res?.data?.data);
       })
       .catch((error) => {

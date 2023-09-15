@@ -84,31 +84,31 @@ import { Icon } from "@iconify/react";
       const defaultTime = `${defaultDate.getHours().toString().padStart(2, '0')}:${defaultDate.getMinutes().toString().padStart(2, '0')}`;
       const [selectedDate, setSelectedDate] = useState(defaultDate?.toISOString().split('T')[0]);
       const [selectedTime, setSelectedTime] = useState(defaultTime);
-      const [users,setUsers] = useState([])
+      // const [users,setUsers] = useState([])
 
       useEffect(() => {
         setSelectedDate(defaultDate.toISOString().split('T')[0]);
         setSelectedTime(defaultTime);
       }, [data]);
 
-      useEffect(()=>{
-        if(data){
-         let val ={
-           value: data?.incidentViewModel?.emergencyTreatmentCenterViewModel?.name
-         }
-         axiosInstance.post('Account/getUsersByOrganisationName',val).then(res =>{
-           let obj = res?.data?.data?.map((dt:any)=>{
-             return {
-               label: `${dt?.firstName} ${dt?.lastName}`,
-               value: dt?.id
-             }
-           })
-           setUsers(obj)
-         }).catch(error =>{
-           console.log(error)
-         })
-        }
-        },[data])
+      // useEffect(()=>{
+      //   if(data){
+      //    let val ={
+      //      value: data?.incidentViewModel?.emergencyTreatmentCenterViewModel?.name
+      //    }
+      //    axiosInstance.post('Account/getUsersByOrganisationName',val).then(res =>{
+      //      let obj = res?.data?.data?.map((dt:any)=>{
+      //        return {
+      //          label: `${dt?.firstName} ${dt?.lastName}`,
+      //          value: dt?.id
+      //        }
+      //      })
+      //      setUsers(obj)
+      //    }).catch(error =>{
+      //      console.log(error)
+      //    })
+      //   }
+      //   },[data])
 
       useEffect(()=>{
         axiosInstance
@@ -280,25 +280,16 @@ import { Icon } from "@iconify/react";
                         <TextField
                             variant="outlined"
                             fullWidth
-                            select
                             type="text"
-                            defaultValue={data?.medicUserId}
                             {...register('medicUserId')}
                             helperText={errors?.medicUserId?.message?.toString()}
                             FormHelperTextProps={{
                             className:"helperTextColor"
                             }}
-                        >
-                            <MenuItem value={""}>
-                                None
-                            </MenuItem>
-                           {users?.map((user: any, index:number) =>(
-                            <MenuItem value={user?.value} key={index}>
-                                {user?.label}
-                            </MenuItem>
-                           ))} 
-                        </TextField>
-                                            </Grid>
+                        />
+                           
+                       
+                      </Grid>
                     
                     <Grid item sm={6}>
                         <FormLabel >
