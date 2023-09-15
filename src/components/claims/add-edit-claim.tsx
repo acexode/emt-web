@@ -90,7 +90,6 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
       });
       useEffect(()=>{
         axiosInstance.get("ServicesAndFees/get").then(res =>{
-          console.log(res?.data);
           const obj = res?.data?.data?.map((dt: { code: any; description: any; price: any; id: any;feeCategory:any })=>{
             return {
                 code :dt?.code,
@@ -204,8 +203,7 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
             handleToggle();
             fetchAllData()
           } catch (error) {
-              const errorMessage =errorMessages[error?.response?.status]
-            enqueueSnackbar(errorMessage, {
+            enqueueSnackbar(error?.response?.data?.message, {
                 variant: "error",
                 action: (key) => (
                   <MIconButton size="small" onClick={() => closeSnackbar(key)}>
@@ -339,7 +337,7 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
                             style={{ width: '60rem' }}
                             >
                                <TextField
-                        {...register(`incidentDrugs[${index}].dose`)}
+                        {...register(`incidentDrugs[${index}].dose`,{valueAsNumber:true})}
                         // disabled={`incidentDrugs[${index}].isMedicine`}
                    
                       />

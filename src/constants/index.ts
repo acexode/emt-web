@@ -28,8 +28,8 @@ export const roles =  {
         value:"SUPERADMINISTRATOR"
     },
     AMBULANCEUSER:{
-        label:"AMBULANCEUSER",
-        value:"AMBULANCE USER"
+        label:"AMBULANCE USER",
+        value:"AMBULANCEUSER"
     },
     EMERGENCYTREATMENTUSER:{
         label:"EMT USER",
