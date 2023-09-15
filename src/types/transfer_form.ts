@@ -27,6 +27,7 @@ export interface ITransferSheets {
     description: string
     recommendation: string
     traiageCategory: string
+    triageCategory: string
     sex: string
     incidentLocation: string
     districtWard: string

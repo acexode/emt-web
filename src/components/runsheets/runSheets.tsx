@@ -13,7 +13,8 @@ import {
   Container,
   TableContainer,
   TablePagination,
-  Skeleton
+  Skeleton,
+  Chip
 } from "@mui/material";
 
 // routes
@@ -302,8 +303,8 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                               align="left"
                               
                             >
-                               {row?.incidentViewModel?.traiageCategory || "Nil"
-                              }
+                               <Chip label={row?.incidentViewModel?.triageCategory} className={`${row?.incidentViewModel?.triageCategory === "Emergent" ? "emergentBg": "nonEmergentBg"}`} />
+                               
                             </TableCell>
                             <TableCell
                               align="left"
