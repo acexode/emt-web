@@ -355,7 +355,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                               </TableCell>
                             <TableCell align="left">
                           
-                           {row?.sex === 0 ? "Female" : "Male" || "Nil"}
+                           {row?.sex || "Nil"}
                              
                               </TableCell>
                             <TableCell align="left">
