@@ -390,10 +390,10 @@ import MapWithSearchAndDraw from "../../../components/testMap";
                             }}
                         >
                             
-                            <MenuItem value={"Male"}>
+                            <MenuItem value={1}>
                             Male
                             </MenuItem>
-                            <MenuItem value={"Female"}>
+                            <MenuItem value={0}>
                             Female
                             </MenuItem>
                             
