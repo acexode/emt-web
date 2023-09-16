@@ -39,6 +39,8 @@ import { formatDate2, formatDateTime } from "../../utility";
           window.print();
         }
 
+        // console.log({content})
+
       return (
       <Page title={`View Incident | EMT`}>
         <Container maxWidth={themeStretch ? false : "lg"}>
@@ -270,14 +272,14 @@ import { formatDate2, formatDateTime } from "../../utility";
                     <Grid item sm={4}>
                     <ListItem>
                       <ListItemText primary={<Typography>
-                     Area Council
+                     Area Council / LGA
                       </Typography>} 
                       secondary={
                         <Typography sx={{color:"#7b939c"}} >{content?.areaCouncil || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
-                    <Grid item sm={4}>
+                    {/* <Grid item sm={4}>
                     <ListItem>
                       <ListItemText primary={<Typography>
                      Zip Code
@@ -296,7 +298,7 @@ import { formatDate2, formatDateTime } from "../../utility";
                         <Typography sx={{color:"#7b939c"}} >{content?.canResolveWithoutAmbulance || "Not Available"}</Typography>
                       } />
                     </ListItem>
-                    </Grid>
+                    </Grid> */}
                     </Grid>
             </Card>
           <Card sx={{ p: 3, pb: 10, mb: 2 }}>

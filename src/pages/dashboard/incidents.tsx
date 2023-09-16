@@ -17,7 +17,7 @@ const TABLE_HEAD = [
   { id: "ambulanceViewModel.name", label: "Ambulance", alignRight: false },
   { id: "incidentDate", label: "Date", alignRight: false },
   { id: "emergencyTreatmentCenterViewModel.name", label: "Treatment Center", alignRight: false },
-  { id: "incidentStatusType", label: "Incident Status", alignRight: false },
+  // { id: "incidentStatusType", label: "Incident Status", alignRight: false },
   { id: "eventStatusType", label: "Event Status", alignRight: false },
   { id: "" },
 ];

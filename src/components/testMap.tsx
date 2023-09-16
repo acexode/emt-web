@@ -1,16 +1,47 @@
 // @ts-nocheck
 
 import  { useState, useEffect, FC } from 'react';
-import { MapContainer, TileLayer, Marker, Polyline , Popup} from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Polyline , Popup,useMapEvents} from 'react-leaflet';
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import SearchControl from './SearchControl';
 import NigeriaGeoSearchProvider from './CustomGeoSearch';
 
 interface IMapSelector {
-    setSelectedLongitude:any;
-    setSelectedLatitude:any;
-    defaultMapLocations:any;
+  setSelectedLongitude:any;
+  setSelectedLatitude:any;
+  selectedLatitude:any;
+  selectedLongitude:any;
 }
+
+
+const LocationMarker:FC<IMapSelector> = ({setSelectedLatitude,setSelectedLongitude,selectedLatitude,selectedLongitude}) => {
+
+  const handleMapClick = (e: { latlng: { lat: any; lng: any; }; }) => {
+      const { lat, lng } = e.latlng;
+     setSelectedLatitude(lat);
+     setSelectedLongitude(lng);
+   };
+     
+   useMapEvents({
+    click(e) {
+      handleMapClick(e)
+    },
+  })
+
+  return (
+      <>
+       {selectedLatitude !== null && selectedLongitude !== null && (
+      <Marker position={[selectedLatitude, selectedLongitude]}>
+        <Popup>
+          {/* Latitude: {selectedLatitude}, Longitude: {selectedLongitude} */}
+        </Popup>
+      </Marker>
+    )}
+      </>
+  )
+ 
+}
+
 const  MapWithSearchAndDraw:FC<IMapSelector> = ({setSelectedLatitude,setSelectedLongitude,defaultMapLocations})  => {
   const [userLocation, setUserLocation] = useState<any>(null);
   const [_selectedLocation, setSelectedLocation] = useState<any>(defaultMapLocations);
@@ -68,6 +99,12 @@ const prov = new OpenStreetMapProvider();
             searchLabel={"Enter address, please"}
             keepResult={true}
             />
+             <LocationMarker 
+      setSelectedLatitude={setSelectedLatitude} 
+      setSelectedLongitude={setSelectedLongitude} 
+      selectedLatitude={defaultMapLocations.y} 
+      selectedLongitude={defaultMapLocations.x}
+       />
         </MapContainer>
         );
 }

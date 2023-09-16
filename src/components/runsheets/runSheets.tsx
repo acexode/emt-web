@@ -296,7 +296,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                               align="left"
                               
                             >
-                               {formatDateTime(row?.arrivalTime) || "Nil"
+                               {formatDateTime(row?.dateAdded) || "Nil"
                               }
                             </TableCell>
                             <TableCell
