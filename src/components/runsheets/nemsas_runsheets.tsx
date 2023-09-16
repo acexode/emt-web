@@ -330,13 +330,13 @@ const CustomTableNemsas: FC<ITable> = ({ dataList, page_title, table_Head,loadin
                                {row?.totalMinutesToHospital || "Nil"
                               }
                             </TableCell>
-                            <TableCell
+                            {/* <TableCell
                               align="left"
                               
                             >
                                {row?.incidentViewModel?.traiageCategory || "Nil"
                               }
-                            </TableCell>
+                            </TableCell> */}
                             <TableCell
                               align="left"
                               

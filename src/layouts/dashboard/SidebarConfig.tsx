@@ -108,15 +108,15 @@ export const sidebarETCConfig = [
   {
     subheader: "Misc",
     items: [
-      {
-        title: "Settings",
+      // {
+      //   title: "Settings",
 
-        path: PATH_DASHBOARD.settings.root,
-        icon: ICONS.settings,
-        children: [
-          { title: "Users", path: PATH_DASHBOARD.settings.userManagement},
-        ],
-      },
+      //   path: PATH_DASHBOARD.settings.root,
+      //   icon: ICONS.settings,
+      //   children: [
+      //     { title: "Users", path: PATH_DASHBOARD.settings.userManagement},
+      //   ],
+      // },
       { title: "Log Out", path: PATH_AUTH.login, icon: ICONS.exit },
     ],
   },

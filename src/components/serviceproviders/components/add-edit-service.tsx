@@ -36,6 +36,7 @@ import { errorMessages } from "../../../constants";
       name: yup.string().required("*Name is required"),
       location: yup.string().required("*Location is required"),
       code: yup.string(),
+      nhiAorSHIA: yup.string().required("*NHIA/SHIA is required"),
       ambulanceTypeId: yup.number(),
       wardId: yup.number(),
       stateId: yup.number(),
@@ -48,6 +49,7 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
         register,
         handleSubmit,
         reset,
+        watch,
         formState: { errors },
   
       } = useForm({
@@ -65,6 +67,8 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
       const [wards,setWards] = useState<any>([])
       const [states,setStates] = useState<any>([])
       const [lgas,setLgas] = useState<any>([])
+      const watchState = watch("stateId")
+      const watchLga = watch("lgaId")
       useEffect(()=>{
           if(edit){
             reset(formData)
@@ -86,19 +90,7 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
           console.log(error)
         })
     },[])
-      useEffect(()=>{
-        axiosInstance.get('Wards/get').then(res =>{
-          const obj = res?.data?.data?.map((dt: { name: any; id:number}) =>{
-            return {
-                label: dt?.name,
-                value: dt?.id
-            }
-        })
-        setWards(obj)
-        }).catch(error =>{
-          console.log(error)
-        })
-    },[])
+  
     useEffect(()=>{
       axiosInstance.get('States/get').then(res =>{
         const obj = res?.data?.data?.map((dt: { name: any; id:number}) =>{
@@ -113,7 +105,25 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
       })
   },[])
   useEffect(()=>{
-      axiosInstance.get('Lgas/get').then(res =>{
+    if(watchLga){
+      axiosInstance.post('Wards/getByLgaId',{id:watchLga}).then(res =>{
+        const obj = res?.data?.data?.map((dt: { name: any; id:number}) =>{
+          return {
+              label: dt?.name,
+              value: dt?.id
+          }
+      })
+      setWards(obj)
+      }).catch(error =>{
+        console.log(error)
+      })
+    }
+   
+},[watchLga])
+  useEffect(()=>{
+    if(watchState){
+      axiosInstance.post('Lgas/getByStateId',{id:watchState}).then(res =>{
+      
         const obj = res?.data?.data?.map((dt: { name: any; id:number}) =>{
           return {
               label: dt?.name,
@@ -124,7 +134,10 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
       }).catch(error =>{
         console.log(error)
       })
-  },[])
+    }
+  
+  },[watchState])
+  
      
 
     const handleToggle =() => toggle()
@@ -210,6 +223,20 @@ export  const AddEditServiceProvider:FC<IAddEditServiceProvider> = ({edit,formDa
               type="text"
               {...register('location')}
               helperText={errors?.location?.message?.toString()}
+              FormHelperTextProps={{
+              className:"helperTextColor"
+              }}
+            />
+            </Grid>
+            <Grid item xs={12} sm={6} lg={6}>
+              
+            <label>Enter NHIA/SHIA</label>
+            <TextField
+              variant="outlined"
+              fullWidth                      
+              type="text"
+              {...register('nhiAorSHIA')}
+              helperText={errors?.nhiAorSHIA?.message?.toString()}
               FormHelperTextProps={{
               className:"helperTextColor"
               }}

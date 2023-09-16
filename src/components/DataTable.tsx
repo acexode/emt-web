@@ -288,7 +288,7 @@ const CustomUsableTable2: FC<ITable> = ({ dataList, table_Head,loading }) => {
                             
                             <TableCell align="left">
                           
-                           {formatDateTime(row?.timeTaken) || "Nil"}
+                           {formatDateTime(row?.dateAdded) || "Nil"}
                              
                               </TableCell>
                               <TableCell

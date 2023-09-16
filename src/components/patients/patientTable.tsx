@@ -29,7 +29,7 @@ import TableListHead from "../table/tableListHead";
 import ListToolbar from "../table/tableListToolbar";
 import MoreMenu from "../table/TableMoreMenu";
 import { AddEditPatient } from "./components/add-edit-patient";
-import { calculateAge, formatDate2 } from "../../utility";
+import { calculateAge } from "../../utility";
 import axiosInstance from "../../services/api_service";
 // import { AddEditUser } from "./components/add-edit-user";
 // import axiosInstance from "../../services/api_service";
@@ -320,20 +320,20 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                                {row?.lastName || "Nil"
                               }
                             </TableCell>
-                            <TableCell
+                            {/* <TableCell
                               align="left"
                              
                             >
                                {row?.middleName || "Nil"
                               }
-                            </TableCell>
-                            <TableCell
+                            </TableCell> */}
+                            {/* <TableCell
                               align="left"
                              
                             >
                                {formatDate2(row?.doB) || "Nil"
                               }
-                            </TableCell>
+                            </TableCell> */}
                             <TableCell
                               align="left"
                               
@@ -348,11 +348,11 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                               { row?.phoneNumber || "Nil"}
                              
                               </TableCell>
-                            <TableCell align="left">
+                            {/* <TableCell align="left">
                           
                            {row?.nhia || "Nil"}
                              
-                              </TableCell>
+                              </TableCell> */}
                             <TableCell align="left">
                           
                            {row?.sex || "Nil"}

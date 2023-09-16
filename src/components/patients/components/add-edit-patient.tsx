@@ -45,7 +45,7 @@ const incidentTypes = ["Domestic Accidents","Fire Accidents"]
     lastName: yup.string().required("*Last Name  is required"),
     middleName: yup.string(),
     doB: yup.string().required("Date of birth is required"),
-    sex: yup.number(),
+    // sex: yup.number(),
     phoneNumber:yup.string(),
     nhia:yup.string(),
     address:yup.string(),
@@ -82,6 +82,7 @@ export  const AddEditPatient:FC<IAddEditPatient> = ({edit,formData,modal,toggle,
       },[edit])
 
     const handleToggle =() => toggle()
+
 
     const onSubmit = async(data:any) =>{
         let newData = {
@@ -198,7 +199,7 @@ export  const AddEditPatient:FC<IAddEditPatient> = ({edit,formData,modal,toggle,
               <TextField
                  variant="outlined"
                 fullWidth
-                defaultValue={formData?.sex} 
+                defaultValue={formData?.sex  === "Female" ? 0 : 1} 
                 select
                  type="text"
                 {...register("sex")}

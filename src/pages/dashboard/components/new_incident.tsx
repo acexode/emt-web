@@ -43,7 +43,7 @@ import MapWithSearchAndDraw from "../../../components/testMap";
     street: yup.string().required("*Street is required"),
     districtWard: yup.string(),
     areaCouncil: yup.string().required("*Area Council is required"),
-    zipCode: yup.string(),
+    // zipCode: yup.string(),
     incidentCategory: yup.string(),
     // canResolveWithoutAmbulance: yup.string(),
     ambulanceId: yup.string(),
@@ -590,7 +590,7 @@ import MapWithSearchAndDraw from "../../../components/testMap";
                         >
                         </TextField>
                     </Grid>
-                    <Grid item sm={4}>
+                    {/* <Grid item sm={4}>
                         <FormLabel >
                     Zip Code
                         </FormLabel>
@@ -604,7 +604,7 @@ import MapWithSearchAndDraw from "../../../components/testMap";
                         }}
                         >
                         </TextField>
-                    </Grid>
+                    </Grid> */}
                     <Grid item sm={4}>
                         <FormLabel >
                         Incident Category

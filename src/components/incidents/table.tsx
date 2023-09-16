@@ -340,11 +340,11 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
                               { row?.emergencyTreatmentCenterViewModel?.name || "Nil"}
                              
                               </TableCell>
-                            <TableCell align="left">
+                            {/* <TableCell align="left">
                           
                               { row?.incidentStatusType || "Nil"}
                              
-                              </TableCell>
+                              </TableCell> */}
             
                             <TableCell align="left"  width={150}>
                           

@@ -90,6 +90,7 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
       });
       useEffect(()=>{
         axiosInstance.get("ServicesAndFees/get").then(res =>{
+          console.log(res?.data);
           const obj = res?.data?.data?.map((dt: { code: any; description: any; price: any; id: any;feeCategory:any })=>{
             return {
                 code :dt?.code,
@@ -312,6 +313,7 @@ export  const AddEditClaims:FC<IAddEditClaims> = ({edit,formData,modal,toggle,fe
                           options={options}
                           fullWidth
                           getOptionLabel={(option) => option.intervention}
+                          
                           // onChange={(e) => handleAutocompleteChange(index,e.target.textContent)}
                           onChange={(_event, selectedOption) => handleAutocompleteChange(index, selectedOption)}
 

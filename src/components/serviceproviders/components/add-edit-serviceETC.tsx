@@ -38,6 +38,8 @@ import { errorMessages } from "../../../constants";
       address1: yup.string().required("*Address 1 is required"),
       address2: yup.string().required("*Address 2 is required"),
       landmark: yup.string().required("*Landmark is required"),
+      nhiAorSHIA: yup.string().required("*NHIA/SHIA is required"),
+
       hospitalTypeId: yup.string(),
       stateId: yup.string(),
       lgaId: yup.string(),
@@ -50,6 +52,7 @@ export  const AddEditServiceProviderETC:FC<IAddEditServiceProvider> = ({edit,for
         register,
         handleSubmit,
         reset,
+        watch,
         formState: { errors },
   
       } = useForm({
@@ -66,6 +69,7 @@ export  const AddEditServiceProviderETC:FC<IAddEditServiceProvider> = ({edit,for
       const [states,setStates] = useState<any>([])
       const [lgas,setLgas] = useState<any>([])
       const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+      const watchState = watch("stateId")
 
 
       useEffect(()=>{
@@ -103,7 +107,9 @@ export  const AddEditServiceProviderETC:FC<IAddEditServiceProvider> = ({edit,for
           })
       },[])
       useEffect(()=>{
-          axiosInstance.get('Lgas/get').then(res =>{
+        if(watchState){
+          axiosInstance.post('Lgas/getByStateId',{id:watchState}).then(res =>{
+          
             const obj = res?.data?.data?.map((dt: { name: any; id:number}) =>{
               return {
                   label: dt?.name,
@@ -114,8 +120,10 @@ export  const AddEditServiceProviderETC:FC<IAddEditServiceProvider> = ({edit,for
           }).catch(error =>{
             console.log(error)
           })
-      },[])
-
+        }
+      
+      },[watchState])
+     
  
 
     const handleToggle =() => toggle()
@@ -191,6 +199,20 @@ export  const AddEditServiceProviderETC:FC<IAddEditServiceProvider> = ({edit,for
               type="text"
               {...register('name')}
               helperText={errors?.name?.message?.toString()}
+              FormHelperTextProps={{
+              className:"helperTextColor"
+              }}
+            />
+            </Grid>
+            <Grid item xs={12} sm={6} lg={6}>
+              
+            <label>Enter NHIA/SHIA</label>
+            <TextField
+              variant="outlined"
+              fullWidth                      
+              type="text"
+              {...register('nhiAorSHIA')}
+              helperText={errors?.nhiAorSHIA?.message?.toString()}
               FormHelperTextProps={{
               className:"helperTextColor"
               }}
