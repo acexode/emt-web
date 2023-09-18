@@ -184,7 +184,7 @@ const CustomTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,fetc
             heading={`${page_title}`}
             links={[
               { name: "Dashboard", href: PATH_DASHBOARD.root },
-              { name: `${page_title}`, href:PATH_DASHBOARD.settings.userManagement },
+              { name: `${page_title}`, href:PATH_DASHBOARD.patients.root },
               { name: "List" },
             ]}
             // action={
