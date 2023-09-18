@@ -286,7 +286,6 @@ function a11yProps(index: number) {
         );
         };
 
-        console.log({content});
           return (
       <Page title={`View Patient Record | EMT`}>
         <Container maxWidth={themeStretch ? false : "lg"}>
@@ -495,7 +494,7 @@ function a11yProps(index: number) {
             },
           }}
            aria-label="basic tabs example">
-          <Tab label="ETC Treatment" {...a11yProps(0)} />
+          <Tab label="ETC Medical Intervention" {...a11yProps(0)} />
           <Tab label="Drugs and Consumables" {...a11yProps(1)} />
           </Tabs>
           </Box>

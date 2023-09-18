@@ -7,6 +7,7 @@ const CustomTable = lazy(() => import("../../components/runsheets/nemsas_runshee
 
 const TABLE_HEAD = [
   { id: "s/n", label: "S/N", alignRight: false },
+  { id: "title", label: "Title", alignRight: false },
   { id: "patientViewModel.lastName", label: "Patient", alignRight: false },
   { id: "emergencyTreatmentCenterViewModel.name", label: "Facility", alignRight: false },
   { id: "ambulanceViewModel.name", label: "Ambulance", alignRight: false },

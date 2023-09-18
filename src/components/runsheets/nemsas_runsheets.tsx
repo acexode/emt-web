@@ -72,7 +72,12 @@ function applySortFilter(
   if (query) {
     return filter(
       array,
-      (_user) => _user?.ambulance_name?.toLowerCase().includes(query.toLowerCase()) 
+      (_user) => _user?.patientViewModel?.firstName?.toLowerCase().includes(query.toLowerCase()) ||
+      _user?.patientViewModel?.lastName?.toLowerCase().includes(query.toLowerCase()) ||
+      _user?.ambulanceViewModel?.name?.toLowerCase().includes(query.toLowerCase()) ||
+      _user?.routeFrom?.toLowerCase().includes(query.toLowerCase()) ||
+      _user?.routeTo?.toLowerCase().includes(query.toLowerCase()) ||
+      _user?.title?.toLowerCase().includes(query.toLowerCase()) 
     );
   }
   return stabilizedThis.map((el: any[]) => el[0]);
@@ -270,6 +275,13 @@ const CustomTableNemsas: FC<ITable> = ({ dataList, page_title, table_Head,loadin
                              
                             >
                              {startIndex + index + 1}
+                           
+                            </TableCell>
+                            <TableCell
+                              align="left"
+                             
+                            >
+                             {row?.title || "Nil"}
                            
                             </TableCell>
                             <TableCell

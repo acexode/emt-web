@@ -33,7 +33,7 @@ import MapWithSearchAndDraw from "../../../components/testMap";
     incidentDate: yup.string() ,
     incidentTime: yup.string(),
     description: yup.string().required("*Incident Description is required"),
-    callerNumber: yup.string().required("*Caller ID is required"),
+    callerNumber: yup.string().required("*Caller ID is required").max(11).min(11),
     callerName: yup.string().required("*Caller Name is required"),
     callerIsPatient: yup.string().required("*Field is required"),
     sex: yup.string(),
@@ -63,7 +63,7 @@ import MapWithSearchAndDraw from "../../../components/testMap";
         lastName: yup.string().required('*Last Name is required'),
         doB: yup.string(),
         // sex: yup.number().required('*Sex is required'),
-        phoneNumber: yup.string(),
+        phoneNumber: yup.string().max(11).min(11),
       }),
 });
 
@@ -216,8 +216,9 @@ import MapWithSearchAndDraw from "../../../components/testMap";
         longitude,
         latitude,
         treatmentCenter:"",
-        ambulanceName:""
+        ambulanceName:"",
     }
+    console.log({newVal});
     delete newVal?.emergencyTreatmentCenterViewModel
     delete newVal?.ambulanceViewModel
     delete newVal?.patientViewModel
@@ -358,6 +359,10 @@ import MapWithSearchAndDraw from "../../../components/testMap";
                             type="text"
                             {...register('patient.phoneNumber')}
                             defaultValue={row?.patientViewModel?.phoneNumber}
+                            helperText={errors?.patient?.phoneNumber?.message?.toString()}
+                            FormHelperTextProps={{
+                            className:"helperTextColor"
+                        }}
                         
                         >
                         </TextField>
@@ -387,16 +392,16 @@ import MapWithSearchAndDraw from "../../../components/testMap";
                             select
                             type="text"
                             {...register('sex')}
-                            defaultValue={row?.sex}
+                            defaultValue={row?.sex === "Male" ? 1 : 0}
                             FormHelperTextProps={{
                             className:"helperTextColor"
                             }}
                         >
                             
-                            <MenuItem value={"Male"}>
+                            <MenuItem value={1}>
                             Male
                             </MenuItem>
-                            <MenuItem value={"Female"}>
+                            <MenuItem value={0}>
                             Female
                             </MenuItem>
                             

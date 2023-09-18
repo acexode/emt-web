@@ -18,6 +18,7 @@ import { useLocation } from "react-router-dom";
 import { Incident } from "./types";
 import AmbulanceMap from "../../components/_dashboard/general-app/map"
 import { formatDate2, formatDateTime } from "../../utility";
+import axiosInstance from "../../services/api_service";
   
   const ViewIncident: FC = () => {
     const { themeStretch } = useSettings();
@@ -27,6 +28,7 @@ import { formatDate2, formatDateTime } from "../../utility";
     const {
         state: { row},
       } = useLocation();
+      console.log({row});
         useEffect(()=>{
             SetContent(row)
             const newAmbulances = [
@@ -34,6 +36,16 @@ import { formatDate2, formatDateTime } from "../../utility";
             ];
             setAmbulance(newAmbulances)
         },[row])
+
+        useEffect(()=>{
+          axiosInstance.post(`Incidents/getSingle`,{
+            id: row?.id
+          }).then(res =>{
+            console.log(res?.data)
+          }).catch(error =>{
+            console.log(error);
+          })
+        })
 
         const handlePrint = () => {
           window.print();
