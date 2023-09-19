@@ -109,7 +109,16 @@ export const sidebarNEMSASANDSEMSASADMINConfig = [
   {
     subheader: "Misc",
     items: [
-      
+      {
+        title: "Settings",
+
+        path: PATH_DASHBOARD.settings.root,
+        icon: ICONS.settings,
+        children: [
+          { title: "Users", path: PATH_DASHBOARD.settings.userManagement},
+          { title: "Service Providers", path: PATH_DASHBOARD.settings.serviceProviders},
+        ],
+      },
       { title: "Log Out", path: PATH_AUTH.login, icon: ICONS.exit },
     ],
   },
