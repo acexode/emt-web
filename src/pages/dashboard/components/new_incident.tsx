@@ -218,7 +218,7 @@ import MapWithSearchAndDraw from "../../../components/testMap";
         treatmentCenter:"",
         ambulanceName:"",
     }
-    console.log({newVal});
+    // console.log({newVal});
     delete newVal?.emergencyTreatmentCenterViewModel
     delete newVal?.ambulanceViewModel
     delete newVal?.patientViewModel
@@ -282,6 +282,8 @@ import MapWithSearchAndDraw from "../../../components/testMap";
     }
 
     const defaultDOB = row?.patientViewModel?.doB?.split("T")[0]
+    const defaultSex = row?.sex === "Female" ? 1 : row?.sex === "Male" &&  0
+
     return (
       <Page title="Incident Form: Create new incident | EMT">
         <Container maxWidth={themeStretch ? false : "lg"}>
@@ -392,7 +394,7 @@ import MapWithSearchAndDraw from "../../../components/testMap";
                             select
                             type="text"
                             {...register('sex')}
-                            defaultValue={row?.sex === "Male" ? 1 : 0}
+                            defaultValue={defaultSex === false  ? null : defaultSex}
                             FormHelperTextProps={{
                             className:"helperTextColor"
                             }}
