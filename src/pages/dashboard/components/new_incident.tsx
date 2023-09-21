@@ -36,7 +36,7 @@ import MapWithSearchAndDraw from "../../../components/testMap";
     callerNumber: yup.string().required("*Caller ID is required").max(11).min(11),
     callerName: yup.string().required("*Caller Name is required"),
     callerIsPatient: yup.string().required("*Field is required"),
-    sex: yup.string(),
+    // sex: yup.string(),
     recommendation: yup.string().required("*Recommendation is required"),
     triageCategory: yup.string().required("*Triage Category is required"),
     incidentLocation: yup.string().required("*Incident Location is required"),
@@ -62,7 +62,7 @@ import MapWithSearchAndDraw from "../../../components/testMap";
         middleName: yup.string(),
         lastName: yup.string().required('*Last Name is required'),
         doB: yup.string(),
-        // sex: yup.number().required('*Sex is required'),
+        sex: yup.string().required('*Sex is required'),
         phoneNumber: yup.string().max(11).min(11),
       }),
 });
@@ -282,7 +282,7 @@ import MapWithSearchAndDraw from "../../../components/testMap";
     }
 
     const defaultDOB = row?.patientViewModel?.doB?.split("T")[0]
-    const defaultSex = row?.sex === "Female" ? 1 : row?.sex === "Male" &&  0
+    const defaultSex = row?.sex === "Female" ? 0 : row?.sex === "Male" &&  1
 
     return (
       <Page title="Incident Form: Create new incident | EMT">
@@ -393,7 +393,7 @@ import MapWithSearchAndDraw from "../../../components/testMap";
                             fullWidth
                             select
                             type="text"
-                            {...register('sex')}
+                            {...register('patient.sex')}
                             defaultValue={defaultSex === false  ? null : defaultSex}
                             FormHelperTextProps={{
                             className:"helperTextColor"
