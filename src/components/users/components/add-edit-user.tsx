@@ -21,7 +21,7 @@ import axiosInstance from "../../../services/api_service";
 import { MIconButton } from "../../@material-extend";
 import closeFill from "@iconify/icons-eva/close-fill";
 import { LoadingButton } from "@mui/lab";
-import { errorMessages, userTypesArray } from "../../../constants";
+import { errorMessages, roles, userTypesArray } from "../../../constants";
 import { useAuthUserContext } from "../../../context/authUser.context";
 import { Icon } from "@iconify/react";
 
@@ -175,8 +175,8 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
                 value:dt?.id
               }
             })
-            console.log({obj});
-            setUserRoles(obj)
+            const emtRoles = obj?.filter(ob => userProfile?.userRole === roles.EMERGENCYTREATMENTUSER.value ? ob.value === userProfile?.userRole : ob)
+            setUserRoles(emtRoles)
           }).catch(error =>{
             console.log(error)
           })
@@ -543,9 +543,9 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
                 <MenuItem value={"ETC"}>
                  ETC
                 </MenuItem>
-                <MenuItem value={"Ambulance"}>
+              {userProfile?.userRole !== roles.EMERGENCYTREATMENTUSER.value &&  <MenuItem value={"Ambulance"}>
                 Ambulance
-                </MenuItem>
+                </MenuItem>}
                
               </TextField>
                
