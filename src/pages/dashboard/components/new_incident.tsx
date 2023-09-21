@@ -62,7 +62,7 @@ import MapWithSearchAndDraw from "../../../components/testMap";
         middleName: yup.string(),
         lastName: yup.string().required('*Last Name is required'),
         doB: yup.string(),
-        sex: yup.string().required('*Sex is required'),
+        sex: yup.string(),
         phoneNumber: yup.string().max(11).min(11),
       }),
 });
@@ -395,9 +395,7 @@ import MapWithSearchAndDraw from "../../../components/testMap";
                             type="text"
                             {...register('patient.sex')}
                             defaultValue={defaultSex === false  ? null : defaultSex}
-                            FormHelperTextProps={{
-                            className:"helperTextColor"
-                            }}
+                           
                         >
                             
                             <MenuItem value={1}>
