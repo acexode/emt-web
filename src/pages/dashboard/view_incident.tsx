@@ -28,7 +28,7 @@ import axiosInstance from "../../services/api_service";
     const {
         state: { row},
       } = useLocation();
-      console.log({row});
+      // console.log({row});
         useEffect(()=>{
             SetContent(row)
             const newAmbulances = [
@@ -130,7 +130,7 @@ import axiosInstance from "../../services/api_service";
                         Gender
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >{content?.sex || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >{content?.patientViewModel?.sex || "Not Available"}</Typography>
                       } />
                     </ListItem>
                     </Grid>
