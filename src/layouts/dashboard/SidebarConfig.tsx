@@ -72,6 +72,46 @@ const sidebarConfig = [
     ],
   },
 ];
+export const sidebarMANAGERConfig = [
+  // GENERAL
+  // ----------------------------------------------------------------------
+  {
+    subheader: "general",
+    items: [
+      {
+        title: "Dashboard",
+
+        path: PATH_DASHBOARD.general.app,
+        icon: ICONS.dashboard,
+      },
+
+      {
+        title: "Incidents",
+        path: PATH_DASHBOARD.incidents.root,
+        icon: ICONS.reports,
+      },
+      {
+        title: "Claims",
+        path: PATH_DASHBOARD.claims.root,
+        icon: ICONS.booking,
+      },
+      {
+        title: "Ambulance Run Sheets",
+        path: PATH_DASHBOARD.nemsas_run_sheets.root,
+        icon: ICONS.reports,
+      },
+    ],
+  },
+
+  // Misc
+  // ----------------------------------------------------------------------
+  {
+    subheader: "Misc",
+    items: [
+      { title: "Log Out", path: PATH_AUTH.login, icon: ICONS.exit },
+    ],
+  },
+];
 
 export const sidebarNEMSASANDSEMSASADMINConfig = [
   // GENERAL
