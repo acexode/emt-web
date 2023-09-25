@@ -24,7 +24,7 @@ import Scrollbar from "../../components/Scrollbar";
 import NavSection from "../../components/NavSection";
 import { MHidden } from "../../components/@material-extend";
 //
-import sidebarConfig, { sidebarAdmin, sidebarETCConfig, sidebarNEMSASANDSEMSASADMINConfig, sidebarNEMSASANDSEMSASUSERConfig } from "./SidebarConfig";
+import sidebarConfig, { sidebarAdmin, sidebarETCConfig, sidebarMANAGERConfig, sidebarNEMSASANDSEMSASADMINConfig, sidebarNEMSASANDSEMSASUSERConfig } from "./SidebarConfig";
 import { useAuthUserContext } from "../../context/authUser.context";
 import tokenService from "../../services/tokenService";
 import { roles, userType } from "../../constants";
@@ -106,15 +106,18 @@ export default function DashboardSidebar({
     if(userProfile?.userRole  === roles.EMERGENCYTREATMENTUSER.value){
       setsidebar(sidebarETCConfig);
     }
-    else if(userProfile?.userRole === roles.NEMSASADMIN.value || userProfile?.userRole === roles.SEMSASPIUUSER.value){
+    else if(userProfile?.userRole === roles.NEMSASADMIN.value || userProfile?.userRole === roles.SEMSASMANAGER.value){
       setsidebar(sidebarNEMSASANDSEMSASADMINConfig)
     }
-    else if(userProfile?.userRole === roles.NEMSASUSER.value || userProfile?.userRole === roles.SEMSASUSER.value){
+    else if(userProfile?.userRole === roles.NEMSASUSER.value || userProfile?.userRole === roles.SEMSASUSER.value || userProfile?.userRole === roles.SEMSASDISPATCH.value){
       setsidebar(sidebarNEMSASANDSEMSASUSERConfig)
     }
     else if(userProfile?.userRole === roles.PARTNERS.value ||userProfile?.userRole === roles.SUPERADMINISTRATOR.value) {
       setsidebar(sidebarAdmin);
-    }else{
+    }else if(userProfile?.userRole === roles.SEMSASMANAGER.value || userProfile?.userRole === roles.NEMSASMANAGER.value){
+      setsidebar(sidebarMANAGERConfig)
+    }
+    else{
       setsidebar(sidebarConfig);
     }
   }, [userProfile]);

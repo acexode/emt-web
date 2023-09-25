@@ -39,16 +39,24 @@ export const roles =  {
         label:"NEMSAS ADMIN",
         value:"NEMSASADMIN"
     },
+    NEMSASMANAGER:{
+        label:"NEMSAS MANAGER",
+        value:"NEMSASMANAGER"
+    },
     NEMSASUSER:{
         label:"NEMSAS USER",
         value:"NEMSASUSER",
     },
-    SEMSASPIUUSER:{
-        label:"SEMSAS PIU USER",
-        value:"SEMSASPIUUSER"
+    SEMSASMANAGER:{
+        label:"SEMSAS MANAGER",
+        value:"SEMSASMANAGER"
     },
     SEMSASUSER:{
         label:"SEMSAS USER",
         value:"SEMSASUSER"
-    }
+    },
+    SEMSASDISPATCH:{
+        label:"SEMSAS DISPATCHER",
+        value:"SEMSASDISPATCH"
+    },
 }
